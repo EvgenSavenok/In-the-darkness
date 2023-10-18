@@ -28,15 +28,15 @@ private:
 public:
 	sf::Sprite getSprite() { return sprite; };
 	Players();
-	void move(sf::RenderWindow& window, Map& map, Animations& animeOfTeleport, Boxes& box);
+	void move(sf::RenderWindow& window, Map& map, Animations& animeOfTeleport, Boxes& box, Animations& cage);
 	void setDir(Direction dir) { this->dir = dir; };
 	bool update(sf::Clock clock, Map& map, sf::Clock teleportClock, Animations& animeOfTeleport);
 	float x, y;
 	bool checkOnMoveDown(Boxes& box);
 	bool checkOnMoveUp(Boxes& box);
 	bool checkOnMoveLeft(Boxes& box);
-	bool checkOnMoveRight(Boxes& box);
-	void updateRight(Boxes& box);
+	bool checkOnMoveRight(Boxes& box, Animations& anime);
+	void updateRight(Boxes& box, Animations& anime);
 	void updateLeft(Boxes& box);
 	void updateUp(Boxes& box);
 	void updateDown(Boxes& box);
@@ -56,5 +56,6 @@ public:
 	void drawKey(sf::RenderWindow& window);
 	void checkOnBox(int curRow, int curCol, char dir, Boxes& box, Map& map, int indexOfBox);
 	void checkOnNearBox(int curRow, int curCol, char dir, Boxes& box, Map& map, int indexOfBox);
+	bool checkOnCageCollision(int curRow, int curCol);
 	static const int brickSize = 90;
 };

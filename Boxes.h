@@ -14,14 +14,11 @@ private:
 
 	float brickSize = 90;
 	const float offset = 4;
-	bool isBoxOnPoint[7];
 
 public:
 	sf::Vector2f position;
 	Boxes();
 
-	bool getBoxPoint(int indexOfPoint) { return isBoxOnPoint[indexOfPoint]; }
-	void setBoxPoint(bool point, int indexOfPoint) { this->isBoxOnPoint[indexOfPoint] = point; }
 	float getBoxX(int indexOfBox) { return boxes[indexOfBox].x; }
 	void setBoxX(float boxX, int indexOfBox) { this->boxes[indexOfBox].x = boxX; }
 	float getBoxY(int indexOfBox) { return boxes[indexOfBox].y; }

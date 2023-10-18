@@ -8,14 +8,21 @@ Animations::Animations()
 	cageSprite.setTextureRect(sf::IntRect(0, 0, 90, 90));
 }
 
-void Animations::setCagePos(sf::RenderWindow& window, Boxes& box, Map& map)
+void Animations::setCagePos(sf::RenderWindow& window, Boxes& box, Map& map, sf::Clock& cageClock)
 {
-	cageSprite.setPosition(brickSize * 31, brickSize * 12);
-	window.draw(cageSprite);
-	startCageAnimation(box, map);
+	if (getCageAnimationState())
+	{
+		map.firstLevelMap[12][31] = ' ';
+	}
+	else
+	{
+		cageSprite.setPosition(brickSize * 31, brickSize * 12);
+		window.draw(cageSprite);
+		startCageAnimation(box, map, window, cageClock);
+	}
 }
 
-void Animations::startCageAnimation(Boxes& box, Map& map)
+void Animations::startCageAnimation(Boxes& box, Map& map, sf::RenderWindow& window, sf::Clock& cageClock)
 {
 	int countOfPoints = 0;
 	for (int i = 0; i < 36; i++)
@@ -26,8 +33,16 @@ void Animations::startCageAnimation(Boxes& box, Map& map)
 				countOfPoints++;
 		}
 	}
-	if (countOfPoints == 7)
+	if (countOfPoints == 1)
 	{
-		countOfPoints = 7;
+		sf::Time curTime = cageClock.getElapsedTime();
+		if (curTime.asSeconds() >= 0.01) 
+		{
+			setCageHeight(getCageHeight() - 1);
+			cageSprite.setTextureRect(sf::IntRect(0, 0, 90, getCageHeight()));
+			window.draw(cageSprite);
+			setCageAnimationState(true);
+			cageClock.restart();
+		}
 	}
 }

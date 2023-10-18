@@ -1,4 +1,4 @@
-#include "Boxes.h"
+﻿#include "Boxes.h"
 #include "Map.h"
 
 Boxes::Boxes()
@@ -33,8 +33,6 @@ void Boxes::initializeBoxes()
 
 	position = sf::Vector2f(brickSize * 25 + 15, brickSize * 11 + 15);
 	boxes.push_back(position);
-
-	isBoxOnPoint[5] = true;
 }
 
 void Boxes::drawBox(sf::RenderWindow& window)
@@ -93,10 +91,24 @@ void Boxes::checkAllPoints(Map& map)
 				}
 			}
 		}
-		else
+		//else
+		//{
+			
+			//if (map.firstLevelMap[curBoxRow][curBoxCol] != ' ')
+			//{
+			//	map.firstLevelMap[curBoxRow][curBoxCol] = '.';
+			//}
+		//}
+		if (map.firstLevelMap[curBoxRow][curBoxCol] == 'G')
 		{
-			if (map.firstLevelMap[curBoxRow][curBoxCol] != ' ')
+			if ((getBoxX(i) > brickSize * curBoxCol + 30) || (getBoxX(i) < brickSize * curBoxCol + 5))
+			{
 				map.firstLevelMap[curBoxRow][curBoxCol] = '.';
+			}
+			if ((getBoxY(i) > brickSize * curBoxRow + 30) || (getBoxY(i) < brickSize * curBoxRow + 5))
+			{
+				map.firstLevelMap[curBoxRow][curBoxCol] = '.';
+			}
 		}
 	}
 }

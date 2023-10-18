@@ -207,7 +207,18 @@ bool Players::checkOnMoveLeft(Boxes& box)
 	return canMoveLeft;
 }
 
-bool Players::checkOnMoveRight(Boxes& box)
+bool Players::checkOnCageCollision(int curRow, int curCol)
+{
+	bool canMoveRight = true;
+	float a = returnY();
+	if (returnY() >= brickSize * 12 - 55)
+	{
+		canMoveRight = false;
+	}
+	return canMoveRight;
+}
+
+bool Players::checkOnMoveRight(Boxes& box, Animations& cage)
 {
 	Map map;
 
@@ -218,6 +229,8 @@ bool Players::checkOnMoveRight(Boxes& box)
 	curRow += 6;
 
 	bool canMoveRight = true;
+
+	bool a = cage.getCageAnimationState();
 
 	checkOnKey(curRow, curCol, 3);
 	for (int i = 0; i < 7; i++)
@@ -234,9 +247,20 @@ bool Players::checkOnMoveRight(Boxes& box)
 		}
 	}
 
-	if ((((map.firstLevelMap[curRow][curCol + 1] != ' ') && (map.firstLevelMap[curRow][curCol + 1] != 'T') && (map.firstLevelMap[curRow][curCol + 1] != '.') && (map.firstLevelMap[curRow][curCol + 1] != 'G')) && (returnX() + offset >= curCol * brickSize + 45)))
+	if (cage.getCageAnimationState())
+	{
+		map.firstLevelMap[12][31] = ' ';
+	}
+
+	if (((map.firstLevelMap[curRow][curCol + 1] != ' ') && (map.firstLevelMap[curRow][curCol + 1] != 'T') && (map.firstLevelMap[curRow][curCol + 1] != '.') && (map.firstLevelMap[curRow][curCol + 1] != 'G')) && (returnX() + offset >= curCol * brickSize + 45))
 	{
 		canMoveRight = false;
+	}
+
+	if (((map.firstLevelMap[curRow][curCol + 1] == 'C') || (map.firstLevelMap[curRow + 1][curCol + 1] == 'C')) && (returnX() + offset >= curCol * brickSize + 45))
+	{
+		if (!cage.getCageAnimationState())
+			canMoveRight = checkOnCageCollision(curRow, curCol);
 	}
 
 	std::fill(canPushBox, canPushBox + 7, false);
@@ -379,9 +403,9 @@ bool Players::checkOnTeleport(Map& map)
 	return false;
 }
 
-void Players::updateRight(Boxes& box)
+void Players::updateRight(Boxes& box, Animations& cage)
 {
-	if (checkOnMoveRight(box))
+	if (checkOnMoveRight(box, cage))
 	{
 		x += offset;
 		curImg++;
@@ -467,9 +491,9 @@ bool Players::startTeleportAnimation(Map& map, sf::Clock teleportClock, Animatio
 	return false;
 }
 
-void Players::move(sf::RenderWindow& window, Map& map, Animations& animeOfTeleport, Boxes& box)
+void Players::move(sf::RenderWindow& window, Map& map, Animations& anime, Boxes& box, Animations& cage)
 {
-	if (!animeOfTeleport.getStay())
+	if (!anime.getStay())
 	{
 		if (curImg > 6)
 		{
@@ -494,7 +518,7 @@ void Players::move(sf::RenderWindow& window, Map& map, Animations& animeOfTelepo
 		}
 		case Direction::right:
 		{
-			updateRight(box);
+			updateRight(box, cage);
 			break;
 		}
 		}
@@ -502,7 +526,7 @@ void Players::move(sf::RenderWindow& window, Map& map, Animations& animeOfTelepo
 	}
 	if (checkOnTeleport(map) && (map.getPlateY() <= 7 * brickSize - 5))
 	{
-		animeOfTeleport.setStay(true);
+		anime.setStay(true);
 	}
 }
 

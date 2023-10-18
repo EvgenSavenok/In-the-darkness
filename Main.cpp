@@ -6,10 +6,45 @@
 #include "Animations.h"
 #include "Boxes.h"
 
+void pressOnKey(sf::RenderWindow& window, sf::Clock& clock, Players& player, Map& map, Animations& animeOfTeleport, Boxes& box, Animations& cage)
+{
+    sf::Event event;
+    while (window.pollEvent(event))
+    {
+        if (event.type == sf::Event::KeyPressed) {
+            clock.restart();
+            if (event.key.code == sf::Keyboard::Escape)
+            {
+                window.close();
+            }
+            if (event.key.code == sf::Keyboard::D)
+            {
+                player.setDir(Direction::right);
+                player.move(window, map, animeOfTeleport, box, cage);
+            }
+            if (event.key.code == sf::Keyboard::A)
+            {
+                player.setDir(Direction::left);
+                player.move(window, map, animeOfTeleport, box, cage);
+            }
+            if (event.key.code == sf::Keyboard::W)
+            {
+                player.setDir(Direction::up);
+                player.move(window, map, animeOfTeleport, box, cage);
+            }
+            if (event.key.code == sf::Keyboard::S)
+            {
+                player.setDir(Direction::down);
+                player.move(window, map, animeOfTeleport, box, cage);
+            }
+        }
+    }
+}
+
 int main() 
 {
     sf::RenderWindow window;
-    window.create(sf::VideoMode::getDesktopMode(), L"Лабиринт");
+    window.create(sf::VideoMode::getDesktopMode(), L"Rage");
     window.setMouseCursorVisible(false);
     const float screenWidth = sf::VideoMode::getDesktopMode().width;
     const float screenHeight = sf::VideoMode::getDesktopMode().height;
@@ -22,40 +57,11 @@ int main()
     sf::Clock clock;
     sf::Clock enemyClock;
     sf::Clock teleportClock;
+    sf::Clock cageClock;
     sf::View camera(sf::FloatRect(0, 0, screenWidth, screenHeight));
     while (window.isOpen()) 
     {
-        sf::Event event;
-        while (window.pollEvent(event)) 
-        {
-            if (event.type == sf::Event::KeyPressed) {
-                clock.restart();
-                if (event.key.code == sf::Keyboard::Escape) 
-                {
-                    window.close();
-                }
-                if (event.key.code == sf::Keyboard::D) 
-                {
-                    player.setDir(Direction::right);
-                    player.move(window, map, animeOfTeleport, box);
-                }
-                if (event.key.code == sf::Keyboard::A) 
-                {
-                    player.setDir(Direction::left); 
-                    player.move(window, map, animeOfTeleport, box);
-                }
-                if (event.key.code == sf::Keyboard::W) 
-                {
-                    player.setDir(Direction::up); 
-                    player.move(window, map, animeOfTeleport, box);
-                }
-                if (event.key.code == sf::Keyboard::S) 
-                {
-                    player.setDir(Direction::down);    
-                    player.move(window, map, animeOfTeleport, box);
-                }
-            }
-        }
+        pressOnKey(window, clock, player, map, animeOfTeleport, box, cage);
         enemy_boar.setDir(enemyDirection::left);
         if (enemy_boar.enemyMove(enemyClock))
         {
@@ -70,7 +76,7 @@ int main()
         map.createMap(window);
         box.drawBox(window);
         player.drawKey(window);
-        cage.setCagePos(window, box, map);
+        cage.setCagePos(window, box, map, cageClock);
         camera.setCenter(player.x, player.y);
         window.draw(map.getTeleportSprite());
         window.draw(player.getSprite());
