@@ -33,7 +33,7 @@ void Animations::startCageAnimation(Boxes& box, Map& map, sf::RenderWindow& wind
 				countOfPoints++;
 		}
 	}
-	if (countOfPoints == 1)
+	if (countOfPoints == 7)
 	{
 		sf::Time curTime = cageClock.getElapsedTime();
 		if (curTime.asSeconds() >= 0.01) 

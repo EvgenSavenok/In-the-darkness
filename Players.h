@@ -56,6 +56,7 @@ public:
 	void drawKey(sf::RenderWindow& window);
 	void checkOnBox(int curRow, int curCol, char dir, Boxes& box, Map& map, int indexOfBox);
 	void checkOnNearBox(int curRow, int curCol, char dir, Boxes& box, Map& map, int indexOfBox);
-	bool checkOnCageCollision(int curRow, int curCol);
+	bool checkOnRightCageCollision(int curRow, int curCol, bool canMoveRigth);
+	bool checkOnDownCageCollision(bool canMoveDown);
 	static const int brickSize = 90;
 };

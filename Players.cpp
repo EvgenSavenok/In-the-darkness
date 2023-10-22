@@ -7,7 +7,7 @@ Players::Players()
 {
 	key = false;
 	std::fill(canPushBox, canPushBox + 7, false);
-	x = brickSize * 26 + 25;
+	x = brickSize * 12 + 25;
 	y = brickSize * 7 + 15;
 	curImg = 0;
 	dir = Direction::down;
@@ -83,6 +83,18 @@ int Players::calculateCurCol()
 	return curCol;
 }
 
+bool Players::checkOnDownCageCollision(bool canMoveDown)
+{
+	if (returnY() + offset >= brickSize * 11 + 25)
+	{
+		if ((returnX() >= brickSize * 31 - 30) && (returnX() <= brickSize * 31))
+		{
+			canMoveDown = false;
+		}
+	}
+	return canMoveDown;
+}
+
 bool Players::checkOnMoveDown(Boxes& box)
 {
 	Map map;
@@ -114,10 +126,11 @@ bool Players::checkOnMoveDown(Boxes& box)
 		}
 	}
 
-	if ((((map.firstLevelMap[curRow + 1][curCol] != ' ') && (map.firstLevelMap[curRow + 1][curCol] != 'T' && (map.firstLevelMap[curRow + 1][curCol] != '.')) && (map.firstLevelMap[curRow + 1][curCol + 1] != 'G')) && (returnY() + 4 >= curRow * brickSize + 25)))
+	if ((((map.firstLevelMap[curRow + 1][curCol] != ' ') && (map.firstLevelMap[curRow + 1][curCol] != 'T' && (map.firstLevelMap[curRow + 1][curCol] != '.')) && (map.firstLevelMap[curRow + 1][curCol + 1] != 'G')) && (returnY() + 4 >= curRow * brickSize + 30)))
 	{
 		canMoveDown = false;
 	}
+	canMoveDown = checkOnDownCageCollision(canMoveDown);
 
 	std::fill(canPushBox, canPushBox + 7, false);
 
@@ -207,10 +220,8 @@ bool Players::checkOnMoveLeft(Boxes& box)
 	return canMoveLeft;
 }
 
-bool Players::checkOnCageCollision(int curRow, int curCol)
+bool Players::checkOnRightCageCollision(int curRow, int curCol, bool canMoveRight)
 {
-	bool canMoveRight = true;
-	float a = returnY();
 	if (returnY() >= brickSize * 12 - 55)
 	{
 		canMoveRight = false;
@@ -260,7 +271,7 @@ bool Players::checkOnMoveRight(Boxes& box, Animations& cage)
 	if (((map.firstLevelMap[curRow][curCol + 1] == 'C') || (map.firstLevelMap[curRow + 1][curCol + 1] == 'C')) && (returnX() + offset >= curCol * brickSize + 45))
 	{
 		if (!cage.getCageAnimationState())
-			canMoveRight = checkOnCageCollision(curRow, curCol);
+			canMoveRight = checkOnRightCageCollision(curRow, curCol, canMoveRight);
 	}
 
 	std::fill(canPushBox, canPushBox + 7, false);
@@ -467,8 +478,8 @@ bool Players::startTeleportAnimation(Map& map, sf::Clock teleportClock, Animatio
 		if ((map.getPlateX() < map.startXCoordinate + brickSize * 3) && (curTime.asSeconds() >= animeOfTeleport.getInterval()))
 		{
 			map.teleportSprite.setPosition(map.getPlateX() - brickSize, map.getPlateY());
-			x += 30;
-			map.setPlateX(map.getPlateX() + 30);
+			x += 3;
+			map.setPlateX(map.getPlateX() + 3);
 			if (animeOfTeleport.getFirstCycleInfo())
 			{
 				animeOfTeleport.setInterval(0.1);
