@@ -33,7 +33,7 @@ void Animations::startCageAnimation(Boxes& box, Map& map, sf::RenderWindow& wind
 				countOfPoints++;
 		}
 	}
-	if (countOfPoints == 7)
+	if (countOfPoints == 1)
 	{
 		sf::Time curTime = cageClock.getElapsedTime();
 		if (curTime.asSeconds() >= 0.01) 
@@ -41,7 +41,8 @@ void Animations::startCageAnimation(Boxes& box, Map& map, sf::RenderWindow& wind
 			setCageHeight(getCageHeight() - 1);
 			cageSprite.setTextureRect(sf::IntRect(0, 0, 90, getCageHeight()));
 			window.draw(cageSprite);
-			setCageAnimationState(true);
+			if (getCageHeight() == 0)
+				setCageAnimationState(true);
 			cageClock.restart();
 		}
 	}

@@ -7,7 +7,7 @@ Players::Players()
 {
 	key = false;
 	std::fill(canPushBox, canPushBox + 7, false);
-	x = brickSize * 12 + 25;
+	x = brickSize * 26 + 25;
 	y = brickSize * 7 + 15;
 	curImg = 0;
 	dir = Direction::down;
@@ -95,7 +95,7 @@ bool Players::checkOnDownCageCollision(bool canMoveDown)
 	return canMoveDown;
 }
 
-bool Players::checkOnMoveDown(Boxes& box)
+bool Players::checkOnMoveDown(Boxes& box, Animations& cage)
 {
 	Map map;
 
@@ -126,9 +126,17 @@ bool Players::checkOnMoveDown(Boxes& box)
 		}
 	}
 
-	if ((((map.firstLevelMap[curRow + 1][curCol] != ' ') && (map.firstLevelMap[curRow + 1][curCol] != 'T' && (map.firstLevelMap[curRow + 1][curCol] != '.')) && (map.firstLevelMap[curRow + 1][curCol + 1] != 'G')) && (returnY() + 4 >= curRow * brickSize + 30)))
+	if (cage.getCageAnimationState())
 	{
-		canMoveDown = false;
+		map.firstLevelMap[12][31] = ' ';
+	}
+
+	if (map.firstLevelMap[curRow + 1][curCol] != ' ')
+	{
+		if (map.firstLevelMap[curRow + 1][curCol] != 'T' && map.firstLevelMap[curRow + 1][curCol] != '.' && map.firstLevelMap[curRow + 1][curCol + 1] != 'G' && returnY() + 4 >= curRow * brickSize + 30)
+		{
+			canMoveDown = false;
+		}
 	}
 	canMoveDown = checkOnDownCageCollision(canMoveDown);
 
@@ -425,9 +433,9 @@ void Players::updateRight(Boxes& box, Animations& cage)
 	}
 }
 
-void Players::updateDown(Boxes& box)
+void Players::updateDown(Boxes& box, Animations& cage)
 {
-	if (checkOnMoveDown(box))
+	if (checkOnMoveDown(box, cage))
 	{
 		y += offset;
 		curImg++;
@@ -514,7 +522,7 @@ void Players::move(sf::RenderWindow& window, Map& map, Animations& anime, Boxes&
 		{
 		case Direction::down:
 		{
-			updateDown(box);
+			updateDown(box, cage);
 			break;
 		}
 		case Direction::up:
