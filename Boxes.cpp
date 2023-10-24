@@ -91,14 +91,6 @@ void Boxes::checkAllPoints(Map& map)
 				}
 			}
 		}
-		//else
-		//{
-			
-			//if (map.firstLevelMap[curBoxRow][curBoxCol] != ' ')
-			//{
-			//	map.firstLevelMap[curBoxRow][curBoxCol] = '.';
-			//}
-		//}
 		if (map.firstLevelMap[curBoxRow][curBoxCol] == 'G')
 		{
 			if ((getBoxX(i) > brickSize * curBoxCol + 30) || (getBoxX(i) < brickSize * curBoxCol + 5))

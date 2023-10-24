@@ -32,16 +32,16 @@ public:
 	void setDir(Direction dir) { this->dir = dir; };
 	bool update(sf::Clock clock, Map& map, sf::Clock teleportClock, Animations& animeOfTeleport);
 	float x, y;
-	bool checkOnMoveDown(Boxes& box, Animations& cage);
-	bool checkOnMoveUp(Boxes& box);
-	bool checkOnMoveLeft(Boxes& box);
-	bool checkOnMoveRight(Boxes& box, Animations& anime);
-	void updateRight(Boxes& box, Animations& anime);
-	void updateLeft(Boxes& box);
-	void updateUp(Boxes& box);
-	void updateDown(Boxes& box, Animations& cage);
-	float returnX() { return x; }
-	float returnY() { return y; }
+	bool checkOnMoveDown(Boxes& box, Animations& cage, Map& map);
+	bool checkOnMoveUp(Boxes& box, Animations& anime, Map& map);
+	bool checkOnMoveLeft(Boxes& box, Animations& anime, Map& map);
+	bool checkOnMoveRight(Boxes& box, Animations& anime, Map& map);
+	void updateRight(Boxes& box, Animations& anime, Map& map);
+	void updateLeft(Boxes& box, Animations& anime, Map& map);
+	void updateUp(Boxes& box, Animations& anime, Map& map);
+	void updateDown(Boxes& box, Animations& anime, Map& map);
+	float returnPlayerX() { return x; }
+	float returnPlayerY() { return y; }
 	bool isHasKey() { return key; };
 	void setKey(bool key) { this->key = key; };
 	void checkOnKey(int curRow, int curCol, int curDir);
@@ -58,5 +58,10 @@ public:
 	void checkOnNearBox(int curRow, int curCol, char dir, Boxes& box, Map& map, int indexOfBox);
 	bool checkOnRightCageCollision(int curRow, int curCol, bool canMoveRigth);
 	bool checkOnDownCageCollision(bool canMoveDown);
+	void checkOnDoor(char dir, Map& map, Animations& doorAnime);
+	void checkOnBottomDoor(int curRow, int curCol, Map& map, Animations& doorAnime);
+	void checkOnTopDoor(int curRow, int curCol, Map& map, Animations& doorAnime);
+	void checkOnLeftDoor(int curRow, int curCol, Map& map, Animations& doorAnime);
+	void checkOnRightDoor(int curRow, int curCol, Map& map, Animations& doorAnime);
 	static const int brickSize = 90;
 };

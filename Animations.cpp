@@ -24,6 +24,7 @@ void Animations::setCagePos(sf::RenderWindow& window, Boxes& box, Map& map, sf::
 
 void Animations::startCageAnimation(Boxes& box, Map& map, sf::RenderWindow& window, sf::Clock& cageClock)
 {
+	#define numOfActivePoints 1
 	int countOfPoints = 0;
 	for (int i = 0; i < 36; i++)
 	{
@@ -33,7 +34,7 @@ void Animations::startCageAnimation(Boxes& box, Map& map, sf::RenderWindow& wind
 				countOfPoints++;
 		}
 	}
-	if (countOfPoints == 1)
+	if (countOfPoints == numOfActivePoints)
 	{
 		sf::Time curTime = cageClock.getElapsedTime();
 		if (curTime.asSeconds() >= 0.01) 
