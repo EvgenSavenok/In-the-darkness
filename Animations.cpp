@@ -22,6 +22,11 @@ void Animations::setCagePos(sf::RenderWindow& window, Boxes& box, Map& map, sf::
 	}
 }
 
+void Animations::checkOnOpenDoor()
+{
+
+}
+
 void Animations::startCageAnimation(Boxes& box, Map& map, sf::RenderWindow& window, sf::Clock& cageClock)
 {
 	#define numOfActivePoints 1
@@ -47,4 +52,9 @@ void Animations::startCageAnimation(Boxes& box, Map& map, sf::RenderWindow& wind
 			cageClock.restart();
 		}
 	}
+}
+
+void Animations::startDoorAnimation()
+{
+
 }

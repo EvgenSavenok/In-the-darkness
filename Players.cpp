@@ -134,7 +134,7 @@ bool Players::checkOnMoveDown(Boxes& box, Animations& anime, Map& map)
 
 	if (map.firstLevelMap[curRow + 1][curCol] != ' ')
 	{
-		if (map.firstLevelMap[curRow + 1][curCol] != 'T' && map.firstLevelMap[curRow + 1][curCol] != '.' && map.firstLevelMap[curRow + 1][curCol + 1] != 'G' && returnPlayerY() + 4 >= curRow * brickSize + 30)
+		if ((map.firstLevelMap[curRow + 1][curCol] != 'T') && (map.firstLevelMap[curRow + 1][curCol] != '.') && (map.firstLevelMap[curRow + 1][curCol] != 'G') && returnPlayerY() + 4 >= curRow * brickSize + 30)
 		{
 			canMoveDown = false;
 		}
@@ -360,7 +360,10 @@ void Players::checkOnBox(int curRow, int curCol, char dir, Boxes& box, Map& map,
 	}
 	else if ((dir == 'D') && (fabs((float)(box.getBoxY(indexOfBox) - y)) <= 57) && (fabs((float)(box.getBoxX(indexOfBox) - x)) <= 35))
 	{
-		float a = box.getBoxY(indexOfBox);
+		canPushBox[indexOfBox] = true;
+	}
+	else if ((dir == 'D') && (fabs((float)(box.getBoxY(indexOfBox) - y)) <= 64) && (fabs((float)(box.getBoxX(indexOfBox) - x)) <= 35) && (box.getBoxY(indexOfBox) > y))
+	{
 		canPushBox[indexOfBox] = true;
 	}
 	else

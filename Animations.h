@@ -42,4 +42,6 @@ public:
 	Animations();
 	void setCagePos(sf::RenderWindow& window, Boxes& box, Map& map, sf::Clock& cageClock);
 	void startCageAnimation(Boxes& box, Map& map, sf::RenderWindow& window, sf::Clock& cageClock);
+	void checkOnOpenDoor();
+	void startDoorAnimation();
 };

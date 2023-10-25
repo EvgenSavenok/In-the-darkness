@@ -41,6 +41,22 @@ void pressOnKey(sf::RenderWindow& window, sf::Clock& clock, Players& player, Map
     }
 }
 
+void updatePlayerState(sf::Clock& playerClock, Players& player, Map& map, Animations& animeOfTeleport, sf::Clock& teleportClock)
+{
+    if (player.update(playerClock, map, teleportClock, animeOfTeleport))
+    {
+        teleportClock.restart();
+    }
+}
+
+void updateBoarState(Enemies& enemyBoar, sf::Clock& enemyClock)
+{
+    if (enemyBoar.enemyMove(enemyClock))
+    {
+        enemyClock.restart();
+    }
+}
+
 int main() 
 {
     sf::RenderWindow window;
@@ -49,28 +65,22 @@ int main()
     const float screenWidth = sf::VideoMode::getDesktopMode().width;
     const float screenHeight = sf::VideoMode::getDesktopMode().height;
     Players player;
-    Enemies enemy_boar;
+    Enemies enemyBoar;
     Animations animeOfTeleport;
     Animations cage;
     Boxes box;
     Map map;
-    sf::Clock clock;
+    sf::Clock playerClock;
     sf::Clock enemyClock;
     sf::Clock teleportClock;
     sf::Clock cageClock;
     sf::View camera(sf::FloatRect(0, 0, screenWidth, screenHeight));
     while (window.isOpen()) 
     {
-        pressOnKey(window, clock, player, map, animeOfTeleport, box, cage);
-        enemy_boar.setDir(enemyDirection::left);
-        if (enemy_boar.enemyMove(enemyClock))
-        {
-            enemyClock.restart();
-        }
-        if (player.update(clock, map, teleportClock, animeOfTeleport))
-        {
-            teleportClock.restart();
-        }
+        pressOnKey(window, playerClock, player, map, animeOfTeleport, box, cage);
+        enemyBoar.setDir(enemyDirection::left);
+        updateBoarState(enemyBoar, enemyClock);
+        updatePlayerState(playerClock, player, map, animeOfTeleport, teleportClock);
         window.clear(sf::Color::Black);
         box.checkAllPoints(map);
         map.createMap(window);
@@ -80,7 +90,7 @@ int main()
         camera.setCenter(player.x, player.y);
         window.draw(map.getTeleportSprite());
         window.draw(player.getSprite());
-        window.draw(enemy_boar.getSprite());
+        window.draw(enemyBoar.getSprite());
         window.setView(camera); 
         window.display();
     }
