@@ -136,7 +136,7 @@ bool Players::checkOnDownBoxCollisions(int curRow, int curCol, Boxes& box, Map& 
 	}
 }
 
-bool Players::checkOnMoveDown(Boxes& box, Animations& anime, Map& map)
+bool Players::checkOnMoveDown(Boxes& box, Animations& anime, Map& map, sf::RenderWindow& window)
 {
 	int curRow = calculateCurPlayerRow() + 6;
 	int curCol = calculateCurPlayerCol() + 11;
@@ -144,7 +144,6 @@ bool Players::checkOnMoveDown(Boxes& box, Animations& anime, Map& map)
 	const int numOfPointsBoxes = 7;
 	checkOnKey(curRow, curCol, 'D');
 	checkOnDoor('D', map, anime);
-	anime.checkOnOpenDoor(map);
 	canMoveDown = checkOnDownBoxCollisions(curRow, curCol, box, map);
 	if (anime.getCageAnimationState())
 	{
@@ -180,7 +179,7 @@ bool Players::checkOnUpBoxCollisions(int curRow, int curCol, Boxes& box, Map& ma
 	}
 }
 
-bool Players::checkOnMoveUp(Boxes& box, Animations& anime, Map& map)
+bool Players::checkOnMoveUp(Boxes& box, Animations& anime, Map& map, sf::RenderWindow& window)
 {
 	int curRow = calculateCurPlayerRow() + 6;
 	int curCol = calculateCurPlayerCol() + 11;
@@ -188,7 +187,6 @@ bool Players::checkOnMoveUp(Boxes& box, Animations& anime, Map& map)
 	const int numOfPointsBoxes = 7;
 	checkOnKey(curRow, curCol, 'U');
 	checkOnDoor('U', map, anime);
-	anime.checkOnOpenDoor(map);
 	canMoveUp = checkOnUpBoxCollisions(curRow, curCol, box, map);
 	if (((map.firstLevelMap[curRow - 1][curCol] != ' ') && (map.firstLevelMap[curRow - 1][curCol] != 'T') && (map.firstLevelMap[curRow - 1][curCol] != '.') && (map.firstLevelMap[curRow - 1][curCol] != 'G')) && (returnPlayerY() - 4 <= curRow * brickSize))
 	{
@@ -226,7 +224,7 @@ bool Players::checkOnLeftBoxCollisions(int curRow, int curCol, Boxes& box, Map& 
 	}
 }
 
-bool Players::checkOnMoveLeft(Boxes& box, Animations& anime, Map& map)
+bool Players::checkOnMoveLeft(Boxes& box, Animations& anime, Map& map, sf::RenderWindow& window)
 {
 	int curRow = calculateCurPlayerRow() + 6;
 	int curCol = calculateCurPlayerCol() + 11;
@@ -234,7 +232,6 @@ bool Players::checkOnMoveLeft(Boxes& box, Animations& anime, Map& map)
 	const int numOfPointsBoxes = 7;
 	checkOnKey(curRow, curCol, 'L');
 	checkOnDoor('L', map, anime);
-	anime.checkOnOpenDoor(map);
 	canMoveLeft = checkOnLeftBoxCollisions(curRow, curCol, box, map);
 	if (((map.firstLevelMap[curRow][curCol - 1] != ' ') && (map.firstLevelMap[curRow][curCol - 1] != 'T') && (map.firstLevelMap[curRow][curCol - 1] != '.') && (map.firstLevelMap[curRow][curCol - 1] != 'G')) && (returnPlayerX() - 4 <= curCol * brickSize))
 	{
@@ -271,7 +268,7 @@ bool Players::checkOnRightBoxCollisions(int curRow, int curCol, Boxes& box, Map&
 	}
 }
 
-bool Players::checkOnMoveRight(Boxes& box, Animations& anime, Map& map)
+bool Players::checkOnMoveRight(Boxes& box, Animations& anime, Map& map, sf::RenderWindow& window)
 {
 	int curRow = calculateCurPlayerRow() + 6;
 	int curCol = calculateCurPlayerCol() + 11;
@@ -279,7 +276,6 @@ bool Players::checkOnMoveRight(Boxes& box, Animations& anime, Map& map)
 	const int numOfPointsBoxes = 7;
 	checkOnKey(curRow, curCol, 'R');
 	checkOnDoor('R', map, anime);
-	anime.checkOnOpenDoor(map);
 	canMoveRight = checkOnRightBoxCollisions(curRow, curCol, box, map);
 	if (anime.getCageAnimationState())
 	{
@@ -426,9 +422,9 @@ bool Players::checkOnTeleport(Map& map)
 	return false;
 }
 
-void Players::updateRight(Boxes& box, Animations& cage, Map& map)
+void Players::updateRight(Boxes& box, Animations& cage, Map& map, sf::RenderWindow& window)
 {
-	if (checkOnMoveRight(box, cage, map))
+	if (checkOnMoveRight(box, cage, map, window))
 	{
 		playerX += offset;
 		curImg++;
@@ -437,9 +433,9 @@ void Players::updateRight(Boxes& box, Animations& cage, Map& map)
 	}
 }
 
-void Players::updateDown(Boxes& box, Animations& cage, Map& map)
+void Players::updateDown(Boxes& box, Animations& cage, Map& map, sf::RenderWindow& window)
 {
-	if (checkOnMoveDown(box, cage, map))
+	if (checkOnMoveDown(box, cage, map, window))
 	{
 		playerY += offset;
 		curImg++;
@@ -448,9 +444,9 @@ void Players::updateDown(Boxes& box, Animations& cage, Map& map)
 	}
 }
 
-void Players::updateUp(Boxes& box, Animations& anime, Map& map)
+void Players::updateUp(Boxes& box, Animations& anime, Map& map, sf::RenderWindow& window)
 {
-	if (checkOnMoveUp(box, anime, map))
+	if (checkOnMoveUp(box, anime, map, window))
 	{
 		playerY -= offset;
 		curImg++;
@@ -459,9 +455,9 @@ void Players::updateUp(Boxes& box, Animations& anime, Map& map)
 	}
 }
 
-void Players::updateLeft(Boxes& box, Animations& anime, Map& map)
+void Players::updateLeft(Boxes& box, Animations& anime, Map& map, sf::RenderWindow& window)
 {
-	if (checkOnMoveLeft(box, anime, map))
+	if (checkOnMoveLeft(box, anime, map, window))
 	{
 		playerX -= offset;
 		curImg++;
@@ -523,22 +519,22 @@ void Players::move(sf::RenderWindow& window, Map& map, Animations& anime, Boxes&
 		{
 		case Direction::down:
 		{
-			updateDown(box, anime, map);
+			updateDown(box, anime, map, window);
 			break;
 		}
 		case Direction::up:
 		{
-			updateUp(box, anime, map);
+			updateUp(box, anime, map, window);
 			break;
 		}
 		case Direction::left:
 		{
-			updateLeft(box, anime, map);
+			updateLeft(box, anime, map, window);
 			break;
 		}
 		case Direction::right:
 		{
-			updateRight(box, anime, map);
+			updateRight(box, anime, map, window);
 			break;
 		}
 		}

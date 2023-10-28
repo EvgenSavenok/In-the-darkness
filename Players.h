@@ -39,14 +39,14 @@ public:
 	void setDir(Direction dir) { this->playerDir = dir; };
 	bool update(sf::Clock clock, Map& map, sf::Clock teleportClock, Animations& animeOfTeleport);
 	float playerX, playerY;
-	bool checkOnMoveDown(Boxes& box, Animations& cage, Map& map);
-	bool checkOnMoveUp(Boxes& box, Animations& anime, Map& map);
-	bool checkOnMoveLeft(Boxes& box, Animations& anime, Map& map);
-	bool checkOnMoveRight(Boxes& box, Animations& anime, Map& map);
-	void updateRight(Boxes& box, Animations& anime, Map& map);
-	void updateLeft(Boxes& box, Animations& anime, Map& map);
-	void updateUp(Boxes& box, Animations& anime, Map& map);
-	void updateDown(Boxes& box, Animations& anime, Map& map);
+	bool checkOnMoveDown(Boxes& box, Animations& cage, Map& map, sf::RenderWindow& window);
+	bool checkOnMoveUp(Boxes& box, Animations& anime, Map& map, sf::RenderWindow& window);
+	bool checkOnMoveLeft(Boxes& box, Animations& anime, Map& map, sf::RenderWindow& window);
+	bool checkOnMoveRight(Boxes& box, Animations& anime, Map& map, sf::RenderWindow& window);
+	void updateRight(Boxes& box, Animations& anime, Map& map, sf::RenderWindow& window);
+	void updateLeft(Boxes& box, Animations& anime, Map& map, sf::RenderWindow& window);
+	void updateUp(Boxes& box, Animations& anime, Map& map, sf::RenderWindow& window);
+	void updateDown(Boxes& box, Animations& anime, Map& map, sf::RenderWindow& window);
 	float returnPlayerX() { return playerX; }
 	float returnPlayerY() { return playerY; }
 	bool isHasKey() { return key; };

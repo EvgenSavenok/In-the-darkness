@@ -7,6 +7,23 @@ Animations::Animations()
 	cageTexture.loadFromImage(cageImg);
 	cageSprite.setTexture(cageTexture);
 	cageSprite.setTextureRect(sf::IntRect(0, 0, 90, 90));
+
+
+	doorImg.loadFromFile("Images/doors.png");
+	doorTexture.loadFromImage(doorImg);
+	doorSprite.setTexture(doorTexture);
+	doorSprite.setTextureRect(sf::IntRect(107, 7, 95, 95));
+
+	leftDoorImg.loadFromFile("Images/doors.png");
+	leftDoorTexture.loadFromImage(leftDoorImg);
+	leftDoorSprite.setTexture(leftDoorTexture);
+	leftDoorSprite.setTextureRect(sf::IntRect(154.5, 7, 47.5, 95));
+
+	rightDoorImg.loadFromFile("Images/doors.png");
+	rightDoorTexture.loadFromImage(rightDoorImg);
+	rightDoorSprite.setTexture(rightDoorTexture);
+	rightDoorSprite.setTextureRect(sf::IntRect(202, 7, 47.5, 95));
+
 	initializeDoors();
 }
 
@@ -79,20 +96,46 @@ int Animations::checkCurDoorNum(int curRow, int curCol)
 	}
 }
 
-void Animations::checkOnOpenDoor(Map& map)
+void Animations::checkOnOpenDoor(Map& map, sf::RenderWindow& window, sf::Clock& leftDoorClock, sf::Clock& rightDoorClock)
 {
 	for (int i = 0; i < numOfDoors; i++)
 	{
 		if (getDoorAnimationState(i))
 		{
-			startDoorAnimation(i, map);
+			startDoorAnimation(i, map, window, leftDoorClock, rightDoorClock);
 		}
 	}
 }
 
-void Animations::startDoorAnimation(int numOfDoor, Map& map)
+void Animations::startDoorAnimation(int numOfDoor, Map& map, sf::RenderWindow& window, sf::Clock& leftDoorClock, sf::Clock& rightDoorClock)
 {
 	int curDoorCol = doors[numOfDoor].x;
 	int curDoorRow = doors[numOfDoor].y;
 	map.firstLevelMap[curDoorRow][curDoorCol] = ' ';
+
+	bool canRestartLeftClock = false;
+	bool canRestartRightClock = false;
+
+	if ((leftDoorClock.getElapsedTime().asMilliseconds() > 100) && (leftDoorStartX < 252.0) && (leftDoorWidth > 0))
+	{
+		leftDoorOffset--;
+		leftDoorWidth -= 1;
+		leftDoorStartX++;
+		leftDoorClock.restart();
+	}
+
+	if ((rightDoorClock.getElapsedTime().asMilliseconds() > 100) && (rightDoorOffset < 95) && (rightDoorWidth > 0))
+	{
+		rightDoorOffset++;
+		rightDoorWidth -= 1;
+		rightDoorClock.restart();
+	}
+
+	leftDoorSprite.setTextureRect(sf::IntRect(leftDoorStartX, 7, leftDoorWidth, 95));
+	leftDoorSprite.setPosition(brickSize * curDoorCol, brickSize * curDoorRow);
+	window.draw(leftDoorSprite);
+
+	rightDoorSprite.setTextureRect(sf::IntRect(250.0, 7, rightDoorWidth, 95));
+	rightDoorSprite.setPosition(brickSize * curDoorCol + rightDoorOffset, brickSize * curDoorRow);
+	window.draw(rightDoorSprite);
 }

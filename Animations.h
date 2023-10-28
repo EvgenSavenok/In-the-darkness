@@ -15,6 +15,18 @@ private:
 	sf::Texture cageTexture;
 	sf::Sprite cageSprite;
 
+	sf::Image doorImg;
+	sf::Texture doorTexture;
+	sf::Sprite doorSprite;
+
+	sf::Image leftDoorImg;
+	sf::Texture leftDoorTexture;
+	sf::Sprite leftDoorSprite;
+
+	sf::Image rightDoorImg;
+	sf::Texture rightDoorTexture;
+	sf::Sprite rightDoorSprite;
+
 	bool isCanStartBoxAnime = false;
 	float cageHeight = 90;
 
@@ -22,9 +34,14 @@ private:
 
 	float brickSize = 90;
 
-	void startDoorAnimation(int numOfDoor, Map& map);
+	void startDoorAnimation(int numOfDoor, Map& map, sf::RenderWindow& window, sf::Clock& leftDoorClock, sf::Clock& rightDoorClock);
 	sf::Vector2f position;
 	void initializeDoors();
+	float leftDoorStartX = 205;
+	float leftDoorWidth = 47.5;
+	float rightDoorWidth = 47.5;
+	float leftDoorOffset = 0;
+	float rightDoorOffset = 47.5;
 	int numOfDoors = 0;
 	std::vector<bool> isCanStartDoorAnimation;
 	Map map;
@@ -48,7 +65,7 @@ public:
 	Animations();
 	void setCagePos(sf::RenderWindow& window, Boxes& box, Map& map, sf::Clock& cageClock);
 	void startCageAnimation(Boxes& box, Map& map, sf::RenderWindow& window, sf::Clock& cageClock);
-	void checkOnOpenDoor(Map& map);
+	void checkOnOpenDoor(Map& map, sf::RenderWindow& window, sf::Clock& leftDoorClock, sf::Clock& rightDoorClock);
 	int checkCurDoorNum(int curRow, int curCol);
 	std::vector<sf::Vector2f> doors;
 };
