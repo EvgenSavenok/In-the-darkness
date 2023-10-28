@@ -17,12 +17,17 @@ private:
 
 	bool isCanStartBoxAnime = false;
 	float cageHeight = 90;
-	bool isCageAnimationStarted = false;
 
-	bool isCanStartDoorAnimation = false;
+	bool isCageAnimationStarted = false;
 
 	float brickSize = 90;
 
+	void startDoorAnimation(int numOfDoor, Map& map);
+	sf::Vector2f position;
+	void initializeDoors();
+	int numOfDoors = 0;
+	std::vector<bool> isCanStartDoorAnimation;
+	
 public:
 	bool getStay() { return isStayOnTeleport; }
 	void setStay(bool isStayOnTeleport) { this->isStayOnTeleport = isStayOnTeleport; }
@@ -30,8 +35,8 @@ public:
 	void setCageHeight(float cageHeight) { this->cageHeight = cageHeight; }
 	void setCageAnimationState(bool isCageAnimationStarted) { this->isCageAnimationStarted = isCageAnimationStarted; }
 	bool getCageAnimationState() { return isCageAnimationStarted; }
-	void setDoorAnimationState(bool isCanStartDoorAnimation) { this->isCanStartDoorAnimation = isCanStartDoorAnimation; }
-	bool getDoorAnimationState() { return isCanStartDoorAnimation; }
+	void setDoorAnimationState(bool isCanStartDoorAnimation, int numOfDoor) { this->isCanStartDoorAnimation[numOfDoor] = isCanStartDoorAnimation; }
+	bool getDoorAnimationState(int numOfDoor) { return isCanStartDoorAnimation[numOfDoor]; }
 
 	float getInterval() { return interval; }
 	void setInterval(float interval) { this->interval = interval; }
@@ -42,6 +47,7 @@ public:
 	Animations();
 	void setCagePos(sf::RenderWindow& window, Boxes& box, Map& map, sf::Clock& cageClock);
 	void startCageAnimation(Boxes& box, Map& map, sf::RenderWindow& window, sf::Clock& cageClock);
-	void checkOnOpenDoor();
-	void startDoorAnimation();
+	void checkOnOpenDoor(Map& map);
+	int checkCurDoorNum(int curRow, int curCol);
+	std::vector<sf::Vector2f> doors;
 };

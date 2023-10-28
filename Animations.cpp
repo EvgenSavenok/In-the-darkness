@@ -1,4 +1,5 @@
 #include "Animations.h"
+#include "Map.h"
 
 Animations::Animations()
 {
@@ -6,6 +7,25 @@ Animations::Animations()
 	cageTexture.loadFromImage(cageImg);
 	cageSprite.setTexture(cageTexture);
 	cageSprite.setTextureRect(sf::IntRect(0, 0, 90, 90));
+	initializeDoors();
+}
+
+void Animations::initializeDoors()
+{
+	Map map;
+	for (int i = 0; i < 36; i++)
+	{
+		for (int j = 0; j < 43; j++)
+		{
+			if (map.firstLevelMap[i][j] == 'D')
+			{
+				numOfDoors++;
+				position = sf::Vector2f(j, i);
+				doors.push_back(position);
+				isCanStartDoorAnimation.push_back(false);
+			}
+		}
+	}
 }
 
 void Animations::setCagePos(sf::RenderWindow& window, Boxes& box, Map& map, sf::Clock& cageClock)
@@ -20,11 +40,6 @@ void Animations::setCagePos(sf::RenderWindow& window, Boxes& box, Map& map, sf::
 		window.draw(cageSprite);
 		startCageAnimation(box, map, window, cageClock);
 	}
-}
-
-void Animations::checkOnOpenDoor()
-{
-
 }
 
 void Animations::startCageAnimation(Boxes& box, Map& map, sf::RenderWindow& window, sf::Clock& cageClock)
@@ -54,7 +69,31 @@ void Animations::startCageAnimation(Boxes& box, Map& map, sf::RenderWindow& wind
 	}
 }
 
-void Animations::startDoorAnimation()
+int Animations::checkCurDoorNum(int curRow, int curCol)
 {
+	for (int i = 0; i < numOfDoors; i++)
+	{
+		if ((curCol == doors[i].x) && (curRow == doors[i].y))
+		{
+			return i;
+		}
+	}
+}
 
+void Animations::checkOnOpenDoor(Map& map)
+{
+	for (int i = 0; i < numOfDoors; i++)
+	{
+		if (getDoorAnimationState(i))
+		{
+			startDoorAnimation(i, map);
+		}
+	}
+}
+
+void Animations::startDoorAnimation(int numOfDoor, Map& map)
+{
+	int curDoorCol = doors[numOfDoor].x;
+	int curDoorRow = doors[numOfDoor].y;
+	map.firstLevelMap[curDoorCol][curDoorRow] == ' ';
 }

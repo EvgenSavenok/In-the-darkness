@@ -78,8 +78,8 @@ int main()
     while (window.isOpen()) 
     {
         pressOnKey(window, playerClock, player, map, animeOfTeleport, box, cage);
-        enemyBoar.setDir(enemyDirection::left);
-        updateBoarState(enemyBoar, enemyClock);
+      //  enemyBoar.setDir(enemyDirection::left);
+      //  updateBoarState(enemyBoar, enemyClock);
         updatePlayerState(playerClock, player, map, animeOfTeleport, teleportClock);
         window.clear(sf::Color::Black);
         box.checkAllPoints(map);
@@ -87,7 +87,7 @@ int main()
         box.drawBox(window);
         player.drawKey(window);
         cage.setCagePos(window, box, map, cageClock);
-        camera.setCenter(player.x, player.y);
+        camera.setCenter(player.playerX, player.playerY);
         window.draw(map.getTeleportSprite());
         window.draw(player.getSprite());
         window.draw(enemyBoar.getSprite());

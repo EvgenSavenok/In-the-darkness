@@ -9,19 +9,26 @@ enum class Direction { down, up, left, right };
 class Players
 {
 private:
-	sf::Image img;
+	sf::Image playerImg;
 	sf::Texture texture;
 	sf::Sprite sprite;
 
-	Direction dir;
+	Direction playerDir;
 	int curImg;
 	float delayInSeconds = 0.5f;
+	#define numOfBoxes 7
 	bool key;
-	bool canPushBox[7];
+	bool canPushBox[numOfBoxes];
 
 	sf::Image keyImg;
 	sf::Texture keyTexture;
 	sf::Sprite keySprite;
+
+	bool checkOnDownBoxCollisions(int curRow, int curCol, Boxes& box, Map& map);
+	bool checkOnUpBoxCollisions(int curRow, int curCol, Boxes& box, Map& map);
+	bool checkOnLeftBoxCollisions(int curRow, int curCol, Boxes& box, Map& map);
+	bool checkOnRightBoxCollisions(int curRow, int curCol, Boxes& box, Map& map);
+	void checkBoxOnWallCollision(Map& map, int curBoxRow, int curBoxCol, char dir, int indexOfBox, Boxes& box);
 
 	const float offset = 4;
 
@@ -29,9 +36,9 @@ public:
 	sf::Sprite getSprite() { return sprite; };
 	Players();
 	void move(sf::RenderWindow& window, Map& map, Animations& animeOfTeleport, Boxes& box, Animations& cage);
-	void setDir(Direction dir) { this->dir = dir; };
+	void setDir(Direction dir) { this->playerDir = dir; };
 	bool update(sf::Clock clock, Map& map, sf::Clock teleportClock, Animations& animeOfTeleport);
-	float x, y;
+	float playerX, playerY;
 	bool checkOnMoveDown(Boxes& box, Animations& cage, Map& map);
 	bool checkOnMoveUp(Boxes& box, Animations& anime, Map& map);
 	bool checkOnMoveLeft(Boxes& box, Animations& anime, Map& map);
@@ -40,14 +47,14 @@ public:
 	void updateLeft(Boxes& box, Animations& anime, Map& map);
 	void updateUp(Boxes& box, Animations& anime, Map& map);
 	void updateDown(Boxes& box, Animations& anime, Map& map);
-	float returnPlayerX() { return x; }
-	float returnPlayerY() { return y; }
+	float returnPlayerX() { return playerX; }
+	float returnPlayerY() { return playerY; }
 	bool isHasKey() { return key; };
 	void setKey(bool key) { this->key = key; };
-	void checkOnKey(int curRow, int curCol, int curDir);
+	void checkOnKey(int curRow, int curCol, char curDir);
 	bool checkOnTeleport(Map& map);
-	int calculateCurRow();
-	int calculateCurCol();
+	int calculateCurPlayerRow();
+	int calculateCurPlayerCol();
 	bool prepareForTeleportAnime(Animations& animeOfTeleport, Map& map, sf::Clock teleportClock, bool isNewCycle);
 	bool startTeleportAnimation(Map& map, sf::Clock clock, Animations& animeOfTeleport);
 	int keyX, keyY;
