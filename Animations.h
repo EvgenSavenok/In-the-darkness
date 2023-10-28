@@ -27,6 +27,7 @@ private:
 	void initializeDoors();
 	int numOfDoors = 0;
 	std::vector<bool> isCanStartDoorAnimation;
+	Map map;
 	
 public:
 	bool getStay() { return isStayOnTeleport; }

@@ -416,11 +416,8 @@ void Players::checkOnBox(int curRow, int curCol, char dir, Boxes& box, Map& map,
 
 bool Players::checkOnTeleport(Map& map)
 {
-	int curRow = calculateCurPlayerRow();
-	int curCol = calculateCurPlayerCol();
-
-	curCol += 11;
-	curRow += 6;
+	int curRow = calculateCurPlayerRow() + 6;
+	int curCol = calculateCurPlayerCol() + 11;
 
 	if (map.firstLevelMap[curRow][curCol] == 'T')
 	{
@@ -557,11 +554,8 @@ bool Players::prepareForTeleportAnime(Animations& animeOfTeleport, Map& map, sf:
 {
 	if (animeOfTeleport.getStay())
 	{
-		int curRow = calculateCurPlayerRow();
-		int curCol = calculateCurPlayerCol();
-
-		curCol += 11;
-		curRow += 6;
+		int curRow = calculateCurPlayerRow() + 6;
+		int curCol = calculateCurPlayerCol() + 11;
 
 		if (animeOfTeleport.getFirstSetInfo())
 		{
@@ -657,7 +651,6 @@ void Players::checkOnLeftDoor(int curRow, int curCol, Map& map, Animations& door
 
 void Players::checkOnRightDoor(int curRow, int curCol, Map& map, Animations& doorAnime)
 {
-	bool a;
 	if (map.firstLevelMap[curRow][curCol + 1] == 'D')
 	{
 		if ((returnPlayerX() + offset >= (curCol + 1) * brickSize - 45) && isHasKey())

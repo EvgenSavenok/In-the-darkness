@@ -66,10 +66,10 @@ int main()
     const float screenHeight = sf::VideoMode::getDesktopMode().height;
     Players player;
     Enemies enemyBoar;
+    Map map;
     Animations animeOfTeleport;
     Animations cage;
     Boxes box;
-    Map map;
     sf::Clock playerClock;
     sf::Clock enemyClock;
     sf::Clock teleportClock;

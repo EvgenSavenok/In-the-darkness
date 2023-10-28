@@ -12,7 +12,6 @@ Animations::Animations()
 
 void Animations::initializeDoors()
 {
-	Map map;
 	for (int i = 0; i < 36; i++)
 	{
 		for (int j = 0; j < 43; j++)
@@ -95,5 +94,5 @@ void Animations::startDoorAnimation(int numOfDoor, Map& map)
 {
 	int curDoorCol = doors[numOfDoor].x;
 	int curDoorRow = doors[numOfDoor].y;
-	map.firstLevelMap[curDoorCol][curDoorRow] == ' ';
+	map.firstLevelMap[curDoorRow][curDoorCol] = ' ';
 }
