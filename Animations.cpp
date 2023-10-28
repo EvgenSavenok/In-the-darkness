@@ -1,4 +1,4 @@
-#include "Animations.h"
+﻿#include "Animations.h"
 #include "Map.h"
 
 Animations::Animations()
@@ -60,7 +60,7 @@ void Animations::setCagePos(sf::RenderWindow& window, Boxes& box, Map& map, sf::
 
 void Animations::startCageAnimation(Boxes& box, Map& map, sf::RenderWindow& window, sf::Clock& cageClock)
 {
-	#define numOfActivePoints 1
+	#define numOfActivePoints 2
 	int countOfPoints = 0;
 	for (int i = 0; i < 36; i++)
 	{
@@ -111,30 +111,27 @@ void Animations::startDoorAnimation(int numOfDoor, Map& map, sf::RenderWindow& w
 {
 	int curDoorCol = doors[numOfDoor].x;
 	int curDoorRow = doors[numOfDoor].y;
-	map.firstLevelMap[curDoorRow][curDoorCol] = ' ';
-
-	bool canRestartLeftClock = false;
-	bool canRestartRightClock = false;
-
-	if ((leftDoorClock.getElapsedTime().asMilliseconds() > 100) && (leftDoorStartX < 252.0) && (leftDoorWidth > 0))
+	map.firstLevelMap[curDoorRow][curDoorCol] = 'C';
+	if ((leftDoorClock.getElapsedTime().asMilliseconds() > 85) && (leftDoorStartX < 252.0) && (leftDoorWidth > 0))
 	{
-		leftDoorOffset--;
-		leftDoorWidth -= 1;
+		leftDoorOffset--;//создай массив с координатами и такими штуками для каждой двери
+		leftDoorWidth -= 1;//еще есть баг, где если быстро ласт ящик переместить над платформой, то клетка откроется частично
 		leftDoorStartX++;
 		leftDoorClock.restart();
 	}
-
 	if ((rightDoorClock.getElapsedTime().asMilliseconds() > 100) && (rightDoorOffset < 95) && (rightDoorWidth > 0))
 	{
 		rightDoorOffset++;
 		rightDoorWidth -= 1;
 		rightDoorClock.restart();
 	}
-
+	if (leftDoorWidth <= 0)
+	{
+		map.firstLevelMap[curDoorRow][curDoorCol] = ' ';
+	}
 	leftDoorSprite.setTextureRect(sf::IntRect(leftDoorStartX, 7, leftDoorWidth, 95));
 	leftDoorSprite.setPosition(brickSize * curDoorCol, brickSize * curDoorRow);
 	window.draw(leftDoorSprite);
-
 	rightDoorSprite.setTextureRect(sf::IntRect(250.0, 7, rightDoorWidth, 95));
 	rightDoorSprite.setPosition(brickSize * curDoorCol + rightDoorOffset, brickSize * curDoorRow);
 	window.draw(rightDoorSprite);

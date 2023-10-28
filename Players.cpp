@@ -5,10 +5,10 @@
 
 Players::Players()
 {
-	key = true;
+	key = false;
 	std::fill(canPushBox, canPushBox + 7, false);
-	playerX = brickSize * 13 + 25;
-	playerY = brickSize * 13 + 15;
+	playerX = brickSize * 27 + 25;
+	playerY = brickSize * 12 + 15;
 	curImg = 0;
 	playerDir = Direction::down;
 	playerImg.loadFromFile("Images/player.png");

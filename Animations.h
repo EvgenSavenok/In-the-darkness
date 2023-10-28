@@ -38,8 +38,8 @@ private:
 	sf::Vector2f position;
 	void initializeDoors();
 	float leftDoorStartX = 205;
-	float leftDoorWidth = 47.5;
-	float rightDoorWidth = 47.5;
+	float leftDoorWidth = 46.5;
+	float rightDoorWidth = 40.5;
 	float leftDoorOffset = 0;
 	float rightDoorOffset = 47.5;
 	int numOfDoors = 0;
