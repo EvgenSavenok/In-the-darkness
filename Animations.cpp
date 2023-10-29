@@ -39,6 +39,7 @@ void Animations::initializeDoors()
 				position = sf::Vector2f(j, i);
 				doors.push_back(position);
 				isCanStartDoorAnimation.push_back(false);
+				door.push_back(DoorsProperties(205.0, 46.5, 40.5, 0.0, 47.5));
 			}
 		}
 	}
@@ -60,7 +61,7 @@ void Animations::setCagePos(sf::RenderWindow& window, Boxes& box, Map& map, sf::
 
 void Animations::startCageAnimation(Boxes& box, Map& map, sf::RenderWindow& window, sf::Clock& cageClock)
 {
-	#define numOfActivePoints 2
+	#define numOfActivePoints 1
 	int countOfPoints = 0;
 	for (int i = 0; i < 36; i++)
 	{
@@ -82,6 +83,13 @@ void Animations::startCageAnimation(Boxes& box, Map& map, sf::RenderWindow& wind
 				setCageAnimationState(true);
 			cageClock.restart();
 		}
+	}
+	else
+	{
+		const int startCageHeight = 90;
+		setCageHeight(startCageHeight);
+		cageSprite.setTextureRect(sf::IntRect(0, 0, 90, getCageHeight()));
+		window.draw(cageSprite);
 	}
 }
 
@@ -112,27 +120,27 @@ void Animations::startDoorAnimation(int numOfDoor, Map& map, sf::RenderWindow& w
 	int curDoorCol = doors[numOfDoor].x;
 	int curDoorRow = doors[numOfDoor].y;
 	map.firstLevelMap[curDoorRow][curDoorCol] = 'C';
-	if ((leftDoorClock.getElapsedTime().asMilliseconds() > 85) && (leftDoorStartX < 252.0) && (leftDoorWidth > 0))
+	if ((leftDoorClock.getElapsedTime().asMilliseconds() > 85) && (door[numOfDoor].leftDoorStartX < 252.0) && (door[numOfDoor].leftDoorWidth > 0))
 	{
-		leftDoorOffset--;//создай массив с координатами и такими штуками для каждой двери
-		leftDoorWidth -= 1;//еще есть баг, где если быстро ласт ящик переместить над платформой, то клетка откроется частично
-		leftDoorStartX++;
+		door[numOfDoor].leftDoorOffset--;//создай массив с координатами и такими штуками для каждой двери
+		door[numOfDoor].leftDoorWidth -= 1;
+		door[numOfDoor].leftDoorStartX++;
 		leftDoorClock.restart();
 	}
-	if ((rightDoorClock.getElapsedTime().asMilliseconds() > 100) && (rightDoorOffset < 95) && (rightDoorWidth > 0))
+	if ((rightDoorClock.getElapsedTime().asMilliseconds() > 100) && (door[numOfDoor].rightDoorOffset < 95) && (door[numOfDoor].rightDoorWidth > 0))
 	{
-		rightDoorOffset++;
-		rightDoorWidth -= 1;
+		door[numOfDoor].rightDoorOffset++;
+		door[numOfDoor].rightDoorWidth -= 1;
 		rightDoorClock.restart();
 	}
-	if (leftDoorWidth <= 0)
+	if (door[numOfDoor].leftDoorWidth <= 0)
 	{
 		map.firstLevelMap[curDoorRow][curDoorCol] = ' ';
 	}
-	leftDoorSprite.setTextureRect(sf::IntRect(leftDoorStartX, 7, leftDoorWidth, 95));
+	leftDoorSprite.setTextureRect(sf::IntRect(door[numOfDoor].leftDoorStartX, 7, door[numOfDoor].leftDoorWidth, 95));
 	leftDoorSprite.setPosition(brickSize * curDoorCol, brickSize * curDoorRow);
 	window.draw(leftDoorSprite);
-	rightDoorSprite.setTextureRect(sf::IntRect(250.0, 7, rightDoorWidth, 95));
-	rightDoorSprite.setPosition(brickSize * curDoorCol + rightDoorOffset, brickSize * curDoorRow);
+	rightDoorSprite.setTextureRect(sf::IntRect(250.0, 7, door[numOfDoor].rightDoorWidth, 95));
+	rightDoorSprite.setPosition(brickSize * curDoorCol + door[numOfDoor].rightDoorOffset, brickSize * curDoorRow);
 	window.draw(rightDoorSprite);
 }
