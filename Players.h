@@ -6,7 +6,7 @@
 
 enum class Direction { down, up, left, right };
 
-class Players
+class Player
 {
 private:
 	sf::Image playerImg;
@@ -31,11 +31,12 @@ private:
 	void checkBoxOnWallCollision(Map& map, int curBoxRow, int curBoxCol, char dir, int indexOfBox, Boxes& box);
 
 	const float offset = 4;
+	const int playerDelay = 1;
 
 public:
 	sf::Sprite getSprite() { return sprite; };
-	Players();
-	void move(sf::RenderWindow& window, Map& map, Animations& animeOfTeleport, Boxes& box, Animations& cage);
+	Player();
+	bool move(sf::RenderWindow& window, Map& map, Animations& animeOfTeleport, Boxes& box, Animations& cage, sf::Clock& playerClock);
 	void setDir(Direction dir) { this->playerDir = dir; };
 	bool update(sf::Clock clock, Map& map, sf::Clock teleportClock, Animations& animeOfTeleport);
 	float playerX, playerY;

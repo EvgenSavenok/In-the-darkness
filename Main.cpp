@@ -5,14 +5,23 @@
 #include "Map.h"
 #include "Animations.h"
 #include "Boxes.h"
+#include "Candle/RadialLight.hpp"
+#include "Candle/LightingArea.hpp"
+#include "BackgroundObjects.h"
 
-void pressOnKey(sf::RenderWindow& window, sf::Clock& clock, Players& player, Map& map, Animations& anime, Boxes& box, Animations& cage)
+void pressOnKey(sf::RenderWindow& window, sf::Clock& clock, Player& player, Map& map, Animations& anime, Boxes& box, Animations& cage)
 {
     sf::Event event;
+   /* light.setRange(100);
+    light.setFade(false);
+    candle::LightingArea fog(candle::LightingArea::FOG,
+        sf::Vector2f(0.f, 0.f),
+        sf::Vector2f(300.f, 379.f));*/
+    //fog.setAreaColor(sf::Color::Black);
+    bool isTime = false;
     while (window.pollEvent(event))
     {
         if (event.type == sf::Event::KeyPressed) {
-            clock.restart();
             if (event.key.code == sf::Keyboard::Escape)
             {
                 window.close();
@@ -20,28 +29,40 @@ void pressOnKey(sf::RenderWindow& window, sf::Clock& clock, Players& player, Map
             if (event.key.code == sf::Keyboard::D)
             {
                 player.setDir(Direction::right);
-                player.move(window, map, anime, box, cage);
+                isTime = player.move(window, map, anime, box, cage, clock);
             }
             if (event.key.code == sf::Keyboard::A)
             {
                 player.setDir(Direction::left);
-                player.move(window, map, anime, box, cage);
+                isTime = player.move(window, map, anime, box, cage, clock);
             }
             if (event.key.code == sf::Keyboard::W)
             {
                 player.setDir(Direction::up);
-                player.move(window, map, anime, box, cage);
+                isTime = player.move(window, map, anime, box, cage, clock);
             }
             if (event.key.code == sf::Keyboard::S)
             {
                 player.setDir(Direction::down);
-                player.move(window, map, anime, box, cage);
+                isTime = player.move(window, map, anime, box, cage, clock);
             }
         }
+        if (isTime)
+        {
+            clock.restart();
+        }
+       /* if (event.type == sf::Event::MouseMoved) {
+            sf::Vector2f mp(sf::Mouse::getPosition(window));
+            light.setPosition(mp);
+        }*/
+        //fog.clear();
+       // fog.draw(light);
+       // fog.display();
+       // window.draw(fog);
     }
 }
 
-void updatePlayerState(sf::Clock& playerClock, Players& player, Map& map, Animations& animeOfTeleport, sf::Clock& teleportClock)
+void updatePlayerState(sf::Clock& playerClock, Player& player, Map& map, Animations& animeOfTeleport, sf::Clock& teleportClock)
 {
     if (player.update(playerClock, map, teleportClock, animeOfTeleport))
     {
@@ -60,6 +81,8 @@ void updateBoarState(Enemies& enemyBoar, sf::Clock& enemyClock)
     {
         enemyClock.restart();
     }
+    enemyDirection dir = enemyBoar.getDir();
+    enemyBoar.setDir(dir);
 }
 
 int main() 
@@ -67,14 +90,16 @@ int main()
     sf::RenderWindow window;
     window.create(sf::VideoMode::getDesktopMode(), L"Rage");
     window.setMouseCursorVisible(false);
+   // candle::RadialLight light;
     const float screenWidth = sf::VideoMode::getDesktopMode().width;
     const float screenHeight = sf::VideoMode::getDesktopMode().height;
-    Players player;
+    Player player;
     Enemies enemyBoar;
     Map map;
     Animations anime;
     Animations cage;
     Boxes box;
+    BackgroundObjects backgroundObject;
     sf::Clock playerClock;
     sf::Clock enemyClock;
     sf::Clock teleportClock;
@@ -85,8 +110,7 @@ int main()
     while (window.isOpen()) 
     {
         pressOnKey(window, playerClock, player, map, anime, box, cage);
-      //  enemyBoar.setDir(enemyDirection::left);
-      //  updateBoarState(enemyBoar, enemyClock);
+        updateBoarState(enemyBoar, enemyClock);
         updatePlayerState(playerClock, player, map, anime, teleportClock);
         window.clear(sf::Color::Black);
         box.checkAllPoints(map);
@@ -97,6 +121,7 @@ int main()
         cage.setCagePos(window, box, map, cageClock);
         camera.setCenter(player.playerX, player.playerY);
         window.draw(map.getTeleportSprite());
+        window.draw(backgroundObject.getDieScientistSprite());
         window.draw(player.getSprite());
         window.draw(enemyBoar.getSprite());
         window.setView(camera); 

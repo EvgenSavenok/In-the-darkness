@@ -3,7 +3,7 @@
 #include <math.h>
 #include "Animations.h"
 
-Players::Players()
+Player::Player()
 {
 	key = false;
 	std::fill(canPushBox, canPushBox + 7, false);
@@ -28,7 +28,7 @@ Players::Players()
 	keySprite.setTextureRect(sf::IntRect(0, 0, 30, 30));
 }
 
-void Players::drawKey(sf::RenderWindow& window)
+void Player::drawKey(sf::RenderWindow& window)
 {
 	const int curKeyX = 31;
 	const int curKeyY = 12;
@@ -43,7 +43,7 @@ void Players::drawKey(sf::RenderWindow& window)
 	}
 }
 
-void Players::checkOnKey(int curRow, int curCol, char curDir)
+void Player::checkOnKey(int curRow, int curCol, char curDir)
 {
 	int curXDistance = returnKeyX() - 11 * brickSize;
 	int curKeyCol = curXDistance / brickSize + 11;
@@ -84,21 +84,21 @@ void Players::checkOnKey(int curRow, int curCol, char curDir)
 	}
 }
 
-int Players::calculateCurPlayerRow()
+int Player::calculateCurPlayerRow()
 {
 	int curYDistance = returnPlayerY() - 6 * Map::brickSize;
 	int curRow = curYDistance / Map::brickSize;
 	return curRow;
 }
 
-int Players::calculateCurPlayerCol()
+int Player::calculateCurPlayerCol()
 {
 	int curXDistance = returnPlayerX() - 11 * Map::brickSize;
 	int curCol = curXDistance / Map::brickSize;
 	return curCol;
 }
 
-bool Players::checkOnDownCageCollision(bool canMoveDown)
+bool Player::checkOnDownCageCollision(bool canMoveDown)
 {
 	const int cageX = 31;
 	const int cageY = 11;
@@ -114,7 +114,7 @@ bool Players::checkOnDownCageCollision(bool canMoveDown)
 	return canMoveDown;
 }
 
-bool Players::checkOnDownBoxCollisions(int curRow, int curCol, Boxes& box, Map& map)
+bool Player::checkOnDownBoxCollisions(int curRow, int curCol, Boxes& box, Map& map)
 {
 	const int numOfPointsBoxes = 7;
 	for (int i = 0; i < numOfPointsBoxes; i++)
@@ -136,7 +136,7 @@ bool Players::checkOnDownBoxCollisions(int curRow, int curCol, Boxes& box, Map& 
 	}
 }
 
-bool Players::checkOnMoveDown(Boxes& box, Animations& anime, Map& map, sf::RenderWindow& window)
+bool Player::checkOnMoveDown(Boxes& box, Animations& anime, Map& map, sf::RenderWindow& window)
 {
 	int curRow = calculateCurPlayerRow() + 6;
 	int curCol = calculateCurPlayerCol() + 11;
@@ -161,7 +161,7 @@ bool Players::checkOnMoveDown(Boxes& box, Animations& anime, Map& map, sf::Rende
 	return canMoveDown;
 }
 
-bool Players::checkOnUpBoxCollisions(int curRow, int curCol, Boxes& box, Map& map)
+bool Player::checkOnUpBoxCollisions(int curRow, int curCol, Boxes& box, Map& map)
 {
 	const int numOfPointsBoxes = 7;
 	for (int i = 0; i < numOfPointsBoxes; i++)
@@ -179,7 +179,7 @@ bool Players::checkOnUpBoxCollisions(int curRow, int curCol, Boxes& box, Map& ma
 	}
 }
 
-bool Players::checkOnMoveUp(Boxes& box, Animations& anime, Map& map, sf::RenderWindow& window)
+bool Player::checkOnMoveUp(Boxes& box, Animations& anime, Map& map, sf::RenderWindow& window)
 {
 	int curRow = calculateCurPlayerRow() + 6;
 	int curCol = calculateCurPlayerCol() + 11;
@@ -196,7 +196,7 @@ bool Players::checkOnMoveUp(Boxes& box, Animations& anime, Map& map, sf::RenderW
 	return canMoveUp;
 }
 
-bool Players::checkOnLeftBoxCollisions(int curRow, int curCol, Boxes& box, Map& map)
+bool Player::checkOnLeftBoxCollisions(int curRow, int curCol, Boxes& box, Map& map)
 {
 	const int numOfPointsBoxes = 7;
 	for (int i = 0; i < numOfPointsBoxes; i++)
@@ -224,7 +224,7 @@ bool Players::checkOnLeftBoxCollisions(int curRow, int curCol, Boxes& box, Map& 
 	}
 }
 
-bool Players::checkOnMoveLeft(Boxes& box, Animations& anime, Map& map, sf::RenderWindow& window)
+bool Player::checkOnMoveLeft(Boxes& box, Animations& anime, Map& map, sf::RenderWindow& window)
 {
 	int curRow = calculateCurPlayerRow() + 6;
 	int curCol = calculateCurPlayerCol() + 11;
@@ -241,7 +241,7 @@ bool Players::checkOnMoveLeft(Boxes& box, Animations& anime, Map& map, sf::Rende
 	return canMoveLeft;
 }
 
-bool Players::checkOnRightCageCollision(int curRow, int curCol, bool canMoveRight)
+bool Player::checkOnRightCageCollision(int curRow, int curCol, bool canMoveRight)
 {
 	if (returnPlayerY() >= brickSize * 12 - 55)
 	{
@@ -250,7 +250,7 @@ bool Players::checkOnRightCageCollision(int curRow, int curCol, bool canMoveRigh
 	return canMoveRight;
 }
 
-bool Players::checkOnRightBoxCollisions(int curRow, int curCol, Boxes& box, Map& map)
+bool Player::checkOnRightBoxCollisions(int curRow, int curCol, Boxes& box, Map& map)
 {
 	const int numOfPointsBoxes = 7;
 	for (int i = 0; i < numOfPointsBoxes; i++)
@@ -268,7 +268,7 @@ bool Players::checkOnRightBoxCollisions(int curRow, int curCol, Boxes& box, Map&
 	}
 }
 
-bool Players::checkOnMoveRight(Boxes& box, Animations& anime, Map& map, sf::RenderWindow& window)
+bool Player::checkOnMoveRight(Boxes& box, Animations& anime, Map& map, sf::RenderWindow& window)
 {
 	int curRow = calculateCurPlayerRow() + 6;
 	int curCol = calculateCurPlayerCol() + 11;
@@ -294,7 +294,7 @@ bool Players::checkOnMoveRight(Boxes& box, Animations& anime, Map& map, sf::Rend
 	return canMoveRight;
 }
 
-void Players::checkOnNearBox(int curRow, int curCol, char dir, Boxes& box, Map& map, int indexOfBox)
+void Player::checkOnNearBox(int curRow, int curCol, char dir, Boxes& box, Map& map, int indexOfBox)
 {
 	if (canPushBox[indexOfBox])
 	{
@@ -339,7 +339,7 @@ void Players::checkOnNearBox(int curRow, int curCol, char dir, Boxes& box, Map& 
 	}
 }
 
-void Players::checkBoxOnWallCollision(Map& map, int curBoxRow, int curBoxCol, char dir, int indexOfBox, Boxes& box)
+void Player::checkBoxOnWallCollision(Map& map, int curBoxRow, int curBoxCol, char dir, int indexOfBox, Boxes& box)
 {
 	if ((map.firstLevelMap[curBoxRow][curBoxCol + 1] != ' ') && (dir == 'R') && (map.firstLevelMap[curBoxRow][curBoxCol + 1] != '.') && (map.firstLevelMap[curBoxRow][curBoxCol + 1] != 'G'))
 	{
@@ -371,7 +371,7 @@ void Players::checkBoxOnWallCollision(Map& map, int curBoxRow, int curBoxCol, ch
 	}
 }
 
-void Players::checkOnBox(int curRow, int curCol, char dir, Boxes& box, Map& map, int indexOfBox)
+void Player::checkOnBox(int curRow, int curCol, char dir, Boxes& box, Map& map, int indexOfBox)
 {
 	int curXDistance = box.getBoxX(indexOfBox) - 11 * brickSize;
 	int curBoxCol = curXDistance / brickSize + 11;
@@ -410,7 +410,7 @@ void Players::checkOnBox(int curRow, int curCol, char dir, Boxes& box, Map& map,
 	checkBoxOnWallCollision(map, curBoxRow, curBoxCol, dir, indexOfBox, box);
 }
 
-bool Players::checkOnTeleport(Map& map)
+bool Player::checkOnTeleport(Map& map)
 {
 	int curRow = calculateCurPlayerRow() + 6;
 	int curCol = calculateCurPlayerCol() + 11;
@@ -422,7 +422,7 @@ bool Players::checkOnTeleport(Map& map)
 	return false;
 }
 
-void Players::updateRight(Boxes& box, Animations& cage, Map& map, sf::RenderWindow& window)
+void Player::updateRight(Boxes& box, Animations& cage, Map& map, sf::RenderWindow& window)
 {
 	if (checkOnMoveRight(box, cage, map, window))
 	{
@@ -433,7 +433,7 @@ void Players::updateRight(Boxes& box, Animations& cage, Map& map, sf::RenderWind
 	}
 }
 
-void Players::updateDown(Boxes& box, Animations& cage, Map& map, sf::RenderWindow& window)
+void Player::updateDown(Boxes& box, Animations& cage, Map& map, sf::RenderWindow& window)
 {
 	if (checkOnMoveDown(box, cage, map, window))
 	{
@@ -444,7 +444,7 @@ void Players::updateDown(Boxes& box, Animations& cage, Map& map, sf::RenderWindo
 	}
 }
 
-void Players::updateUp(Boxes& box, Animations& anime, Map& map, sf::RenderWindow& window)
+void Player::updateUp(Boxes& box, Animations& anime, Map& map, sf::RenderWindow& window)
 {
 	if (checkOnMoveUp(box, anime, map, window))
 	{
@@ -455,7 +455,7 @@ void Players::updateUp(Boxes& box, Animations& anime, Map& map, sf::RenderWindow
 	}
 }
 
-void Players::updateLeft(Boxes& box, Animations& anime, Map& map, sf::RenderWindow& window)
+void Player::updateLeft(Boxes& box, Animations& anime, Map& map, sf::RenderWindow& window)
 {
 	if (checkOnMoveLeft(box, anime, map, window))
 	{
@@ -466,7 +466,7 @@ void Players::updateLeft(Boxes& box, Animations& anime, Map& map, sf::RenderWind
 	}
 }
 
-bool Players::startTeleportAnimation(Map& map, sf::Clock teleportClock, Animations& animeOfTeleport)
+bool Player::startTeleportAnimation(Map& map, sf::Clock teleportClock, Animations& animeOfTeleport)
 {
 	sf::Time curTime = teleportClock.getElapsedTime();
 	float timing = curTime.asSeconds();
@@ -507,46 +507,53 @@ bool Players::startTeleportAnimation(Map& map, sf::Clock teleportClock, Animatio
 	return false;
 }
 
-void Players::move(sf::RenderWindow& window, Map& map, Animations& anime, Boxes& box, Animations& cage)
+bool Player::move(sf::RenderWindow& window, Map& map, Animations& anime, Boxes& box, Animations& cage, sf::Clock& playerClock)
 {
-	if (!anime.getStay())
+	sf::Time curTime = playerClock.getElapsedTime();
+	float timing = curTime.asMilliseconds();
+	if (timing >= playerDelay)//connect to time
 	{
-		if (curImg > 6)
+		if (!anime.getStay())
 		{
-			curImg = 0;
+			if (curImg > 6)
+			{
+				curImg = 0;
+			}
+			switch (playerDir)
+			{
+			case Direction::down:
+			{
+				updateDown(box, anime, map, window);
+				break;
+			}
+			case Direction::up:
+			{
+				updateUp(box, anime, map, window);
+				break;
+			}
+			case Direction::left:
+			{
+				updateLeft(box, anime, map, window);
+				break;
+			}
+			case Direction::right:
+			{
+				updateRight(box, anime, map, window);
+				break;
+			}
+			}
+			sprite.setPosition(playerX, playerY);
 		}
-		switch (playerDir)
+		if (checkOnTeleport(map) && (map.getPlateY() <= 7 * brickSize - 5))
 		{
-		case Direction::down:
-		{
-			updateDown(box, anime, map, window);
-			break;
+			anime.setStay(true);
 		}
-		case Direction::up:
-		{
-			updateUp(box, anime, map, window);
-			break;
-		}
-		case Direction::left:
-		{
-			updateLeft(box, anime, map, window);
-			break;
-		}
-		case Direction::right:
-		{
-			updateRight(box, anime, map, window);
-			break;
-		}
-		}
-		sprite.setPosition(playerX, playerY);
+		return true;
 	}
-	if (checkOnTeleport(map) && (map.getPlateY() <= 7 * brickSize - 5))
-	{
-		anime.setStay(true);
-	}
+	return false;
 }
 
-bool Players::prepareForTeleportAnime(Animations& animeOfTeleport, Map& map, sf::Clock teleportClock, bool isNewCycle)
+bool Player::prepareForTeleportAnime(Animations& animeOfTeleport, Map& map, sf::Clock teleportClock, bool isNewCycle)
 {
 	if (animeOfTeleport.getStay())
 	{
@@ -574,7 +581,7 @@ bool Players::prepareForTeleportAnime(Animations& animeOfTeleport, Map& map, sf:
 	return isNewCycle;
 }
 
-bool Players::update(sf::Clock clock, Map& map, sf::Clock teleportClock, Animations& animeOfTeleport)
+bool Player::update(sf::Clock clock, Map& map, sf::Clock teleportClock, Animations& animeOfTeleport)
 {
 	bool isNewCycle = false;
 	sf::Time curTime = clock.getElapsedTime();
@@ -609,7 +616,7 @@ bool Players::update(sf::Clock clock, Map& map, sf::Clock teleportClock, Animati
 	return isNewCycle;
 }
 
-void Players::checkOnBottomDoor(int curRow, int curCol, Map& map, Animations& doorAnime)
+void Player::checkOnBottomDoor(int curRow, int curCol, Map& map, Animations& doorAnime)
 {
 	if (map.firstLevelMap[curRow + 1][curCol] == 'D') 
 	{
@@ -621,7 +628,7 @@ void Players::checkOnBottomDoor(int curRow, int curCol, Map& map, Animations& do
 	}
 }
 
-void Players::checkOnTopDoor(int curRow, int curCol, Map& map, Animations& doorAnime)
+void Player::checkOnTopDoor(int curRow, int curCol, Map& map, Animations& doorAnime)
 {
 	if (map.firstLevelMap[curRow - 1][curCol] == 'D')
 	{
@@ -633,7 +640,7 @@ void Players::checkOnTopDoor(int curRow, int curCol, Map& map, Animations& doorA
 	}
 }
 
-void Players::checkOnLeftDoor(int curRow, int curCol, Map& map, Animations& doorAnime)
+void Player::checkOnLeftDoor(int curRow, int curCol, Map& map, Animations& doorAnime)
 {
 	if (map.firstLevelMap[curRow][curCol - 1] == 'D')
 	{
@@ -645,7 +652,7 @@ void Players::checkOnLeftDoor(int curRow, int curCol, Map& map, Animations& door
 	}
 }
 
-void Players::checkOnRightDoor(int curRow, int curCol, Map& map, Animations& doorAnime)
+void Player::checkOnRightDoor(int curRow, int curCol, Map& map, Animations& doorAnime)
 {
 	if (map.firstLevelMap[curRow][curCol + 1] == 'D')
 	{
@@ -657,7 +664,7 @@ void Players::checkOnRightDoor(int curRow, int curCol, Map& map, Animations& doo
 	}
 }
 
-void Players::checkOnDoor(char dir, Map& map, Animations& doorAnime)
+void Player::checkOnDoor(char dir, Map& map, Animations& doorAnime)
 {
 	int curRow = calculateCurPlayerRow() + 6;
 	int curCol = calculateCurPlayerCol() + 11;

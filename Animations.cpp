@@ -8,7 +8,6 @@ Animations::Animations()
 	cageSprite.setTexture(cageTexture);
 	cageSprite.setTextureRect(sf::IntRect(0, 0, 90, 90));
 
-
 	doorImg.loadFromFile("Images/doors.png");
 	doorTexture.loadFromImage(doorImg);
 	doorSprite.setTexture(doorTexture);
