@@ -19,8 +19,8 @@ bool Enemies::checkBoarUp()
 	int curXDistance = returnEnemyX() - 11 * brickSize;
 	int curCol = curXDistance / brickSize + 11;
 
-	int curYDistance = returnEnemyY() + 50 - 6 * brickSize;
-	int curRow = curYDistance / brickSize + 6;
+	int curYDistance = returnEnemyY() + 50 - 2 * brickSize;
+	int curRow = curYDistance / brickSize + 2;
 
 	if ((map.firstLevelMap[curRow - 1][curCol] != ' ') && (returnEnemyY() - 4 <= curRow * brickSize))
 	{
@@ -34,8 +34,8 @@ bool Enemies::checkBoarDown()
 	int curXDistance = returnEnemyX() - 11 * brickSize;
 	int curCol = curXDistance / brickSize + 11;
 
-	int curYDistance = returnEnemyY() + 50 - 6 * brickSize;
-	int curRow = curYDistance / brickSize + 6;
+	int curYDistance = returnEnemyY() + 50 - 2 * brickSize;
+	int curRow = curYDistance / brickSize + 2;
 
 	if (((map.firstLevelMap[curRow + 1][curCol] != ' ')) && (returnEnemyX() - 4 <= curCol * Map::brickSize))
 	{
@@ -49,8 +49,8 @@ bool Enemies::checkBoarRight()
 	int curXDistance = returnEnemyX() - 11 * brickSize;
 	int curCol = curXDistance / brickSize + 11;
 
-	int curYDistance = returnEnemyY() + 50 - 6 * brickSize;
-	int curRow = curYDistance / brickSize + 6;
+	int curYDistance = returnEnemyY() + 50 - 2 * brickSize;
+	int curRow = curYDistance / brickSize + 2;
 
 	if (((map.firstLevelMap[curRow][curCol + 1] != ' ')) && (returnEnemyX() - 4 <= curCol * brickSize))
 	{
@@ -64,8 +64,8 @@ bool Enemies::checkBoarLeft()
 	int curXDistance = returnEnemyX() - 11 * brickSize;
 	int curCol = curXDistance / brickSize + 11;
 
-	int curYDistance = returnEnemyY() + 50 - 6 * brickSize;
-	int curRow = curYDistance / brickSize + 6;
+	int curYDistance = returnEnemyY() + 50 - 2 * brickSize;
+	int curRow = curYDistance / brickSize + 2;
 
 	if (((map.firstLevelMap[curRow][curCol - 1] != ' ')) && (returnEnemyX() - 4 <= curCol * Map::brickSize))
 	{
@@ -133,8 +133,8 @@ bool Enemies::checkOnMoveDown()
 	int curXDistance = returnEnemyX() - 11 * brickSize;
 	int curCol = curXDistance / brickSize + 11;
 
-	int curYDistance = returnEnemyY() - 6 * brickSize;
-	int curRow = curYDistance / brickSize + 6;
+	int curYDistance = returnEnemyY() - 2 * brickSize;
+	int curRow = curYDistance / brickSize + 2;
 
 	if ((map.firstLevelMap[curRow + 1][curCol] != ' ') && (returnEnemyY() + 25 >= curRow * brickSize + 25))
 	{
@@ -149,8 +149,8 @@ bool Enemies::checkOnMoveUp()
 	int curXDistance = returnEnemyX() - 11 * brickSize;
 	int curCol = curXDistance / brickSize + 11;
 
-	int curYDistance = returnEnemyY() + 50 - 6 * brickSize;
-	int curRow = curYDistance / brickSize + 6;
+	int curYDistance = returnEnemyY() + 50 - 2 * brickSize;
+	int curRow = curYDistance / brickSize + 2;
 
 	if ((map.firstLevelMap[curRow - 1][curCol] != ' ') && (returnEnemyY() - 4 <= curRow * brickSize))
 	{
@@ -165,8 +165,8 @@ bool Enemies::checkOnMoveLeft()
 	int curXDistance = returnEnemyX() - 11 * brickSize;
 	int curCol = curXDistance / brickSize + 11;
 
-	int curYDistance = returnEnemyY() + 50 - 6 * brickSize;
-	int curRow = curYDistance / brickSize + 6;
+	int curYDistance = returnEnemyY() + 50 - 2 * brickSize;
+	int curRow = curYDistance / brickSize + 2;
 
 	if (((map.firstLevelMap[curRow][curCol - 1] != ' ')) && (returnEnemyX() - 4 <= curCol * Map::brickSize))
 	{
@@ -181,8 +181,8 @@ bool Enemies::checkOnMoveRight()
 	int curXDistance = returnEnemyX() - 11 * brickSize;
 	int curCol = curXDistance / brickSize + 11;
 
-	int curYDistance = returnEnemyY() + 50 - 6 * brickSize;
-	int curRow = curYDistance / brickSize + 6;
+	int curYDistance = returnEnemyY() + 50 - 2 * brickSize;
+	int curRow = curYDistance / brickSize + 2;
 
 	if (((map.firstLevelMap[curRow][curCol + 1] != ' ')) && (returnEnemyX() - 4 <= curCol * brickSize + 20))
 	{

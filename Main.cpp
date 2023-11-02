@@ -72,18 +72,6 @@ void updateBoarState(Enemies& enemyBoar, sf::Clock& enemyClock)
     enemyBoar.setDir(dir);
 }
 
-void drawElectricities(sf::RenderWindow& window, BackgroundObjects& backgroundObject)
-{
-    backgroundObject.setElectricityPosition(22, 14);
-    window.draw(backgroundObject.getElectricitySprite());
-    backgroundObject.setElectricityPosition(23, 15);
-    window.draw(backgroundObject.getElectricitySprite());
-    backgroundObject.setElectricityPosition(23, 14);
-    window.draw(backgroundObject.getElectricitySprite());
-    backgroundObject.setElectricityPosition(22, 15);
-    window.draw(backgroundObject.getElectricitySprite());
-}
-
 int main() 
 {
     sf::RenderWindow window;
@@ -124,11 +112,10 @@ int main()
         camera.setCenter(player.playerX, player.playerY);
         window.draw(map.getTeleportSprite());
         window.draw(backgroundObject.getDieScientistSprite());
-        drawElectricities(window, backgroundObject);
         window.draw(enemyBoar.getSprite());
         window.setView(camera); 
         fogSprite.setPosition(player.playerX - 1240, player.playerY - 1200);
-      //  window.draw(fogSprite);
+        window.draw(fogSprite);
         window.draw(player.getSprite());
         window.display();
     }

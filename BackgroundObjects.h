@@ -11,18 +11,12 @@ private:
 	sf::Sprite dieScientistSprite;
 	float dieScientistX = brickSize * 27, dieScientistY = brickSize * 14 + 10;
 
-	sf::Image electricityImg;
-	sf::Texture electricityTexture;
-	sf::Sprite electricitySprite;
-
 public:
 	BackgroundObjects();
 	sf::Sprite getDieScientistSprite() { return dieScientistSprite; }
-	sf::Sprite getElectricitySprite() { return electricitySprite; }
 	void setDieScientistX(float x) { dieScientistX = x; }
 	float getDieScientistX() { return dieScientistX; }
 	void setDieScientistY(float y) { dieScientistY = y; }
 	float getDieScientistY() { return dieScientistY; }
-	void setElectricityPosition(int x, int y);
 };
 

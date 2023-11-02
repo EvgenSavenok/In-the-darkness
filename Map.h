@@ -69,19 +69,19 @@ public:
         "BBBBBBBBBBBB TBBB BBBBBBB  .  . BBBBBBBBBBBBBBB",
         "BBBBBBBBBBBB BBBBBBBEBBBB   .  CBBBBBBBBBBBBBBB",
         "BBBBBBBBBBBBDBBBBB   BBBBBBBBDBBBBBBBBBBBBBBBBB",
-        "BBBBBBBBBBBB  BBBBBBBB          BBBBBBBBBBBBBBB",
-        "BBBBBBBBBBBB  B                 BBBBBBBBBBBBBBB",
-        "BBBBBBBBBBBBB R                 BBBBBBBBBBBBBBB",
-        "BBBBBBBBBBBBBDB                 BBBBBBBBBBBBBBB",
+        "BBBBBBBBBBBB  BBBBBBBB      R R BBBBBBBBBBBBBBB",
+        "BBBBBBBBBBBB  B             R R BBBBBBBBBBBBBBB",
+        "BBBBBBBBBBBBB B                 BBBBBBBBBBBBBBB",
+        "BBBBBBBBBBBBB B                 BBBBBBBBBBBBBBB",
         "BBBBBBBBBBBBB B                 BBBBBBBBBBBBBBB",
         "BBBBBBBBBBBBB B                 BBBBBBBBBBBBBBB",     //width = 22
         "BBBBBBBBBBBBB B                 BBBBBBBBBBBBBBB",     //height = 24                                                           
         "BBBBBBBBBBBBB B                 BBBBBBBBBBBBBBB",     /* B - кирпич; E - дверь выхода */
         "BBBBBBBBBBBBB B                 BBBBBBBBBBBBBBB",     /* R - кирпич с прибором; D - обычная дверь */
         "BBBBBBBBBBBBB B                 BBBBBBBBBBBBBBB",     /* H - вход */
-        "BBBBBBBBBBBBB BB BBBBBBB BBBBBBBBBBBBBBBBBBBBBB",     /* T - телепорт */
-        "BBBBBBBBBBBBBDBB BBBBBBB        BBBBBBBBBBBBBBB",     /*C - клетка*/
-        "BBBBBBBBBBB    B BBBBBBBBBBBBBB BBBBBBBBBBBBBBB",     /*. - точка необходимой остановки ящика*/
-        "BBBBBBBBBBB    B BBBBBBBBBBBBBB BBBBBBBBBBBBBBB"      /*G - зеленая коробка (уже на нужной точке)*/
+        "BBBBBBBBBBBBBDBB BBBBBBBBBBBBBBBBBBBBBBBBBBBBBB",     /* T - телепорт */
+        "BBBBBBBBBBBBB    BBBBBBBBBBBBBBBBBBBBBBBBBBBBBB",     /*C - клетка*/
+        "BBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBB",     /*. - точка необходимой остановки ящика*/
+        "BBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBB"      /*G - зеленая коробка (уже на нужной точке)*/
     };
 };
