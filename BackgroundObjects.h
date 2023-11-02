@@ -15,8 +15,6 @@ private:
 	sf::Texture electricityTexture;
 	sf::Sprite electricitySprite;
 
-	sf::Vector2f boxPosition;
-
 public:
 	BackgroundObjects();
 	sf::Sprite getDieScientistSprite() { return dieScientistSprite; }
@@ -25,6 +23,6 @@ public:
 	float getDieScientistX() { return dieScientistX; }
 	void setDieScientistY(float y) { dieScientistY = y; }
 	float getDieScientistY() { return dieScientistY; }
-	std::vector<sf::Vector2f> electricities;
+	void setElectricityPosition(int x, int y);
 };
 

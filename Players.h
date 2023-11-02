@@ -33,8 +33,11 @@ private:
 	bool checkOnRightBoxCollisions(int curRow, int curCol, Boxes& box, Map& map);
 	void checkBoxOnWallCollision(Map& map, int curBoxRow, int curBoxCol, char dir, int indexOfBox, Boxes& box);
 
-	const float offset = 4;
+	const float playerStep = 4;
 	const int playerDelay = 1;
+
+	const int rowOffset = 2;
+	const int colOffset = 11;
 
 public:
 	sf::Sprite getSprite() { return sprite; };
@@ -67,8 +70,8 @@ public:
 	void drawKey(sf::RenderWindow& window);
 	void checkOnBox(int curRow, int curCol, char dir, Boxes& box, Map& map, int indexOfBox);
 	void checkOnNearBox(int curRow, int curCol, char dir, Boxes& box, Map& map, int indexOfBox);
-	bool checkOnRightCageCollision(int curRow, int curCol, bool canMoveRigth);
-	bool checkOnDownCageCollision(bool canMoveDown);
+	bool checkOnRightCageCollision(int curRow, int curCol, bool canMoveRigth, Map map);
+	bool checkOnDownCageCollision(bool canMoveDown, Animations& cage, Map map);
 	void checkOnDoor(char dir, Map& map, Animations& doorAnime);
 	void checkOnBottomDoor(int curRow, int curCol, Map& map, Animations& doorAnime);
 	void checkOnTopDoor(int curRow, int curCol, Map& map, Animations& doorAnime);

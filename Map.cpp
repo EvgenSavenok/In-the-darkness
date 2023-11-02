@@ -56,9 +56,9 @@ void Map::createMap(sf::RenderWindow& window)
 	int numOfCols = int(screenWidth / brickSize);
 	int numOfRows = int(screenHeight / brickSize);
 
-	for (int i = 0; i < 36; i++)
+	for (int i = 0; i < mapHeight; i++)
 	{
-		for (int j = 0; j < 43; j++)
+		for (int j = 0; j < mapWidth; j++)
 		{
 			switch (firstLevelMap[i][j])
 			{

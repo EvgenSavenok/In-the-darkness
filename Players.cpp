@@ -7,8 +7,8 @@ Player::Player()
 {
 	key = false;
 	std::fill(canPushBox, canPushBox + 7, false);
-	playerX = brickSize * 27 + 25;
-	playerY = brickSize * 14 + 15;
+	playerX = brickSize * 29 + 25;
+	playerY = brickSize * 8 + 15;
 	curImg = 0;
 	playerDir = Direction::down;
 	playerImg.loadFromFile("Images/player.png");
@@ -19,7 +19,7 @@ Player::Player()
 	sprite.setScale(1.9, 1.9);
 
 	keyX = brickSize * 31 + 30;
-	keyY = brickSize * 12 + 30;
+	keyY = brickSize * 8 + 30;
 	keySprite.setPosition(keyX, keyY);
 
 	keyImg.loadFromFile("Images/card-key.png");
@@ -31,7 +31,7 @@ Player::Player()
 void Player::drawKey(sf::RenderWindow& window)
 {
 	const int curKeyX = 31;
-	const int curKeyY = 12;
+	const int curKeyY = 8;
 	const int keyOffset = 30;
 	keyX = brickSize * curKeyX + keyOffset;
 	keyY = brickSize * curKeyY + keyOffset;
@@ -41,16 +41,15 @@ void Player::drawKey(sf::RenderWindow& window)
 	{
 		window.draw(keySprite);
 	}
-	
 }
 
 void Player::checkOnKey(int curRow, int curCol, char curDir)
 {
-	int curXDistance = returnKeyX() - 11 * brickSize;
-	int curKeyCol = curXDistance / brickSize + 11;
+	int curXDistance = returnKeyX() - colOffset * brickSize;
+	int curKeyCol = curXDistance / brickSize + colOffset;
 
-	int curYDistance = returnKeyY() + 50 - 6 * brickSize;
-	int curKeyRow = curYDistance / brickSize + 6;
+	int curYDistance = returnKeyY() + 50 - rowOffset * brickSize;
+	int curKeyRow = curYDistance / brickSize + rowOffset;
 
 	const int keyYOffset = 20;
 	const int keyXOffset = 10;
@@ -87,27 +86,29 @@ void Player::checkOnKey(int curRow, int curCol, char curDir)
 
 int Player::calculateCurPlayerRow()
 {
-	int curYDistance = returnPlayerY() - 6 * Map::brickSize;
+	int curYDistance = returnPlayerY() - rowOffset * Map::brickSize;
 	int curRow = curYDistance / Map::brickSize;
 	return curRow;
 }
 
 int Player::calculateCurPlayerCol()
 {
-	int curXDistance = returnPlayerX() - 11 * Map::brickSize;
+	int curXDistance = returnPlayerX() - colOffset * Map::brickSize;
 	int curCol = curXDistance / Map::brickSize;
 	return curCol;
 }
 
-bool Player::checkOnDownCageCollision(bool canMoveDown)
+bool Player::checkOnDownCageCollision(bool canMoveDown, Animations& cage, Map map)
 {
 	const int cageX = 31;
-	const int cageY = 11;
+	const int cageY = 8;
 	const int cageXOffset = 30;
-	const int cageYOffset = 25;
-	if (returnPlayerY() + offset >= brickSize * cageY + cageYOffset)
+	const int cageYOffset = 55;
+	int curRow = calculateCurPlayerRow() + rowOffset;
+	int curCol = calculateCurPlayerCol() + colOffset;
+	if ((returnPlayerY() + playerStep >= brickSize * cageY - cageYOffset) && (map.firstLevelMap[curRow + 1][curCol] == 'C'))
 	{
-		if ((returnPlayerX() >= brickSize * cageX - cageXOffset) && (returnPlayerX() <= brickSize * cageX))
+		if ((returnPlayerX() >= brickSize * cageX - cageXOffset) && (returnPlayerX() <= brickSize * cageX + 90))
 		{
 			canMoveDown = false;
 		}
@@ -139,8 +140,8 @@ bool Player::checkOnDownBoxCollisions(int curRow, int curCol, Boxes& box, Map& m
 
 bool Player::checkOnMoveDown(Boxes& box, Animations& anime, Map& map, sf::RenderWindow& window)
 {
-	int curRow = calculateCurPlayerRow() + 6;
-	int curCol = calculateCurPlayerCol() + 11;
+	int curRow = calculateCurPlayerRow() + rowOffset;
+	int curCol = calculateCurPlayerCol() + colOffset;
 	bool canMoveDown = true;
 	const int numOfPointsBoxes = 7;
 	checkOnKey(curRow, curCol, 'D');
@@ -152,12 +153,12 @@ bool Player::checkOnMoveDown(Boxes& box, Animations& anime, Map& map, sf::Render
 	}
 	if (map.firstLevelMap[curRow + 1][curCol] != ' ')
 	{
-		if ((map.firstLevelMap[curRow + 1][curCol] != 'T') && (map.firstLevelMap[curRow + 1][curCol] != '.') && (map.firstLevelMap[curRow + 1][curCol] != 'G') && returnPlayerY() + 4 >= curRow * brickSize + 30)
+		if ((map.firstLevelMap[curRow + 1][curCol] != 'T') && (map.firstLevelMap[curRow + 1][curCol] != '.') && (map.firstLevelMap[curRow + 1][curCol] != 'G') && (returnPlayerY() + 4 >= curRow * brickSize + 30))
 		{
 			canMoveDown = false;
 		}
 	}
-	canMoveDown = checkOnDownCageCollision(canMoveDown);
+	canMoveDown = checkOnDownCageCollision(canMoveDown, anime, map);
 	std::fill(canPushBox, canPushBox + numOfPointsBoxes, false);
 	return canMoveDown;
 }
@@ -182,8 +183,8 @@ bool Player::checkOnUpBoxCollisions(int curRow, int curCol, Boxes& box, Map& map
 
 bool Player::checkOnMoveUp(Boxes& box, Animations& anime, Map& map, sf::RenderWindow& window)
 {
-	int curRow = calculateCurPlayerRow() + 6;
-	int curCol = calculateCurPlayerCol() + 11;
+	int curRow = calculateCurPlayerRow() + rowOffset;
+	int curCol = calculateCurPlayerCol() + colOffset;
 	bool canMoveUp = true;
 	const int numOfPointsBoxes = 7;
 	checkOnKey(curRow, curCol, 'U');
@@ -227,14 +228,18 @@ bool Player::checkOnLeftBoxCollisions(int curRow, int curCol, Boxes& box, Map& m
 
 bool Player::checkOnMoveLeft(Boxes& box, Animations& anime, Map& map, sf::RenderWindow& window)
 {
-	int curRow = calculateCurPlayerRow() + 6;
-	int curCol = calculateCurPlayerCol() + 11;
+	int curRow = calculateCurPlayerRow() + rowOffset;
+	int curCol = calculateCurPlayerCol() + colOffset;
 	bool canMoveLeft = true;
 	const int numOfPointsBoxes = 7;
 	checkOnKey(curRow, curCol, 'L');
 	checkOnDoor('L', map, anime);
 	canMoveLeft = checkOnLeftBoxCollisions(curRow, curCol, box, map);
-	if (((map.firstLevelMap[curRow][curCol - 1] != ' ') && (map.firstLevelMap[curRow][curCol - 1] != 'T') && (map.firstLevelMap[curRow][curCol - 1] != '.') && (map.firstLevelMap[curRow][curCol - 1] != 'G')) && (returnPlayerX() - 4 <= curCol * brickSize))
+	if (((map.firstLevelMap[curRow][curCol - 1] != ' '))) 
+		if (map.firstLevelMap[curRow][curCol - 1] != 'T')
+			if (map.firstLevelMap[curRow][curCol - 1] != 'G') 
+				if (map.firstLevelMap[curRow][curCol - 1] != '.')
+				if (returnPlayerX() - 4 <= curCol * brickSize)
 	{
 		canMoveLeft = false;
 	}
@@ -242,11 +247,18 @@ bool Player::checkOnMoveLeft(Boxes& box, Animations& anime, Map& map, sf::Render
 	return canMoveLeft;
 }
 
-bool Player::checkOnRightCageCollision(int curRow, int curCol, bool canMoveRight)
+bool Player::checkOnRightCageCollision(int curRow, int curCol, bool canMoveRight, Map map)
 {
-	if (returnPlayerY() >= brickSize * 12 - 55)
+	const int cageX = 31;
+	const int cageY = 8;
+	const int cageXOffset = 55;
+	const int cageYOffset = 20;
+	if (returnPlayerX() + playerStep >= brickSize * cageX - cageXOffset)
 	{
-		canMoveRight = false;
+		if (returnPlayerY() + 50 >= brickSize * cageY)
+		{
+			canMoveRight = false;
+		}
 	}
 	return canMoveRight;
 }
@@ -271,8 +283,8 @@ bool Player::checkOnRightBoxCollisions(int curRow, int curCol, Boxes& box, Map& 
 
 bool Player::checkOnMoveRight(Boxes& box, Animations& anime, Map& map, sf::RenderWindow& window)
 {
-	int curRow = calculateCurPlayerRow() + 6;
-	int curCol = calculateCurPlayerCol() + 11;
+	int curRow = calculateCurPlayerRow() + rowOffset;
+	int curCol = calculateCurPlayerCol() + colOffset;
 	bool canMoveRight = true;
 	const int numOfPointsBoxes = 7;
 	checkOnKey(curRow, curCol, 'R');
@@ -282,14 +294,14 @@ bool Player::checkOnMoveRight(Boxes& box, Animations& anime, Map& map, sf::Rende
 	{
 		map.firstLevelMap[12][31] = ' ';
 	}
-	if (((map.firstLevelMap[curRow][curCol + 1] != ' ') && (map.firstLevelMap[curRow][curCol + 1] != 'T') && (map.firstLevelMap[curRow][curCol + 1] != '.') && (map.firstLevelMap[curRow][curCol + 1] != 'G')) && (returnPlayerX() + offset >= curCol * brickSize + 45))
+	if (((map.firstLevelMap[curRow][curCol + 1] != ' ') && (map.firstLevelMap[curRow][curCol + 1] != 'T') && (map.firstLevelMap[curRow][curCol + 1] != '.') && (map.firstLevelMap[curRow][curCol + 1] != 'G')) && (returnPlayerX() + playerStep >= curCol * brickSize + 45))
 	{
 		canMoveRight = false;
 	}
-	if (((map.firstLevelMap[curRow][curCol + 1] == 'C') || (map.firstLevelMap[curRow + 1][curCol + 1] == 'C')) && (returnPlayerX() + offset >= curCol * brickSize + 45))
+	if (((map.firstLevelMap[curRow][curCol + 1] == 'C') || (map.firstLevelMap[curRow + 1][curCol + 1] == 'C')) && (returnPlayerX() + playerStep >= curCol * brickSize + 45))
 	{
 		if (!anime.getCageAnimationState())
-			canMoveRight = checkOnRightCageCollision(curRow, curCol, canMoveRight);
+			canMoveRight = checkOnRightCageCollision(curRow, curCol, canMoveRight, map);
 	}
 	std::fill(canPushBox, canPushBox + numOfPointsBoxes, false);
 	return canMoveRight;
@@ -374,11 +386,11 @@ void Player::checkBoxOnWallCollision(Map& map, int curBoxRow, int curBoxCol, cha
 
 void Player::checkOnBox(int curRow, int curCol, char dir, Boxes& box, Map& map, int indexOfBox)
 {
-	int curXDistance = box.getBoxX(indexOfBox) - 11 * brickSize;
-	int curBoxCol = curXDistance / brickSize + 11;
+	int curXDistance = box.getBoxX(indexOfBox) - colOffset * brickSize;
+	int curBoxCol = curXDistance / brickSize + colOffset;
 
-	int curYDistance = box.getBoxY(indexOfBox) + 50 - 6 * brickSize;
-	int curBoxRow = curYDistance / brickSize + 6;
+	int curYDistance = box.getBoxY(indexOfBox) + 50 - rowOffset * brickSize;
+	int curBoxRow = curYDistance / brickSize + rowOffset;
 
 	if ((dir == 'R') && (fabs((float)(box.getBoxY(indexOfBox) - playerY)) <= 45) && (fabs((float)(box.getBoxX(indexOfBox) - playerX)) <= 45))
 	{
@@ -413,8 +425,8 @@ void Player::checkOnBox(int curRow, int curCol, char dir, Boxes& box, Map& map, 
 
 bool Player::checkOnTeleport(Map& map)
 {
-	int curRow = calculateCurPlayerRow() + 6;
-	int curCol = calculateCurPlayerCol() + 11;
+	int curRow = calculateCurPlayerRow() + rowOffset;
+	int curCol = calculateCurPlayerCol() + colOffset;
 
 	if (map.firstLevelMap[curRow][curCol] == 'T')
 	{
@@ -427,7 +439,7 @@ void Player::updateRight(Boxes& box, Animations& cage, Map& map, sf::RenderWindo
 {
 	if (checkOnMoveRight(box, cage, map, window))
 	{
-		playerX += offset;
+		playerX += playerStep;
 		curImg++;
 		sprite.setTexture(texture);
 		sprite.setTextureRect(sf::IntRect(curImg * 24, 96, 24, 32));
@@ -438,7 +450,7 @@ void Player::updateDown(Boxes& box, Animations& cage, Map& map, sf::RenderWindow
 {
 	if (checkOnMoveDown(box, cage, map, window))
 	{
-		playerY += offset;
+		playerY += playerStep;
 		curImg++;
 		sprite.setTexture(texture);
 		sprite.setTextureRect(sf::IntRect(curImg * 24, 0, 24, 32));
@@ -449,7 +461,7 @@ void Player::updateUp(Boxes& box, Animations& anime, Map& map, sf::RenderWindow&
 {
 	if (checkOnMoveUp(box, anime, map, window))
 	{
-		playerY -= offset;
+		playerY -= playerStep;
 		curImg++;
 		sprite.setTexture(texture);
 		sprite.setTextureRect(sf::IntRect(curImg * 24, 32, 24, 32));
@@ -460,7 +472,7 @@ void Player::updateLeft(Boxes& box, Animations& anime, Map& map, sf::RenderWindo
 {
 	if (checkOnMoveLeft(box, anime, map, window))
 	{
-		playerX -= offset;
+		playerX -= playerStep;
 		curImg++;
 		sprite.setTexture(texture);
 		sprite.setTextureRect(sf::IntRect(curImg * 24, 64, 24, 32));
@@ -473,8 +485,8 @@ bool Player::startTeleportAnimation(Map& map, sf::Clock teleportClock, Animation
 	float timing = curTime.asSeconds();
 	if (timing >= animeOfTeleport.getInterval())
 	{
-		int curRow = calculateCurPlayerRow() + 6;
-		int curCol = calculateCurPlayerCol() + 11;
+		int curRow = calculateCurPlayerRow() + rowOffset;
+		int curCol = calculateCurPlayerCol() + colOffset;
 
 		if (!animeOfTeleport.getFirstCycleInfo())
 		{
@@ -498,7 +510,8 @@ bool Player::startTeleportAnimation(Map& map, sf::Clock teleportClock, Animation
 			playerY -= 3;
 			map.setPlateY(map.getPlateY() - 3);
 		}
-		if ((map.getPlateY() <= 7 * brickSize - 2) && (curCol == 16))
+		int maxTeleportCol = 16;
+		if (curCol == maxTeleportCol)
 		{
 			map.firstLevelMap[curRow][curCol] = 'T';
 			animeOfTeleport.setStay(false);
@@ -545,8 +558,8 @@ bool Player::move(sf::RenderWindow& window, Map& map, Animations& anime, Boxes& 
 			}
 			sprite.setPosition(playerX, playerY);
 		}
-		if (checkOnTeleport(map) && (map.getPlateY() <= 7 * brickSize - 5))
-		{
+		if (checkOnTeleport(map) && (map.getPlateY() <= 2 * brickSize - 5))
+		{ 
 			anime.setStay(true);
 		}
 		return true;
@@ -558,8 +571,8 @@ bool Player::prepareForTeleportAnime(Animations& animeOfTeleport, Map& map, sf::
 {
 	if (animeOfTeleport.getStay())
 	{
-		int curRow = calculateCurPlayerRow() + 6;
-		int curCol = calculateCurPlayerCol() + 11;
+		int curRow = calculateCurPlayerRow() + rowOffset;
+		int curCol = calculateCurPlayerCol() + colOffset;
 
 		if (animeOfTeleport.getFirstSetInfo())
 		{
@@ -621,7 +634,7 @@ void Player::checkOnBottomDoor(int curRow, int curCol, Map& map, Animations& doo
 {
 	if (map.firstLevelMap[curRow + 1][curCol] == 'D') 
 	{
-		if ((returnPlayerY() + offset >= (curRow + 1) * brickSize - 60) && isHasKey())
+		if ((returnPlayerY() + playerStep >= (curRow + 1) * brickSize - 60) && isHasKey())
 		{
 			int numOfDoor = doorAnime.checkCurDoorNum(curRow + 1, curCol);
 			doorAnime.setDoorAnimationState(true, numOfDoor);
@@ -633,7 +646,7 @@ void Player::checkOnTopDoor(int curRow, int curCol, Map& map, Animations& doorAn
 {
 	if (map.firstLevelMap[curRow - 1][curCol] == 'D')
 	{
-		if ((returnPlayerY() - offset <= curRow * brickSize) && isHasKey())
+		if ((returnPlayerY() - playerStep <= curRow * brickSize) && isHasKey())
 		{
 			int numOfDoor = doorAnime.checkCurDoorNum(curRow - 1, curCol);
 			doorAnime.setDoorAnimationState(true, numOfDoor);
@@ -645,7 +658,7 @@ void Player::checkOnLeftDoor(int curRow, int curCol, Map& map, Animations& doorA
 {
 	if (map.firstLevelMap[curRow][curCol - 1] == 'D')
 	{
-		if ((returnPlayerX() - offset <= curCol * brickSize) && isHasKey())
+		if ((returnPlayerX() - playerStep <= curCol * brickSize) && isHasKey())
 		{
 			int numOfDoor = doorAnime.checkCurDoorNum(curRow, curCol - 1);
 			doorAnime.setDoorAnimationState(true, numOfDoor);
@@ -657,7 +670,7 @@ void Player::checkOnRightDoor(int curRow, int curCol, Map& map, Animations& door
 {
 	if (map.firstLevelMap[curRow][curCol + 1] == 'D')
 	{
-		if ((returnPlayerX() + offset >= (curCol + 1) * brickSize - 45) && isHasKey())
+		if ((returnPlayerX() + playerStep >= (curCol + 1) * brickSize - 45) && isHasKey())
 		{
 			int numOfDoor = doorAnime.checkCurDoorNum(curRow, curCol + 1);
 			doorAnime.setDoorAnimationState(true, numOfDoor);
@@ -667,7 +680,7 @@ void Player::checkOnRightDoor(int curRow, int curCol, Map& map, Animations& door
 
 void Player::checkOnDoor(char dir, Map& map, Animations& doorAnime)
 {
-	int curRow = calculateCurPlayerRow() + 6;
+	int curRow = calculateCurPlayerRow() + 2;
 	int curCol = calculateCurPlayerCol() + 11;
 
 	switch (dir)

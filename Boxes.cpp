@@ -13,25 +13,25 @@ Boxes::Boxes()
 
 void Boxes::initializeBoxes()
 {
+	boxPosition = sf::Vector2f(brickSize * 27 + 15, brickSize * 3 + 15);
+	boxes.push_back(boxPosition);
+
+	boxPosition = sf::Vector2f(brickSize * 28 + 15, brickSize * 4 + 15);
+	boxes.push_back(boxPosition);
+
+	boxPosition = sf::Vector2f(brickSize * 28 + 15, brickSize * 5 + 15);
+	boxes.push_back(boxPosition);
+
+	boxPosition = sf::Vector2f(brickSize * 29 + 15, brickSize * 7 + 15);
+	boxes.push_back(boxPosition);
+
+	boxPosition = sf::Vector2f(brickSize * 28 + 15, brickSize * 7 + 15);
+	boxes.push_back(boxPosition);
+
 	boxPosition = sf::Vector2f(brickSize * 27 + 15, brickSize * 7 + 15);
 	boxes.push_back(boxPosition);
 
-	boxPosition = sf::Vector2f(brickSize * 28 + 15, brickSize * 8 + 15);
-	boxes.push_back(boxPosition);
-
-	boxPosition = sf::Vector2f(brickSize * 28 + 15, brickSize * 9 + 15);
-	boxes.push_back(boxPosition);
-
-	boxPosition = sf::Vector2f(brickSize * 29 + 15, brickSize * 11 + 15);
-	boxes.push_back(boxPosition);
-
-	boxPosition = sf::Vector2f(brickSize * 28 + 15, brickSize * 11 + 15);
-	boxes.push_back(boxPosition);
-
-	boxPosition = sf::Vector2f(brickSize * 27 + 15, brickSize * 11 + 15);
-	boxes.push_back(boxPosition);
-
-	boxPosition = sf::Vector2f(brickSize * 25 + 15, brickSize * 11 + 15);
+	boxPosition = sf::Vector2f(brickSize * 25 + 15, brickSize * 7 + 15);
 	boxes.push_back(boxPosition);
 }
 
@@ -75,11 +75,11 @@ void Boxes::checkAllPoints(Map& map)
 		int curXDistance = getBoxX(i) - 11 * brickSize;
 		int curBoxCol = curXDistance / brickSize;
 
-		int curYDistance = getBoxY(i) + 50 - 6 * brickSize;
+		int curYDistance = getBoxY(i) + 50 - 2 * brickSize;
 		int curBoxRow = curYDistance / brickSize;
 
 		curBoxCol += 11;
-		curBoxRow += 6;
+		curBoxRow += 2;
 
 		if (map.firstLevelMap[curBoxRow][curBoxCol] == '.')
 		{

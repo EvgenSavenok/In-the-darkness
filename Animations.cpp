@@ -28,9 +28,9 @@ Animations::Animations()
 
 void Animations::initializeDoors()
 {
-	for (int i = 0; i < 36; i++)
+	for (int i = 0; i < Map::mapHeight; i++)
 	{
-		for (int j = 0; j < 43; j++)
+		for (int j = 0; j < Map::mapWidth; j++)
 		{
 			if (map.firstLevelMap[i][j] == 'D')
 			{
@@ -48,11 +48,11 @@ void Animations::setCagePos(sf::RenderWindow& window, Boxes& box, Map& map, sf::
 {
 	if (getCageAnimationState())
 	{
-		map.firstLevelMap[12][31] = ' ';
+		map.firstLevelMap[8][31] = ' ';
 	}
 	else
 	{
-		cageSprite.setPosition(brickSize * 31, brickSize * 12);
+		cageSprite.setPosition(brickSize * 31, brickSize * 8);
 		window.draw(cageSprite);
 		startCageAnimation(box, map, window, cageClock);
 	}
@@ -60,11 +60,11 @@ void Animations::setCagePos(sf::RenderWindow& window, Boxes& box, Map& map, sf::
 
 void Animations::startCageAnimation(Boxes& box, Map& map, sf::RenderWindow& window, sf::Clock& cageClock)
 {
-	#define numOfActivePoints 1
+	#define numOfActivePoints 2
 	int countOfPoints = 0;
-	for (int i = 0; i < 36; i++)
+	for (int i = 0; i < Map::mapHeight; i++)
 	{
-		for (int j = 0; j < 43; j++)
+		for (int j = 0; j < Map::mapWidth; j++)
 		{
 			if (map.firstLevelMap[i][j] == 'G')
 				countOfPoints++;
@@ -121,7 +121,7 @@ void Animations::startDoorAnimation(int numOfDoor, Map& map, sf::RenderWindow& w
 	map.firstLevelMap[curDoorRow][curDoorCol] = 'C';
 	if ((leftDoorClock.getElapsedTime().asMilliseconds() > 85) && (door[numOfDoor].leftDoorStartX < 252.0) && (door[numOfDoor].leftDoorWidth > 0))
 	{
-		door[numOfDoor].leftDoorOffset--;//создай массив с координатами и такими штуками для каждой двери
+		door[numOfDoor].leftDoorOffset--;
 		door[numOfDoor].leftDoorWidth -= 1;
 		door[numOfDoor].leftDoorStartX++;
 		leftDoorClock.restart();

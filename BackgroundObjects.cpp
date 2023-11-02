@@ -12,5 +12,9 @@ BackgroundObjects::BackgroundObjects()
 	electricityTexture.loadFromImage(electricityImg);
 	electricitySprite.setTexture(electricityTexture);
 	electricitySprite.setTextureRect(sf::IntRect(0, 0, 60, 90));
-	electricitySprite.setPosition(brickSize * 26 + 15, brickSize * 15);
+}
+
+void BackgroundObjects::setElectricityPosition(int x, int y)
+{
+	electricitySprite.setPosition(brickSize * x + 15, brickSize * y);
 }
