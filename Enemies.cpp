@@ -213,7 +213,7 @@ bool Enemies::enemyMove(sf::Clock clock)
 		{
 			if (checkOnMoveDown())
 			{
-				y += 5;
+				y += 6;
 				sprite.setTexture(texture);
 				sprite.setTextureRect(sf::IntRect(0, curImg * 82 + 10, 45, 80));
 				curImg++;
@@ -224,7 +224,7 @@ bool Enemies::enemyMove(sf::Clock clock)
 		{
 			if (checkOnMoveUp())
 			{
-				y -= 5;
+				y -= 6;
 				sprite.setTexture(texture);
 				sprite.setTextureRect(sf::IntRect(45 * 5 - 30, curImg * 82 + 10, 45, 80));
 				curImg++;

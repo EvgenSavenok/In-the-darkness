@@ -3,6 +3,9 @@
 #include "Map.h"
 #include "Animations.h"
 #include "Boxes.h"
+#include <Candle/RadialLight.hpp>
+#include <Candle/LightingArea.hpp>
+#include "LightSource.hpp"
 
 enum class Direction { down, up, left, right };
 

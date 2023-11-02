@@ -13,26 +13,26 @@ Boxes::Boxes()
 
 void Boxes::initializeBoxes()
 {
-	position = sf::Vector2f(brickSize * 27 + 15, brickSize * 7 + 15);
-	boxes.push_back(position);
+	boxPosition = sf::Vector2f(brickSize * 27 + 15, brickSize * 7 + 15);
+	boxes.push_back(boxPosition);
 
-	position = sf::Vector2f(brickSize * 28 + 15, brickSize * 8 + 15);
-	boxes.push_back(position);
+	boxPosition = sf::Vector2f(brickSize * 28 + 15, brickSize * 8 + 15);
+	boxes.push_back(boxPosition);
 
-	position = sf::Vector2f(brickSize * 28 + 15, brickSize * 9 + 15);
-	boxes.push_back(position);
+	boxPosition = sf::Vector2f(brickSize * 28 + 15, brickSize * 9 + 15);
+	boxes.push_back(boxPosition);
 
-	position = sf::Vector2f(brickSize * 29 + 15, brickSize * 11 + 15);
-	boxes.push_back(position);
+	boxPosition = sf::Vector2f(brickSize * 29 + 15, brickSize * 11 + 15);
+	boxes.push_back(boxPosition);
 
-	position = sf::Vector2f(brickSize * 28 + 15, brickSize * 11 + 15);
-	boxes.push_back(position);
+	boxPosition = sf::Vector2f(brickSize * 28 + 15, brickSize * 11 + 15);
+	boxes.push_back(boxPosition);
 
-	position = sf::Vector2f(brickSize * 27 + 15, brickSize * 11 + 15);
-	boxes.push_back(position);
+	boxPosition = sf::Vector2f(brickSize * 27 + 15, brickSize * 11 + 15);
+	boxes.push_back(boxPosition);
 
-	position = sf::Vector2f(brickSize * 25 + 15, brickSize * 11 + 15);
-	boxes.push_back(position);
+	boxPosition = sf::Vector2f(brickSize * 25 + 15, brickSize * 11 + 15);
+	boxes.push_back(boxPosition);
 }
 
 void Boxes::drawBox(sf::RenderWindow& window)

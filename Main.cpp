@@ -5,19 +5,14 @@
 #include "Map.h"
 #include "Animations.h"
 #include "Boxes.h"
-#include "Candle/RadialLight.hpp"
-#include "Candle/LightingArea.hpp"
+#include <Candle/RadialLight.hpp>
+#include <Candle/LightingArea.hpp>
+#include "LightSource.hpp"
 #include "BackgroundObjects.h"
 
 void pressOnKey(sf::RenderWindow& window, sf::Clock& clock, Player& player, Map& map, Animations& anime, Boxes& box, Animations& cage)
 {
     sf::Event event;
-   /* light.setRange(100);
-    light.setFade(false);
-    candle::LightingArea fog(candle::LightingArea::FOG,
-        sf::Vector2f(0.f, 0.f),
-        sf::Vector2f(300.f, 379.f));*/
-    //fog.setAreaColor(sf::Color::Black);
     bool isTime = false;
     while (window.pollEvent(event))
     {
@@ -51,14 +46,6 @@ void pressOnKey(sf::RenderWindow& window, sf::Clock& clock, Player& player, Map&
         {
             clock.restart();
         }
-       /* if (event.type == sf::Event::MouseMoved) {
-            sf::Vector2f mp(sf::Mouse::getPosition(window));
-            light.setPosition(mp);
-        }*/
-        //fog.clear();
-       // fog.draw(light);
-       // fog.display();
-       // window.draw(fog);
     }
 }
 
@@ -88,9 +75,8 @@ void updateBoarState(Enemies& enemyBoar, sf::Clock& enemyClock)
 int main() 
 {
     sf::RenderWindow window;
-    window.create(sf::VideoMode::getDesktopMode(), L"Rage");
+    window.create(sf::VideoMode::getDesktopMode(), L"In the darkness", sf::Style::Fullscreen);
     window.setMouseCursorVisible(false);
-   // candle::RadialLight light;
     const float screenWidth = sf::VideoMode::getDesktopMode().width;
     const float screenHeight = sf::VideoMode::getDesktopMode().height;
     Player player;
@@ -107,6 +93,10 @@ int main()
     sf::Clock leftDoorClock;
     sf::Clock rightDoorClock;
     sf::View camera(sf::FloatRect(0, 0, screenWidth, screenHeight));
+    sf::Texture fogTexture;
+    fogTexture.loadFromFile("Images/fog.png");
+    sf::Sprite fogSprite(fogTexture);
+    fogSprite.setScale(2.2, 2.2);
     while (window.isOpen()) 
     {
         pressOnKey(window, playerClock, player, map, anime, box, cage);
@@ -122,9 +112,12 @@ int main()
         camera.setCenter(player.playerX, player.playerY);
         window.draw(map.getTeleportSprite());
         window.draw(backgroundObject.getDieScientistSprite());
-        window.draw(player.getSprite());
+        window.draw(backgroundObject.getElectricitySprite());
         window.draw(enemyBoar.getSprite());
         window.setView(camera); 
+        fogSprite.setPosition(player.playerX - 1240, player.playerY - 1200);
+        window.draw(fogSprite);
+        window.draw(player.getSprite());
         window.display();
     }
     return 0;

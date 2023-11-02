@@ -8,7 +8,7 @@ Player::Player()
 	key = false;
 	std::fill(canPushBox, canPushBox + 7, false);
 	playerX = brickSize * 27 + 25;
-	playerY = brickSize * 12 + 15;
+	playerY = brickSize * 14 + 15;
 	curImg = 0;
 	playerDir = Direction::down;
 	playerImg.loadFromFile("Images/player.png");
@@ -41,6 +41,7 @@ void Player::drawKey(sf::RenderWindow& window)
 	{
 		window.draw(keySprite);
 	}
+	
 }
 
 void Player::checkOnKey(int curRow, int curCol, char curDir)

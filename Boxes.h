@@ -16,7 +16,7 @@ private:
 	const float offset = 4;
 
 public:
-	sf::Vector2f position;
+	sf::Vector2f boxPosition;
 	Boxes();
 
 	float getBoxX(int indexOfBox) { return boxes[indexOfBox].x; }
