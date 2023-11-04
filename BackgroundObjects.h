@@ -9,7 +9,7 @@ private:
 	sf::Image dieScientistImg;
 	sf::Texture dieScientistTexture;
 	sf::Sprite dieScientistSprite;
-	float dieScientistX = brickSize * 27, dieScientistY = brickSize * 14 + 10;
+	float dieScientistX = brickSize * 22 + 10, dieScientistY = brickSize * 10 + 10;
 
 public:
 	BackgroundObjects();

@@ -39,6 +39,8 @@ private:
 	const int rowOffset = 2;
 	const int colOffset = 11;
 
+	bool isGameOver = false;
+
 public:
 	sf::Sprite getSprite() { return sprite; };
 	Player();
@@ -77,5 +79,7 @@ public:
 	void checkOnTopDoor(int curRow, int curCol, Map& map, Animations& doorAnime);
 	void checkOnLeftDoor(int curRow, int curCol, Map& map, Animations& doorAnime);
 	void checkOnRightDoor(int curRow, int curCol, Map& map, Animations& doorAnime);
+	bool getGameOverState() { return isGameOver; };
+	void setGameOverState(bool isGameOver) { this->isGameOver = isGameOver; }
 	static const int brickSize = 90;
 };

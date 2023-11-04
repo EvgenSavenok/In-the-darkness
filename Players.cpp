@@ -1,14 +1,13 @@
 #include "Players.h"
 #include "Map.h"
-#include <math.h>
 #include "Animations.h"
 
 Player::Player()
 {
 	key = false;
 	std::fill(canPushBox, canPushBox + 7, false);
-	playerX = brickSize * 29 + 25;
-	playerY = brickSize * 14 + 15;
+	playerX = brickSize * 27 + 25;
+	playerY = brickSize * 12 + 15;
 	curImg = 0;
 	playerDir = Direction::down;
 	playerImg.loadFromFile("Images/player.png");
@@ -239,10 +238,8 @@ bool Player::checkOnMoveLeft(Boxes& box, Animations& anime, Map& map, sf::Render
 		if (map.firstLevelMap[curRow][curCol - 1] != 'T')
 			if (map.firstLevelMap[curRow][curCol - 1] != 'G') 
 				if (map.firstLevelMap[curRow][curCol - 1] != '.')
-				if (returnPlayerX() - 4 <= curCol * brickSize)
-	{
-		canMoveLeft = false;
-	}
+					if (returnPlayerX() - 4 <= curCol * brickSize)
+						canMoveLeft = false;
 	std::fill(canPushBox, canPushBox + numOfPointsBoxes, false);
 	return canMoveLeft;
 }

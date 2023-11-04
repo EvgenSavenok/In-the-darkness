@@ -54,34 +54,34 @@ public:
     sf::Sprite teleportSprite;
 
     static const int mapHeight = 24;
-    static const int mapWidth = 43;
+    static const int mapWidth = 34;
 
     int startXCoordinate, startYCoordinate;
 
     sf::String firstLevelMap[mapHeight] = {
-        "BBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBB",
-        "BBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBB",
-        "BBBBBBBBBBBBBBBBBBBBBBBBBBB   BBBBBBBBBBBBBBBBB",
-        "BBBBBBBBBBBBBBBBB        .    BBBBBBBBBBBBBBBBB",
-        "BBBBBBBBBBBBBBBBB BBBBBBBBB  .BBBBBBBBBBBBBBBBB",
-        "BBBBBBBBBBBBHBBBB BBBBBBB.BB  BBBBBBBBBBBBBBBBB",
-        "BBBBBBBBBBBB BBBB BBBBBBB B . BBBBBBBBBBBBBBBBB",
-        "BBBBBBBBBBBB TBBB BBBBBBB  .  . BBBBBBBBBBBBBBB",
-        "BBBBBBBBBBBB BBBBBBBEBBBB   .  CBBBBBBBBBBBBBBB",
-        "BBBBBBBBBBBBDBBBBB   BBBBBBBBDBBBBBBBBBBBBBBBBB",
-        "BBBBBBBBBBBB  BBBBBBBB      R R BBBBBBBBBBBBBBB",
-        "BBBBBBBBBBBB  B             R R BBBBBBBBBBBBBBB",
-        "BBBBBBBBBBBBB B                 BBBBBBBBBBBBBBB",
-        "BBBBBBBBBBBBB B                 BBBBBBBBBBBBBBB",
-        "BBBBBBBBBBBBB B                 BBBBBBBBBBBBBBB",
-        "BBBBBBBBBBBBB B                 BBBBBBBBBBBBBBB",     //width = 22
-        "BBBBBBBBBBBBB B                 BBBBBBBBBBBBBBB",     //height = 24                                                           
-        "BBBBBBBBBBBBB B                 BBBBBBBBBBBBBBB",     /* B - кирпич; E - дверь выхода */
-        "BBBBBBBBBBBBB B                 BBBBBBBBBBBBBBB",     /* R - кирпич с прибором; D - обычная дверь */
-        "BBBBBBBBBBBBB B                 BBBBBBBBBBBBBBB",     /* H - вход */
-        "BBBBBBBBBBBBBDBB BBBBBBBBBBBBBBBBBBBBBBBBBBBBBB",     /* T - телепорт */
-        "BBBBBBBBBBBBB    BBBBBBBBBBBBBBBBBBBBBBBBBBBBBB",     /*C - клетка*/
-        "BBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBB",     /*. - точка необходимой остановки ящика*/
-        "BBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBB"      /*G - зеленая коробка (уже на нужной точке)*/
+        "BBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBB",
+        "BBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBB",
+        "BBBBBBBBBBBBBBBBBBBBBBBBBBB   BBBB",
+        "BBBBBBBBBBBBBBBBB        .    BBBB",
+        "BBBBBBBBBBBBBBBBB BBBBBBBBB  .BBBB",
+        "BBBBBBBBBBBBHBBBB BBBBBBB.BB  BBBB",
+        "BBBBBBBBBBBB BBBB BBBBBBB B . BBBB",
+        "BBBBBBBBBBBB TBBB BBBBBBB  .  . BB",
+        "BBBBBBBBBBBB BBBBBBBEBBBB   .  CBB",
+        "BBBBBBBBBBBBDBBBBB   BBBBBBBBDBBBB",
+        "BBBBBBBBBBBB  BBBBBBBB      R R BB",
+        "BBBBBBBBBBBB  B       RRRR  R R BB",
+        "BBBBBBBBBBBBB B    RR R         BB",
+        "BBBBBBBBBBBBB B    RR   R R RRRRBB",
+        "BBBBBBBBBBBBB B       RRR R R R BB",
+        "BBBBBBBBBBBBB B       R   R   R BB",     
+        "BBBBBBBBBBBBB B       RRR R R R BB",                                                               
+        "BBBBBBBBBBBBB B       R   R R   BB",     /* B - кирпич; E - дверь выхода */
+        "BBBBBBBBBBBBB B       R R R RRRRBB",     /* R - кирпич с прибором; D - обычная дверь */
+        "BBBBBBBBBBBBB B       R   R     BB",     /* H - вход */
+        "BBBBBBBBBBBBBDRR RRRRRRRRRR RR RBB",     /* T - телепорт */
+        "BBBBBBBBBBBBB    RRRRRRR    RR  BB",     /*C - клетка*/
+        "BBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBB",     /*. - точка необходимой остановки ящика*/
+        "BBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBB"      /*G - зеленая коробка (уже на нужной точке)*/
     };
 };

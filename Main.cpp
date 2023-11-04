@@ -62,9 +62,9 @@ void updateMapState(Map& map, sf::RenderWindow& window, Animations& anime, sf::C
     anime.checkOnOpenDoor(map, window, leftDoorClock, rightDoorClock);
 }
 
-void updateBoarState(Enemies& enemyBoar, sf::Clock& enemyClock)
+void updateBoarState(Enemies& enemyBoar, sf::Clock& enemyClock, Player player)
 {
-    if (enemyBoar.enemyMove(enemyClock))
+    if (enemyBoar.enemyMove(enemyClock, player))
     {
         enemyClock.restart();
     }
@@ -100,7 +100,7 @@ int main()
     while (window.isOpen()) 
     {
         pressOnKey(window, playerClock, player, map, anime, box, cage);
-        updateBoarState(enemyBoar, enemyClock);
+        updateBoarState(enemyBoar, enemyClock, player);
         updatePlayerState(playerClock, player, map, anime, teleportClock);
         window.clear(sf::Color::Black);
         box.checkAllPoints(map);
@@ -112,11 +112,11 @@ int main()
         camera.setCenter(player.playerX, player.playerY);
         window.draw(map.getTeleportSprite());
         window.draw(backgroundObject.getDieScientistSprite());
-        window.draw(enemyBoar.getSprite());
         window.setView(camera); 
         fogSprite.setPosition(player.playerX - 1240, player.playerY - 1200);
-        window.draw(fogSprite);
+       // window.draw(fogSprite);
         window.draw(player.getSprite());
+        window.draw(enemyBoar.getSprite());
         window.display();
     }
     return 0;
