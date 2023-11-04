@@ -47,6 +47,16 @@ Map::Map()
 	greenBoxTexture.loadFromImage(greenBoxImg);
 	greenBoxSprite.setTexture(greenBoxTexture);
 	greenBoxSprite.setTextureRect(sf::IntRect(1, 4, 90, 90));
+
+	iceFloorImg.loadFromFile("Images/ice_floor.png");
+	iceFloorTexture.loadFromImage(iceFloorImg);
+	iceFloorSprite.setTexture(iceFloorTexture);
+	iceFloorSprite.setTextureRect(sf::IntRect(0, 0, 90, 90));
+
+	laveImg.loadFromFile("Images/lave.jpg");
+	laveTexture.loadFromImage(laveImg);
+	laveSprite.setTexture(laveTexture);
+	laveSprite.setTextureRect(sf::IntRect(0, 0, 90, 90));
 }
 
 void Map::createMap(sf::RenderWindow& window)
@@ -115,6 +125,18 @@ void Map::createMap(sf::RenderWindow& window)
 			{
 				greenBoxSprite.setPosition(brickSize * j, brickSize * i);
 				window.draw(greenBoxSprite);
+				break;
+			}
+			case 'I':
+			{
+				iceFloorSprite.setPosition(brickSize * j, brickSize * i);
+				window.draw(iceFloorSprite);
+				break;
+			}
+			case 'L':
+			{
+				laveSprite.setPosition(brickSize * j, brickSize * i);
+				window.draw(laveSprite);
 				break;
 			}
 			}

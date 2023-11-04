@@ -37,7 +37,7 @@ private:
 	const int playerDelay = 1;
 
 	const int rowOffset = 2;
-	const int colOffset = 11;
+	const int colOffset = 2;
 
 	bool isGameOver = false;
 
@@ -80,6 +80,7 @@ public:
 	void checkOnLeftDoor(int curRow, int curCol, Map& map, Animations& doorAnime);
 	void checkOnRightDoor(int curRow, int curCol, Map& map, Animations& doorAnime);
 	bool getGameOverState() { return isGameOver; };
-	void setGameOverState(bool isGameOver) { this->isGameOver = isGameOver; }
+	void setGameOverState(bool isGameOver) { this->isGameOver = isGameOver; };
+
 	static const int brickSize = 90;
 };

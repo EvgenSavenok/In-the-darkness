@@ -21,6 +21,7 @@ private:
 	const int curEnemyX = 2;
 	const int curEnemyY = 11;
 	const int enemyEye = 5;
+	const int enemyStep = 8;
 	
 public:
 	sf::Sprite getSprite() { return enemySprite; };
@@ -31,21 +32,21 @@ public:
 	int returnEnemyX() { return enemyX; }
 	int returnEnemyY() { return enemyY; }
 	bool enemyMove(sf::Clock clock, Player& player);
-	bool checkOnMoveDown(Player& player);
-	bool checkOnMoveUp(Player& player);
-	bool checkOnMoveLeft(Player& player);
-	bool checkOnMoveRight(Player& player);
-	bool checkBoarDown();
-	bool checkBoarUp();
-	bool checkBoarLeft();
-	bool checkBoarRight();
+	bool checkOnMoveDown(Player& player, int curCol, int curRow);
+	bool checkOnMoveUp(Player& player, int curCol, int curRow);
+	bool checkOnMoveLeft(Player& player, int curCol, int curRow);
+	bool checkOnMoveRight(Player& player, int curCol, int curRow);
+	bool checkBoarDown(int curCol, int curRow);
+	bool checkBoarUp(int curCol, int curRow);
+	bool checkBoarLeft(int curCol, int curRow);
+	bool checkBoarRight(int curCol, int curRow);
 	void checkOnNearPlayer(Player& player);
 	void startKillingAnimation(char dir, Player& player);
-	void determineDir();
+	void determineDir(int curCol, int curRow);
 	bool getInteractionWithPlayer() { return isFacedWithPlayer; }
 	void setInteractionWithPlayer(bool isFacedWithPlayer) { this->isFacedWithPlayer = isFacedWithPlayer; }
 	void checkOnPlayer(Player& player);
-	enemyDirection defineNewDirection(int curNumOfDir);
+	enemyDirection defineNewDirection(int curNumOfDir, int curCol, int curRow);
 	sf::Clock enemyClock;
 	static const int brickSize = 90;
 };

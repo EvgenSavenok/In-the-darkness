@@ -114,9 +114,9 @@ int main()
         window.draw(backgroundObject.getDieScientistSprite());
         window.setView(camera); 
         fogSprite.setPosition(player.playerX - 1240, player.playerY - 1200);
+        window.draw(enemyBoar.getSprite());
        // window.draw(fogSprite);
         window.draw(player.getSprite());
-        window.draw(enemyBoar.getSprite());
         window.display();
     }
     return 0;

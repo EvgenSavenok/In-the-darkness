@@ -1,4 +1,4 @@
-#include "Enemies.h"
+﻿#include "Enemies.h"
 
 Enemies::Enemies()
 {
@@ -16,14 +16,8 @@ Enemies::Enemies()
 	enemySprite.setScale(1.1, 1.1);
 }
 
-bool Enemies::checkBoarUp()
+bool Enemies::checkBoarUp(int curCol, int curRow)
 {
-	int curXDistance = returnEnemyX() - curEnemyY * brickSize;
-	int curCol = curXDistance / brickSize + curEnemyY;
-
-	int curYDistance = returnEnemyY() + 50 - curEnemyX * brickSize;
-	int curRow = curYDistance / brickSize + curEnemyX;
-
 	if ((map.firstLevelMap[curRow - 1][curCol] != ' ') && (returnEnemyY() - 4 <= curRow * brickSize))
 	{
 		return false;
@@ -31,14 +25,8 @@ bool Enemies::checkBoarUp()
 	return true;
 }
 
-bool Enemies::checkBoarDown()
+bool Enemies::checkBoarDown(int curCol, int curRow)
 {
-	int curXDistance = returnEnemyX() - curEnemyY * brickSize;
-	int curCol = curXDistance / brickSize + curEnemyY;
-
-	int curYDistance = returnEnemyY() + 50 - curEnemyX * brickSize;
-	int curRow = curYDistance / brickSize + curEnemyX;
-
 	if (((map.firstLevelMap[curRow + 1][curCol] != ' ')) && (returnEnemyX() - 4 <= curCol * Map::brickSize))
 	{
 		return false;
@@ -46,14 +34,8 @@ bool Enemies::checkBoarDown()
 	return true;
 }
 
-bool Enemies::checkBoarRight()
+bool Enemies::checkBoarRight(int curCol, int curRow)
 {
-	int curXDistance = returnEnemyX() - curEnemyY * brickSize;
-	int curCol = curXDistance / brickSize + curEnemyY;
-
-	int curYDistance = returnEnemyY() + 50 - curEnemyX * brickSize;
-	int curRow = curYDistance / brickSize + curEnemyX;
-
 	if (((map.firstLevelMap[curRow][curCol + 1] != ' ')) && (returnEnemyX() - 4 <= curCol * brickSize))
 	{
 		return false;
@@ -61,14 +43,8 @@ bool Enemies::checkBoarRight()
 	return true;
 }
 
-bool Enemies::checkBoarLeft()
+bool Enemies::checkBoarLeft(int curCol, int curRow)
 {
-	int curXDistance = returnEnemyX() - curEnemyY * brickSize;
-	int curCol = curXDistance / brickSize + curEnemyY;
-
-	int curYDistance = returnEnemyY() + 50 - curEnemyX * brickSize;
-	int curRow = curYDistance / brickSize + curEnemyX;
-
 	if (((map.firstLevelMap[curRow][curCol - 1] != ' ')) && (returnEnemyX() - 4 <= curCol * Map::brickSize))
 	{
 		return false;
@@ -76,13 +52,13 @@ bool Enemies::checkBoarLeft()
 	return true;
 }
 
-enemyDirection Enemies::defineNewDirection(int curNumOfDir)
+enemyDirection Enemies::defineNewDirection(int curNumOfDir, int curCol, int curRow)
 {
 	switch (curNumOfDir)
 	{
 	case 1:
 	{
-		if (checkBoarRight())
+		if (checkBoarRight(curCol, curRow))
 		{
 			return enemyDirection::right;
 		}
@@ -90,7 +66,7 @@ enemyDirection Enemies::defineNewDirection(int curNumOfDir)
 	}
 	case 2:
 	{
-		if (checkBoarLeft())
+		if (checkBoarLeft(curCol, curRow))
 		{
 			return enemyDirection::left;
 		}
@@ -98,7 +74,7 @@ enemyDirection Enemies::defineNewDirection(int curNumOfDir)
 	}
 	case 3:
 	{
-		if (checkBoarUp())
+		if (checkBoarUp(curCol, curRow))
 		{
 			return enemyDirection::up;
 		}
@@ -106,7 +82,7 @@ enemyDirection Enemies::defineNewDirection(int curNumOfDir)
 	}
 	case 4:
 	{
-		if (checkBoarDown())
+		if (checkBoarDown(curCol, curRow))
 		{
 			return enemyDirection::down;
 		}
@@ -119,20 +95,22 @@ enemyDirection Enemies::defineNewDirection(int curNumOfDir)
 	}
 }
 
-void Enemies::determineDir()
+void Enemies::determineDir(int curCol, int curRow)
 {
 	enemyDirection enemyCurDir = enemyDirection::none;
 	do {
 		srand(time(NULL));
 		int randDir = rand() % 4 + 1;
-		enemyCurDir = defineNewDirection(randDir);
+		enemyCurDir = defineNewDirection(randDir, curCol, curRow);
 	} while (enemyCurDir == enemyDirection::none);
 	enemyDir = enemyCurDir;
 }
 
 void Enemies::checkOnNearPlayer(Player& player)
 {
-	if ((fabs((float)(enemyX - player.playerX) / 2) <= 15) && (fabs((float)(enemyY - player.playerY) / 2) <= 20))
+	if ((fabs((float)(enemyX - player.playerX) / 2) <= 30) && (fabs((float)(enemyY - player.playerY) / 2) <= 20) && (enemyX <= player.playerX))
+		isFacedWithPlayer = true;
+	if ((fabs((float)(enemyX - player.playerX) / 2) <= 15) && (fabs((float)(enemyY - player.playerY) / 2) <= 20) && (enemyX >= player.playerX))
 		isFacedWithPlayer = true;
 }
 
@@ -203,59 +181,41 @@ void Enemies::checkOnPlayer(Player& player)
 }
 
 
-bool Enemies::checkOnMoveDown(Player& player)
+bool Enemies::checkOnMoveDown(Player& player, int curCol, int curRow)
 {
-	int curXDistance = returnEnemyX() - curEnemyY * brickSize;
-	int curCol = curXDistance / brickSize + curEnemyY;
-
-	int curYDistance = returnEnemyY() - curEnemyX * brickSize;
-	int curRow = curYDistance / brickSize + curEnemyX;
-
 	checkOnPlayer(player);
 	startKillingAnimation('D', player);
 	if ((map.firstLevelMap[curRow + 1][curCol] != ' ') && (returnEnemyY() + 25 >= curRow * brickSize + 25))
 	{
 		isFacedWithLet = true;
-		determineDir();
+		determineDir(curCol, curRow);
 		return false;
 	}
 	isFacedWithLet = false;
 	return true;
 }
 
-bool Enemies::checkOnMoveUp(Player& player)
+bool Enemies::checkOnMoveUp(Player& player, int curCol, int curRow)
 {
-	int curXDistance = returnEnemyX() - curEnemyY * brickSize;
-	int curCol = curXDistance / brickSize + curEnemyY;
-
-	int curYDistance = returnEnemyY() + 50 - curEnemyX * brickSize;
-	int curRow = curYDistance / brickSize + curEnemyX;
-
 	checkOnPlayer(player);
 	startKillingAnimation('U', player);
 	if ((map.firstLevelMap[curRow - 1][curCol] != ' ') && (returnEnemyY() - 4 <= curRow * brickSize))
 	{
 		isFacedWithLet = true;
-		determineDir();
+		determineDir(curCol, curRow);
 		return false;
 	}
 	isFacedWithLet = false;
 	return true;
 }
 
-bool Enemies::checkOnMoveLeft(Player& player)
+bool Enemies::checkOnMoveLeft(Player& player, int curCol, int curRow)
 {
-	int curXDistance = returnEnemyX() - curEnemyY * brickSize;
-	int curCol = curXDistance / brickSize + curEnemyY;
-
-	int curYDistance = returnEnemyY() + 50 - curEnemyX * brickSize;
-	int curRow = curYDistance / brickSize + curEnemyX;
-
 	checkOnPlayer(player);
 	startKillingAnimation('L', player);
 	if (((map.firstLevelMap[curRow][curCol - 1] != ' ')) && (returnEnemyX() - 4 <= curCol * Map::brickSize))
 	{
-		determineDir();
+		determineDir(curCol, curRow);
 		isFacedWithLet = true;
 		return false;
 	}
@@ -263,22 +223,17 @@ bool Enemies::checkOnMoveLeft(Player& player)
 	return true;
 }
 
-bool Enemies::checkOnMoveRight(Player& player)
+bool Enemies::checkOnMoveRight(Player& player, int curCol, int curRow)
 {
-	int curXDistance = returnEnemyX() - curEnemyY * brickSize;
-	int curCol = curXDistance / brickSize + curEnemyY;
-
-	int curYDistance = returnEnemyY() + 50 - curEnemyX * brickSize;
-	int curRow = curYDistance / brickSize + curEnemyX;
-
 	checkOnPlayer(player);
 	startKillingAnimation('R', player);
+	//выход за границы массива
 	if (((map.firstLevelMap[curRow][curCol + 1] != ' ')) && (returnEnemyX() + 8 >= curCol * brickSize))
 	{ 
 		if (returnEnemyY() > curRow * brickSize)
 		{ 
 			isFacedWithLet = true;
-			determineDir();
+			determineDir(curCol, curRow);
 			return false;
 		}
 	}
@@ -296,13 +251,20 @@ bool Enemies::enemyMove(sf::Clock clock, Player& player)
 		{
 			curEnemyImg = 0;
 		}
+
+		int curXDistance = returnEnemyX() - curEnemyY * brickSize;
+		int curCol = curXDistance / brickSize + curEnemyY;
+
+		int curYDistance = returnEnemyY() + 50 - curEnemyX * brickSize;
+		int curRow = curYDistance / brickSize + curEnemyX;
+
 		switch (enemyDir)
 		{
 		case enemyDirection::down:
 		{
-			if (checkOnMoveDown(player) && !isFacedWithPlayer)
+			if (checkOnMoveDown(player, curCol, curRow) && !isFacedWithPlayer)
 			{
-				enemyY += 6;
+				enemyY += enemyStep;
 				enemySprite.setTexture(enemyTexture);
 				enemySprite.setTextureRect(sf::IntRect(0, curEnemyImg * 82 + 10, 45, 80));
 				curEnemyImg++;
@@ -311,9 +273,9 @@ bool Enemies::enemyMove(sf::Clock clock, Player& player)
 		}
 		case enemyDirection::up:
 		{
-			if (checkOnMoveUp(player) && !isFacedWithPlayer)
+			if (checkOnMoveUp(player, curCol, curRow) && !isFacedWithPlayer)
 			{
-				enemyY -= 6;
+				enemyY -= enemyStep;
 				enemySprite.setTexture(enemyTexture);
 				enemySprite.setTextureRect(sf::IntRect(45 * 5 - 30, curEnemyImg * 82 + 10, 45, 80));
 				curEnemyImg++;
@@ -322,9 +284,9 @@ bool Enemies::enemyMove(sf::Clock clock, Player& player)
 		}
 		case enemyDirection::left:
 		{
-			if (checkOnMoveLeft(player) && !isFacedWithPlayer)
+			if (checkOnMoveLeft(player, curCol, curRow) && !isFacedWithPlayer)
 			{
-				enemyX -= 8;
+				enemyX -= enemyStep;
 				enemySprite.setTexture(enemyTexture);
 				enemySprite.setTextureRect(sf::IntRect(132, curEnemyImg * 82 + 8, 60, 82));
 				curEnemyImg++;
@@ -333,9 +295,9 @@ bool Enemies::enemyMove(sf::Clock clock, Player& player)
 		}
 		case enemyDirection::right:
 		{
-			if (checkOnMoveRight(player) && !isFacedWithPlayer)
+			if (checkOnMoveRight(player, curCol, curRow) && !isFacedWithPlayer)
 			{
-				enemyX += 8;
+				enemyX += enemyStep;
 				enemySprite.setTexture(enemyTexture);
 				enemySprite.setTextureRect(sf::IntRect(0, (curEnemyImg * 82) + 4 * 82 + 8, 60, 80));
 				curEnemyImg++;

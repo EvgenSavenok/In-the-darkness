@@ -36,6 +36,14 @@ private:
     sf::Texture greenBoxTexture;
     sf::Sprite greenBoxSprite;
 
+    sf::Image iceFloorImg;
+    sf::Texture iceFloorTexture;
+    sf::Sprite iceFloorSprite;
+
+    sf::Image laveImg;
+    sf::Texture laveTexture;
+    sf::Sprite laveSprite;
+
     int plateX, plateY;
 
 public:
@@ -59,29 +67,29 @@ public:
     int startXCoordinate, startYCoordinate;
 
     sf::String firstLevelMap[mapHeight] = {
-        "BBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBB",
-        "BBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBB",
-        "BBBBBBBBBBBBBBBBBBBBBBBBBBB   BBBB",
-        "BBBBBBBBBBBBBBBBB        .    BBBB",
-        "BBBBBBBBBBBBBBBBB BBBBBBBBB  .BBBB",
-        "BBBBBBBBBBBBHBBBB BBBBBBB.BB  BBBB",
-        "BBBBBBBBBBBB BBBB BBBBBBB B . BBBB",
-        "BBBBBBBBBBBB TBBB BBBBBBB  .  . BB",
-        "BBBBBBBBBBBB BBBBBBBEBBBB   .  CBB",
-        "BBBBBBBBBBBBDBBBBB   BBBBBBBBDBBBB",
-        "BBBBBBBBBBBB  BBBBBBBB      R R BB",
-        "BBBBBBBBBBBB  B       RRRR  R R BB",
-        "BBBBBBBBBBBBB B    RR R         BB",
-        "BBBBBBBBBBBBB B    RR   R R RRRRBB",
-        "BBBBBBBBBBBBB B       RRR R R R BB",
-        "BBBBBBBBBBBBB B       R   R   R BB",     
-        "BBBBBBBBBBBBB B       RRR R R R BB",                                                               
-        "BBBBBBBBBBBBB B       R   R R   BB",     /* B - кирпич; E - дверь выхода */
-        "BBBBBBBBBBBBB B       R R R RRRRBB",     /* R - кирпич с прибором; D - обычная дверь */
-        "BBBBBBBBBBBBB B       R   R     BB",     /* H - вход */
-        "BBBBBBBBBBBBBDRR RRRRRRRRRR RR RBB",     /* T - телепорт */
-        "BBBBBBBBBBBBB    RRRRRRR    RR  BB",     /*C - клетка*/
+        "IIIIIIIIIRBBBBBBBBBBBBBBBBBBBBBBBB",
+        "IRRRERRRRRBBBBBBBBBBBBBBBBBBBBBBBB",
+        "IRIIIIIIIRBBBBBBBBBBBBBBBBB   BBBB",
+        "IRIIIIIIIRBBBBBBB        .    BBBB",
+        "IRIRRRIIIRBBBBBBB BBBBBBBBB  .BBBB",
+        "IRIRIIIIIRBBHBBBB BBBBBBB.BB  BBBB",
+        "IRIRIRIIIRBB BBBB BBBBBBB B . BBBB",
+        "IRIRLRIIIRBB TBBB BBBBBBB  .  . BB",
+        "IRIRRRIIID D BBBBBBBEBBBB   .  CBB",
+        "IRIIIIIIIRBBBBBBBB   BBBBBBBBDBBBB",
+        "RRDRRRRRRRBBBBBBBBBBBB      R R BB",
+        "BB R RR R    R RRR   RRRR   R R BB",
+        "BBDR RR R RRRR RRR RR R         BB",
+        "BB R RR R RRRR RRR RR D R R RRRRBB",
+        "BB R    D    D RRR    RRR R R R BB",
+        "BB R RR R RRRR RRR RRRR   R   R BB",     
+        "BB R RR R RRRR RRR R  RRR R R R BB",                                                               
+        "BB R RR R    R   D R  R   R R   BB",     /* B - кирпич; E - дверь выхода */
+        "BB RRRRRRRRRRRRRRR    R R R RRRRBB",     /* R - кирпич с прибором; D - обычная дверь */
+        "BB    R     R         R   R     BB",     /* H - вход */
+        "BB RRRR RRRRRRRR RRRRRRRRRR RR RBB",     /* T - телепорт */
+        "BB                     R    RR  BB",     /*C - клетка*/
         "BBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBB",     /*. - точка необходимой остановки ящика*/
         "BBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBB"      /*G - зеленая коробка (уже на нужной точке)*/
-    };
+    };                                            /*L - лава*/
 };

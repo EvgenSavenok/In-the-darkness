@@ -7,7 +7,7 @@ class Animations
 {
 private:
 	bool isStayOnTeleport = false;
-	float interval = 2;
+	float interval = 1.5;
 	bool isFirstCycle = false;
 	bool isFirstSetTeleport = true;
 
