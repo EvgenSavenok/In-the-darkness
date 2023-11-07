@@ -3,9 +3,6 @@
 #include "Map.h"
 #include "Animations.h"
 #include "Boxes.h"
-#include <Candle/RadialLight.hpp>
-#include <Candle/LightingArea.hpp>
-#include "LightSource.hpp"
 
 enum class Direction { down, up, left, right };
 
@@ -15,6 +12,10 @@ private:
 	sf::Image playerImg;
 	sf::Texture texture;
 	sf::Sprite sprite;
+
+	sf::Image deadPlayerImg;
+	sf::Texture deadPlayerTexture;
+	sf::Sprite deadPlayerSprite;
 
 	Direction playerDir;
 	int curImg;
@@ -26,6 +27,10 @@ private:
 	sf::Image keyImg;
 	sf::Texture keyTexture;
 	sf::Sprite keySprite;
+
+	sf::Image lifeBarImg;
+	sf::Texture lifeBarTexture;
+	sf::Sprite lifeBarSprite;
 
 	bool checkOnDownBoxCollisions(int curRow, int curCol, Boxes& box, Map& map);
 	bool checkOnUpBoxCollisions(int curRow, int curCol, Boxes& box, Map& map);
@@ -40,13 +45,16 @@ private:
 	const int colOffset = 2;
 
 	bool isGameOver = false;
+	int startNumOfLives = 5;
+	int numOfLives = 5;
+	float widthOfLifeBar = 280;
 
 public:
 	sf::Sprite getSprite() { return sprite; };
 	Player();
 	bool move(sf::RenderWindow& window, Map& map, Animations& animeOfTeleport, Boxes& box, Animations& cage, sf::Clock& playerClock);
 	void setDir(Direction dir) { this->playerDir = dir; };
-	bool update(sf::Clock clock, Map& map, sf::Clock teleportClock, Animations& animeOfTeleport);
+	bool update(sf::Clock clock, Map& map, sf::Clock teleportClock, Animations& animeOfTeleport, sf::RenderWindow& window, sf::View& camera);
 	float playerX, playerY;
 	bool checkOnMoveDown(Boxes& box, Animations& cage, Map& map, sf::RenderWindow& window);
 	bool checkOnMoveUp(Boxes& box, Animations& anime, Map& map, sf::RenderWindow& window);
@@ -81,6 +89,10 @@ public:
 	void checkOnRightDoor(int curRow, int curCol, Map& map, Animations& doorAnime);
 	bool getGameOverState() { return isGameOver; };
 	void setGameOverState(bool isGameOver) { this->isGameOver = isGameOver; };
-
+	int getLives() { return numOfLives; };
+	void setLives(int numOfLives) { this->numOfLives = numOfLives; };
+	void checkLives();
+	void drawLives(sf::RenderWindow& window, sf::View& camera);
+	sf::Sprite getLifeBarSprite() { return lifeBarSprite; };
 	static const int brickSize = 90;
 };

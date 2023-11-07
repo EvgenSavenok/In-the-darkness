@@ -119,7 +119,13 @@ void Enemies::startKillingAnimation(char dir, Player& player)
 	if (isFacedWithPlayer)
 	{
 		if (curKillingImg > 2)
-			player.setGameOverState(true);
+		{
+			isFacedWithPlayer = false;
+			player.checkLives();
+			curKillingImg = 0;
+			if (!player.getGameOverState())
+				checkOnNearPlayer(player);
+		}
 		else
 		{
 			enemySprite.setTexture(enemyTexture);
@@ -183,8 +189,11 @@ void Enemies::checkOnPlayer(Player& player)
 
 bool Enemies::checkOnMoveDown(Player& player, int curCol, int curRow)
 {
-	checkOnPlayer(player);
-	startKillingAnimation('D', player);
+	if (!player.getGameOverState())
+	{
+		checkOnPlayer(player);
+		startKillingAnimation('D', player);
+	}
 	if ((map.firstLevelMap[curRow + 1][curCol] != ' ') && (returnEnemyY() + 25 >= curRow * brickSize + 25))
 	{
 		isFacedWithLet = true;
@@ -197,8 +206,11 @@ bool Enemies::checkOnMoveDown(Player& player, int curCol, int curRow)
 
 bool Enemies::checkOnMoveUp(Player& player, int curCol, int curRow)
 {
-	checkOnPlayer(player);
-	startKillingAnimation('U', player);
+	if (!player.getGameOverState())
+	{
+		checkOnPlayer(player);
+		startKillingAnimation('U', player);
+	}
 	if ((map.firstLevelMap[curRow - 1][curCol] != ' ') && (returnEnemyY() - 4 <= curRow * brickSize))
 	{
 		isFacedWithLet = true;
@@ -211,8 +223,11 @@ bool Enemies::checkOnMoveUp(Player& player, int curCol, int curRow)
 
 bool Enemies::checkOnMoveLeft(Player& player, int curCol, int curRow)
 {
-	checkOnPlayer(player);
-	startKillingAnimation('L', player);
+	if (!player.getGameOverState())
+	{
+		checkOnPlayer(player);
+		startKillingAnimation('L', player);
+	}
 	if (((map.firstLevelMap[curRow][curCol - 1] != ' ')) && (returnEnemyX() - 4 <= curCol * Map::brickSize))
 	{
 		determineDir(curCol, curRow);
@@ -225,8 +240,11 @@ bool Enemies::checkOnMoveLeft(Player& player, int curCol, int curRow)
 
 bool Enemies::checkOnMoveRight(Player& player, int curCol, int curRow)
 {
-	checkOnPlayer(player);
-	startKillingAnimation('R', player);
+	if (!player.getGameOverState())
+	{
+		checkOnPlayer(player);
+		startKillingAnimation('R', player);
+	}
 	//выход за границы массива
 	if (((map.firstLevelMap[curRow][curCol + 1] != ' ')) && (returnEnemyX() + 8 >= curCol * brickSize))
 	{ 

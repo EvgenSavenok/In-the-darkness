@@ -5,9 +5,6 @@
 #include "Map.h"
 #include "Animations.h"
 #include "Boxes.h"
-#include <Candle/RadialLight.hpp>
-#include <Candle/LightingArea.hpp>
-#include "LightSource.hpp"
 #include "BackgroundObjects.h"
 
 void pressOnKey(sf::RenderWindow& window, sf::Clock& clock, Player& player, Map& map, Animations& anime, Boxes& box, Animations& cage)
@@ -49,9 +46,9 @@ void pressOnKey(sf::RenderWindow& window, sf::Clock& clock, Player& player, Map&
     }
 }
 
-void updatePlayerState(sf::Clock& playerClock, Player& player, Map& map, Animations& animeOfTeleport, sf::Clock& teleportClock)
+void updatePlayerState(sf::Clock& playerClock, Player& player, Map& map, Animations& animeOfTeleport, sf::Clock& teleportClock, sf::RenderWindow& window, sf::View& camera)
 {
-    if (player.update(playerClock, map, teleportClock, animeOfTeleport))
+    if (player.update(playerClock, map, teleportClock, animeOfTeleport, window, camera))
     {
         teleportClock.restart();
     }
@@ -62,7 +59,7 @@ void updateMapState(Map& map, sf::RenderWindow& window, Animations& anime, sf::C
     anime.checkOnOpenDoor(map, window, leftDoorClock, rightDoorClock);
 }
 
-void updateBoarState(Enemies& enemyBoar, sf::Clock& enemyClock, Player player)
+void updateBoarState(Enemies& enemyBoar, sf::Clock& enemyClock, Player& player)
 {
     if (enemyBoar.enemyMove(enemyClock, player))
     {
@@ -75,7 +72,7 @@ void updateBoarState(Enemies& enemyBoar, sf::Clock& enemyClock, Player player)
 int main() 
 {
     sf::RenderWindow window;
-    window.create(sf::VideoMode::getDesktopMode(), L"In the darkness");
+    window.create(sf::VideoMode::getDesktopMode(), L"In the darkness", sf::Style::Fullscreen);
     window.setMouseCursorVisible(false);
     const float screenWidth = sf::VideoMode::getDesktopMode().width;
     const float screenHeight = sf::VideoMode::getDesktopMode().height;
@@ -101,7 +98,7 @@ int main()
     {
         pressOnKey(window, playerClock, player, map, anime, box, cage);
         updateBoarState(enemyBoar, enemyClock, player);
-        updatePlayerState(playerClock, player, map, anime, teleportClock);
+        updatePlayerState(playerClock, player, map, anime, teleportClock, window, camera);
         window.clear(sf::Color::Black);
         box.checkAllPoints(map);
         map.createMap(window);
@@ -115,7 +112,8 @@ int main()
         window.setView(camera); 
         fogSprite.setPosition(player.playerX - 1240, player.playerY - 1200);
         window.draw(enemyBoar.getSprite());
-       // window.draw(fogSprite);
+        window.draw(fogSprite);
+        window.draw(player.getLifeBarSprite());
         window.draw(player.getSprite());
         window.display();
     }

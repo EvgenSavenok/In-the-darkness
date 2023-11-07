@@ -6,8 +6,8 @@ Player::Player()
 {
 	key = true;
 	std::fill(canPushBox, canPushBox + 7, false);
-	playerX = brickSize * 2 + 25;
-	playerY = brickSize * 2 + 15;
+	playerX = brickSize * 26 + 25;
+	playerY = brickSize * 12 + 15;
 	curImg = 0;
 	playerDir = Direction::down;
 	playerImg.loadFromFile("Images/player.png");
@@ -25,6 +25,33 @@ Player::Player()
 	keyTexture.loadFromImage(keyImg);
 	keySprite.setTexture(keyTexture);
 	keySprite.setTextureRect(sf::IntRect(0, 0, 30, 30));
+
+	deadPlayerImg.loadFromFile("Images/dead_man.png");
+	deadPlayerTexture.loadFromImage(deadPlayerImg);
+
+    lifeBarImg.loadFromFile("Images/life_bar.png");
+	lifeBarTexture.loadFromImage(lifeBarImg);
+	lifeBarSprite.setTexture(lifeBarTexture);
+	lifeBarSprite.setTextureRect(sf::IntRect(0, 0, widthOfLifeBar, 77));
+}
+
+void Player::checkLives()
+{
+	numOfLives--;
+	lifeBarSprite.setTextureRect(sf::IntRect(0, 0, widthOfLifeBar -= (widthOfLifeBar / (startNumOfLives - 1)), 77));
+	if (numOfLives == 0)
+	{
+		sprite.setTexture(deadPlayerTexture);
+		sprite.setTextureRect(sf::IntRect(0, 0, 33, 20));
+		setGameOverState(true);
+	}
+}
+
+void Player::drawLives(sf::RenderWindow& window, sf::View& camera)
+{
+	int lifeBarOffsetX = 900;
+	int lifeBarOffsetY = 400;
+	lifeBarSprite.setPosition(camera.getCenter().x - lifeBarOffsetX, camera.getCenter().y + lifeBarOffsetY);
 }
 
 void Player::drawKey(sf::RenderWindow& window)
@@ -522,52 +549,6 @@ bool Player::startTeleportAnimation(Map& map, sf::Clock teleportClock, Animation
 	return false;
 }
 
-bool Player::move(sf::RenderWindow& window, Map& map, Animations& anime, Boxes& box, Animations& cage, sf::Clock& playerClock)
-{
-	sf::Time curTime = playerClock.getElapsedTime();
-	float timing = curTime.asMilliseconds();
-	if (timing >= playerDelay)//connect to time
-	{
-		if (!anime.getStay())
-		{
-			if (curImg > 6)
-			{
-				curImg = 0;
-			}
-			switch (playerDir)
-			{
-			case Direction::down:
-			{
-				updateDown(box, anime, map, window);
-				break;
-			}
-			case Direction::up:
-			{
-				updateUp(box, anime, map, window);
-				break;
-			}
-			case Direction::left:
-			{
-				updateLeft(box, anime, map, window);
-				break;
-			}
-			case Direction::right:
-			{
-				updateRight(box, anime, map, window);
-				break;
-			}
-			}
-			sprite.setPosition(playerX, playerY);
-		}
-		if (checkOnTeleport(map) && (map.getPlateY() <= 2 * brickSize - 5))
-		{ 
-			anime.setStay(true);
-		}
-		return true;
-	}
-	return false;
-}
-
 bool Player::prepareForTeleportAnime(Animations& animeOfTeleport, Map& map, sf::Clock teleportClock, bool isNewCycle)
 {
 	if (animeOfTeleport.getStay())
@@ -596,11 +577,11 @@ bool Player::prepareForTeleportAnime(Animations& animeOfTeleport, Map& map, sf::
 	return isNewCycle;
 }
 
-bool Player::update(sf::Clock clock, Map& map, sf::Clock teleportClock, Animations& animeOfTeleport)
+bool Player::update(sf::Clock clock, Map& map, sf::Clock teleportClock, Animations& animeOfTeleport, sf::RenderWindow& window, sf::View& camera)
 {
 	bool isNewCycle = false;
 	sf::Time curTime = clock.getElapsedTime();
-	if (curTime.asSeconds() >= delayInSeconds)
+	if ((curTime.asSeconds() >= delayInSeconds) && (!getGameOverState()))
 	{
 		curImg = 0;
 		switch (playerDir)
@@ -627,6 +608,7 @@ bool Player::update(sf::Clock clock, Map& map, sf::Clock teleportClock, Animatio
 		}
 		}
 	}
+	drawLives(window, camera);
 	isNewCycle = prepareForTeleportAnime(animeOfTeleport, map, teleportClock, isNewCycle);
 	return isNewCycle;
 }
@@ -707,4 +689,50 @@ void Player::checkOnDoor(char dir, Map& map, Animations& doorAnime)
 		break;
 	}
 	}
+}
+
+bool Player::move(sf::RenderWindow& window, Map& map, Animations& anime, Boxes& box, Animations& cage, sf::Clock& playerClock)
+{
+	sf::Time curTime = playerClock.getElapsedTime();
+	float timing = curTime.asMilliseconds();
+	if (timing >= playerDelay)//connect to time
+	{
+		if (!anime.getStay() && (!getGameOverState()))
+		{
+			if (curImg > 6)
+			{
+				curImg = 0;
+			}
+			switch (playerDir)
+			{
+			case Direction::down:
+			{
+				updateDown(box, anime, map, window);
+				break;
+			}
+			case Direction::up:
+			{
+				updateUp(box, anime, map, window);
+				break;
+			}
+			case Direction::left:
+			{
+				updateLeft(box, anime, map, window);
+				break;
+			}
+			case Direction::right:
+			{
+				updateRight(box, anime, map, window);
+				break;
+			}
+			}
+			sprite.setPosition(playerX, playerY);
+		}
+		if (checkOnTeleport(map) && (map.getPlateY() <= 2 * brickSize - 5))
+		{
+			anime.setStay(true);
+		}
+		return true;
+	}
+	return false;
 }
