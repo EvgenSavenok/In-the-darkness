@@ -20,12 +20,17 @@ private:
 	bool isFacedWithLet = false;
 	const int curEnemyX = 2;
 	const int curEnemyY = 11;
-	const int enemyEye = 5;
+	const int enemyEye = 10;
 	const int enemyStep = 8;
+	void checkOnLetWithPlayer(Player& player);
+	bool isHasLeftLet;
+	bool isHasRightLet;
+	bool isHasTopLet;
+	bool isHasBottomLet;
 	
 public:
 	sf::Sprite getSprite() { return enemySprite; };
-	Enemies();
+	Enemies(int startX, int startY);
 	void setDir(enemyDirection dir) { this->enemyDir = dir; };
 	enemyDirection getDir() { return enemyDir; };
 	float enemyX, enemyY;

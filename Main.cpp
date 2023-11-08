@@ -72,19 +72,27 @@ void updateBoarState(Enemies& enemyBoar, sf::Clock& enemyClock, Player& player)
 int main() 
 {
     sf::RenderWindow window;
-    window.create(sf::VideoMode::getDesktopMode(), L"In the darkness", sf::Style::Fullscreen);
+    window.create(sf::VideoMode::getDesktopMode(), L"In the darkness");
     window.setMouseCursorVisible(false);
     const float screenWidth = sf::VideoMode::getDesktopMode().width;
     const float screenHeight = sf::VideoMode::getDesktopMode().height;
     Player player;
-    Enemies enemyBoar;
+    Enemies enemyBoar1(25, 12);
+    Enemies enemyBoar2(23, 13);
+    Enemies enemyBoar3(25, 15);
+    Enemies enemyBoar4(21, 14);
+    Enemies enemyBoar5(21, 14);
     Map map;
     Animations anime;
     Animations cage;
     Boxes box;
     BackgroundObjects backgroundObject;
     sf::Clock playerClock;
-    sf::Clock enemyClock;
+    sf::Clock enemyClock1;
+    sf::Clock enemyClock2;
+    sf::Clock enemyClock3;
+    sf::Clock enemyClock4;
+    sf::Clock enemyClock5;
     sf::Clock teleportClock;
     sf::Clock cageClock;
     sf::Clock leftDoorClock;
@@ -97,7 +105,11 @@ int main()
     while (window.isOpen()) 
     {
         pressOnKey(window, playerClock, player, map, anime, box, cage);
-        updateBoarState(enemyBoar, enemyClock, player);
+        updateBoarState(enemyBoar1, enemyClock1, player);
+        updateBoarState(enemyBoar2, enemyClock2, player);
+        updateBoarState(enemyBoar3, enemyClock3, player);
+        updateBoarState(enemyBoar4, enemyClock4, player);
+        updateBoarState(enemyBoar5, enemyClock5, player);
         updatePlayerState(playerClock, player, map, anime, teleportClock, window, camera);
         window.clear(sf::Color::Black);
         box.checkAllPoints(map);
@@ -111,8 +123,12 @@ int main()
         window.draw(backgroundObject.getDieScientistSprite());
         window.setView(camera); 
         fogSprite.setPosition(player.playerX - 1240, player.playerY - 1200);
-        window.draw(enemyBoar.getSprite());
-        window.draw(fogSprite);
+        window.draw(enemyBoar1.getSprite());
+        window.draw(enemyBoar2.getSprite());
+        window.draw(enemyBoar3.getSprite());
+        window.draw(enemyBoar4.getSprite());
+        window.draw(enemyBoar5.getSprite());
+      //  window.draw(fogSprite);
         window.draw(player.getLifeBarSprite());
         window.draw(player.getSprite());
         window.display();
