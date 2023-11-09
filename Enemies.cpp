@@ -11,7 +11,7 @@ Enemies::Enemies(int startX, int startY)
 	enemySprite.setTexture(enemyTexture);
 	enemySprite.setTextureRect(sf::IntRect(0, 82, 45, 70));
 	enemySprite.setPosition(enemyX, enemyY);
-	enemySprite.setScale(1.1, 1.1);
+	//enemySprite.setScale(1.1, 1.1);
 	isHasLeftLet = false;
 	isHasRightLet = false;
 	isHasTopLet = false;

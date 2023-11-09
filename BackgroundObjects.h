@@ -19,4 +19,3 @@ public:
 	void setDieScientistY(float y) { dieScientistY = y; }
 	float getDieScientistY() { return dieScientistY; }
 };
-

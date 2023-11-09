@@ -39,12 +39,13 @@ private:
 	void checkBoxOnWallCollision(Map& map, int curBoxRow, int curBoxCol, char dir, int indexOfBox, Boxes& box);
 
 	const float playerStep = 4;
-	const int playerDelay = 1;
+	const float playerDelay = 0.01;
 
 	const int rowOffset = 2;
 	const int colOffset = 2;
 
 	bool isGameOver = false;
+	bool isGameWin = false;
 	int startNumOfLives = 5;
 	int numOfLives = 5;
 	float widthOfLifeBar = 280;
@@ -93,6 +94,7 @@ public:
 	void setLives(int numOfLives) { this->numOfLives = numOfLives; };
 	void checkLives();
 	void drawLives(sf::RenderWindow& window, sf::View& camera);
+	void checkOnExit(Map& map, int curRow, int curCol, char dir);
 	sf::Sprite getLifeBarSprite() { return lifeBarSprite; };
 	static const int brickSize = 90;
 };

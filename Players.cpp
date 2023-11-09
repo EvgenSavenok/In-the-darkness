@@ -6,8 +6,8 @@ Player::Player()
 {
 	key = true;
 	std::fill(canPushBox, canPushBox + 7, false);
-	playerX = brickSize * 27 + 25;
-	playerY = brickSize * 15 + 15;
+	playerX = brickSize * 3 + 25;
+	playerY = brickSize * 3 + 15;
 	curImg = 0;
 	playerDir = Direction::down;
 	playerImg.loadFromFile("Images/player.png");
@@ -170,6 +170,7 @@ bool Player::checkOnMoveDown(Boxes& box, Animations& anime, Map& map, sf::Render
 	int curCol = calculateCurPlayerCol() + colOffset;
 	bool canMoveDown = true;
 	const int numOfPointsBoxes = 7;
+	checkOnExit(map, curRow, curCol, 'D');
 	checkOnKey(curRow, curCol, 'D');
 	checkOnDoor('D', map, anime);
 	canMoveDown = checkOnDownBoxCollisions(curRow, curCol, box, map);
@@ -214,12 +215,13 @@ bool Player::checkOnMoveUp(Boxes& box, Animations& anime, Map& map, sf::RenderWi
 	int curCol = calculateCurPlayerCol() + colOffset;
 	bool canMoveUp = true;
 	const int numOfPointsBoxes = 7;
+	checkOnExit(map, curRow, curCol, 'U');
 	checkOnKey(curRow, curCol, 'U');
 	checkOnDoor('U', map, anime);
 	canMoveUp = checkOnUpBoxCollisions(curRow, curCol, box, map);
 	if (((map.firstLevelMap[curRow - 1][curCol] != ' ') && (map.firstLevelMap[curRow - 1][curCol] != 'T') && (map.firstLevelMap[curRow - 1][curCol] != '.') && (map.firstLevelMap[curRow - 1][curCol] != 'G')) && (returnPlayerY() - 4 <= curRow * brickSize))
 	{
-		if (map.firstLevelMap[curRow - 1][curCol] != 'I')
+		if ((map.firstLevelMap[curRow - 1][curCol] != 'I') && (map.firstLevelMap[curRow - 1][curCol] != 'E'))
 			canMoveUp = false;
 	}
 	std::fill(canPushBox, canPushBox + numOfPointsBoxes, false);
@@ -260,16 +262,27 @@ bool Player::checkOnMoveLeft(Boxes& box, Animations& anime, Map& map, sf::Render
 	int curCol = calculateCurPlayerCol() + colOffset;
 	bool canMoveLeft = true;
 	const int numOfPointsBoxes = 7;
+	checkOnExit(map, curRow, curCol, 'L');
 	checkOnKey(curRow, curCol, 'L');
 	checkOnDoor('L', map, anime);
 	canMoveLeft = checkOnLeftBoxCollisions(curRow, curCol, box, map);
-	if (((map.firstLevelMap[curRow][curCol - 1] != ' '))) 
+	if (((map.firstLevelMap[curRow][curCol - 1] != ' ')))
+	{
 		if (map.firstLevelMap[curRow][curCol - 1] != 'T')
-			if (map.firstLevelMap[curRow][curCol - 1] != 'G') 
+		{
+			if (map.firstLevelMap[curRow][curCol - 1] != 'G')
+			{
 				if (map.firstLevelMap[curRow][curCol - 1] != '.')
+				{
 					if (returnPlayerX() - 4 <= curCol * brickSize)
+					{
 						if (map.firstLevelMap[curRow][curCol - 1] != 'I')
 							canMoveLeft = false;
+					}
+				}
+			}
+		}
+	}
 	std::fill(canPushBox, canPushBox + numOfPointsBoxes, false);
 	return canMoveLeft;
 }
@@ -314,6 +327,7 @@ bool Player::checkOnMoveRight(Boxes& box, Animations& anime, Map& map, sf::Rende
 	int curCol = calculateCurPlayerCol() + colOffset;
 	bool canMoveRight = true;
 	const int numOfPointsBoxes = 7;
+	checkOnExit(map, curRow, curCol, 'R');
 	checkOnKey(curRow, curCol, 'R');
 	checkOnDoor('R', map, anime);
 	canMoveRight = checkOnRightBoxCollisions(curRow, curCol, box, map);
@@ -323,7 +337,7 @@ bool Player::checkOnMoveRight(Boxes& box, Animations& anime, Map& map, sf::Rende
 	}
 	if (((map.firstLevelMap[curRow][curCol + 1] != ' ') && (map.firstLevelMap[curRow][curCol + 1] != 'T') && (map.firstLevelMap[curRow][curCol + 1] != '.') && (map.firstLevelMap[curRow][curCol + 1] != 'G')) && (returnPlayerX() + playerStep >= curCol * brickSize + 45))
 	{
-		if (map.firstLevelMap[curRow][curCol + 1] != 'I')
+		if ((map.firstLevelMap[curRow][curCol + 1] != 'I'))
 			canMoveRight = false;
 	}
 	if (((map.firstLevelMap[curRow][curCol + 1] == 'C') || (map.firstLevelMap[curRow + 1][curCol + 1] == 'C')) && (returnPlayerX() + playerStep >= curCol * brickSize + 45))
@@ -689,6 +703,21 @@ void Player::checkOnDoor(char dir, Map& map, Animations& doorAnime)
 		break;
 	}
 	}
+}
+
+void Player::checkOnExit(Map& map, int curRow, int curCol, char dir)
+{
+		switch (dir)
+		{
+		case 'U':
+		{
+			if ((map.firstLevelMap[curRow - 1][curCol] == 'E') && ((playerY - curRow * brickSize) <= -60))
+			{
+				isGameWin = true;
+			}
+			break;
+		}
+		}
 }
 
 bool Player::move(sf::RenderWindow& window, Map& map, Animations& anime, Boxes& box, Animations& cage, sf::Clock& playerClock)

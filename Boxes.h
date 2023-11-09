@@ -30,4 +30,3 @@ public:
 	void initializeBoxes();
 	std::vector<sf::Vector2f> boxes;
 };
-

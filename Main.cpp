@@ -77,8 +77,8 @@ int main()
     const float screenWidth = sf::VideoMode::getDesktopMode().width;
     const float screenHeight = sf::VideoMode::getDesktopMode().height;
     Player player;
-    Enemies enemyBoar1(25, 12);
-    Enemies enemyBoar2(23, 13);
+    Enemies enemyBoar1(2, 13);
+    Enemies enemyBoar2(4, 14);
     Enemies enemyBoar3(25, 15);
     Enemies enemyBoar4(21, 14);
     Enemies enemyBoar5(21, 14);
@@ -128,7 +128,7 @@ int main()
         window.draw(enemyBoar3.getSprite());
         window.draw(enemyBoar4.getSprite());
         window.draw(enemyBoar5.getSprite());
-      //  window.draw(fogSprite);
+     //   window.draw(fogSprite);
         window.draw(player.getLifeBarSprite());
         window.draw(player.getSprite());
         window.display();

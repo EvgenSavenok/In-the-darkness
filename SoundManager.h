@@ -1,7 +1,5 @@
 #include <SFML/Audio.hpp>
 
-//using namespace sf;
-
 class SoundManager {
 public:
     sf::SoundBuffer buf;
