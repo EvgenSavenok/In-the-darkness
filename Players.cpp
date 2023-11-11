@@ -4,10 +4,10 @@
 
 Player::Player()
 {
-	key = true;
+	key = false;
 	std::fill(canPushBox, canPushBox + 7, false);
-	playerX = brickSize * 3 + 25;
-	playerY = brickSize * 3 + 15;
+	playerX = brickSize * 12 + 25;
+	playerY = brickSize * 7 + 15;
 	curImg = 0;
 	playerDir = Direction::down;
 	playerImg.loadFromFile("Images/player.png");
@@ -69,7 +69,7 @@ void Player::drawKey(sf::RenderWindow& window)
 	}
 }
 
-void Player::checkOnKey(int curRow, int curCol, char curDir)
+void Player::checkOnKey(int curRow, int curCol, char curDir, SoundManager& sound)
 {
 	int curXDistance = returnKeyX() - colOffset * brickSize;
 	int curKeyCol = curXDistance / brickSize + colOffset;
@@ -82,30 +82,34 @@ void Player::checkOnKey(int curRow, int curCol, char curDir)
 
 	if (curDir == 'D')
 	{
-		if ((fabs((float)(keyY - playerY)) <= keyYOffset) && (fabs((float)(keyX - playerX)) <= keyXOffset))
+		if ((fabs((float)(keyY - playerY)) <= keyYOffset) && (fabs((float)(keyX - playerX)) <= keyXOffset) && (!key))
 		{
 			key = true;
+			sound.playTakingKey();
 		}
 	}
 	if (curDir == 'U') 
 	{
-		if ((fabs((float)(keyY - playerY)) <= keyYOffset) && (fabs((float)(keyX - playerX)) <= keyXOffset))
+		if ((fabs((float)(keyY - playerY)) <= keyYOffset) && (fabs((float)(keyX - playerX)) <= keyXOffset) && (!key))
 		{
 			key = true;
+			sound.playTakingKey();
 		}
 	}
 	if (curDir == 'L')
 	{
-		if ((fabs((float)(keyX - playerX)) <= keyYOffset) && (fabs((float)(keyY - playerY)) <= keyYOffset))
+		if ((fabs((float)(keyX - playerX)) <= keyYOffset) && (fabs((float)(keyY - playerY)) <= keyYOffset) && (!key))
 		{
 			key = true;
+			sound.playTakingKey();
 		}
 	}	
 	if (curDir == 'R')
 	{
-		if ((fabs((float)(keyX - playerX)) <= keyYOffset) && (fabs((float)(keyY - playerY)) <= keyYOffset))
+		if ((fabs((float)(keyX - playerX)) <= keyYOffset) && (fabs((float)(keyY - playerY)) <= keyYOffset) && (!key))
 		{
 			key = true;
+			sound.playTakingKey();
 		}
 	}
 }
@@ -164,15 +168,15 @@ bool Player::checkOnDownBoxCollisions(int curRow, int curCol, Boxes& box, Map& m
 	}
 }
 
-bool Player::checkOnMoveDown(Boxes& box, Animations& anime, Map& map, sf::RenderWindow& window)
+bool Player::checkOnMoveDown(Boxes& box, Animations& anime, Map& map, sf::RenderWindow& window, SoundManager& sound)
 {
 	int curRow = calculateCurPlayerRow() + rowOffset;
 	int curCol = calculateCurPlayerCol() + colOffset;
 	bool canMoveDown = true;
 	const int numOfPointsBoxes = 7;
 	checkOnExit(map, curRow, curCol, 'D');
-	checkOnKey(curRow, curCol, 'D');
-	checkOnDoor('D', map, anime);
+	checkOnKey(curRow, curCol, 'D', sound);
+	checkOnDoor('D', map, anime, sound);
 	canMoveDown = checkOnDownBoxCollisions(curRow, curCol, box, map);
 	if (anime.getCageAnimationState())
 	{
@@ -209,15 +213,15 @@ bool Player::checkOnUpBoxCollisions(int curRow, int curCol, Boxes& box, Map& map
 	}
 }
 
-bool Player::checkOnMoveUp(Boxes& box, Animations& anime, Map& map, sf::RenderWindow& window)
+bool Player::checkOnMoveUp(Boxes& box, Animations& anime, Map& map, sf::RenderWindow& window, SoundManager& sound)
 {
 	int curRow = calculateCurPlayerRow() + rowOffset;
 	int curCol = calculateCurPlayerCol() + colOffset;
 	bool canMoveUp = true;
 	const int numOfPointsBoxes = 7;
 	checkOnExit(map, curRow, curCol, 'U');
-	checkOnKey(curRow, curCol, 'U');
-	checkOnDoor('U', map, anime);
+	checkOnKey(curRow, curCol, 'U', sound);
+	checkOnDoor('U', map, anime, sound);
 	canMoveUp = checkOnUpBoxCollisions(curRow, curCol, box, map);
 	if (((map.firstLevelMap[curRow - 1][curCol] != ' ') && (map.firstLevelMap[curRow - 1][curCol] != 'T') && (map.firstLevelMap[curRow - 1][curCol] != '.') && (map.firstLevelMap[curRow - 1][curCol] != 'G')) && (returnPlayerY() - 4 <= curRow * brickSize))
 	{
@@ -256,15 +260,15 @@ bool Player::checkOnLeftBoxCollisions(int curRow, int curCol, Boxes& box, Map& m
 	}
 }
 
-bool Player::checkOnMoveLeft(Boxes& box, Animations& anime, Map& map, sf::RenderWindow& window)
+bool Player::checkOnMoveLeft(Boxes& box, Animations& anime, Map& map, sf::RenderWindow& window, SoundManager& sound)
 {
 	int curRow = calculateCurPlayerRow() + rowOffset;
 	int curCol = calculateCurPlayerCol() + colOffset;
 	bool canMoveLeft = true;
 	const int numOfPointsBoxes = 7;
 	checkOnExit(map, curRow, curCol, 'L');
-	checkOnKey(curRow, curCol, 'L');
-	checkOnDoor('L', map, anime);
+	checkOnKey(curRow, curCol, 'L', sound);
+	checkOnDoor('L', map, anime, sound);
 	canMoveLeft = checkOnLeftBoxCollisions(curRow, curCol, box, map);
 	if (((map.firstLevelMap[curRow][curCol - 1] != ' ')))
 	{
@@ -321,15 +325,15 @@ bool Player::checkOnRightBoxCollisions(int curRow, int curCol, Boxes& box, Map& 
 	}
 }
 
-bool Player::checkOnMoveRight(Boxes& box, Animations& anime, Map& map, sf::RenderWindow& window)
+bool Player::checkOnMoveRight(Boxes& box, Animations& anime, Map& map, sf::RenderWindow& window, SoundManager& sound)
 {
 	int curRow = calculateCurPlayerRow() + rowOffset;
 	int curCol = calculateCurPlayerCol() + colOffset;
 	bool canMoveRight = true;
 	const int numOfPointsBoxes = 7;
 	checkOnExit(map, curRow, curCol, 'R');
-	checkOnKey(curRow, curCol, 'R');
-	checkOnDoor('R', map, anime);
+	checkOnKey(curRow, curCol, 'R', sound);
+	checkOnDoor('R', map, anime, sound);
 	canMoveRight = checkOnRightBoxCollisions(curRow, curCol, box, map);
 	if (anime.getCageAnimationState())
 	{
@@ -477,9 +481,9 @@ bool Player::checkOnTeleport(Map& map)
 	return false;
 }
 
-void Player::updateRight(Boxes& box, Animations& cage, Map& map, sf::RenderWindow& window)
+void Player::updateRight(Boxes& box, Animations& cage, Map& map, sf::RenderWindow& window, SoundManager& doorSound)
 {
-	if (checkOnMoveRight(box, cage, map, window))
+	if (checkOnMoveRight(box, cage, map, window, doorSound))
 	{
 		playerX += playerStep;
 		curImg++;
@@ -488,9 +492,9 @@ void Player::updateRight(Boxes& box, Animations& cage, Map& map, sf::RenderWindo
 	}
 }
 
-void Player::updateDown(Boxes& box, Animations& cage, Map& map, sf::RenderWindow& window)
+void Player::updateDown(Boxes& box, Animations& cage, Map& map, sf::RenderWindow& window, SoundManager& doorSound)
 {
-	if (checkOnMoveDown(box, cage, map, window))
+	if (checkOnMoveDown(box, cage, map, window, doorSound))
 	{
 		playerY += playerStep;
 		curImg++;
@@ -499,9 +503,9 @@ void Player::updateDown(Boxes& box, Animations& cage, Map& map, sf::RenderWindow
 	}
 }
 
-void Player::updateUp(Boxes& box, Animations& anime, Map& map, sf::RenderWindow& window)
+void Player::updateUp(Boxes& box, Animations& anime, Map& map, sf::RenderWindow& window, SoundManager& doorSound)
 {
-	if (checkOnMoveUp(box, anime, map, window))
+	if (checkOnMoveUp(box, anime, map, window, doorSound))
 	{
 		playerY -= playerStep;
 		curImg++;
@@ -510,9 +514,9 @@ void Player::updateUp(Boxes& box, Animations& anime, Map& map, sf::RenderWindow&
 	}
 }
 
-void Player::updateLeft(Boxes& box, Animations& anime, Map& map, sf::RenderWindow& window)
+void Player::updateLeft(Boxes& box, Animations& anime, Map& map, sf::RenderWindow& window, SoundManager& doorSound)
 {
-	if (checkOnMoveLeft(box, anime, map, window))
+	if (checkOnMoveLeft(box, anime, map, window, doorSound))
 	{
 		playerX -= playerStep;
 		curImg++;
@@ -521,7 +525,7 @@ void Player::updateLeft(Boxes& box, Animations& anime, Map& map, sf::RenderWindo
 	}
 }
 
-bool Player::startTeleportAnimation(Map& map, sf::Clock teleportClock, Animations& animeOfTeleport)
+bool Player::startTeleportAnimation(Map& map, sf::Clock teleportClock, Animations& animeOfTeleport, SoundManager& sound)
 {
 	sf::Time curTime = teleportClock.getElapsedTime();
 	float timing = curTime.asSeconds();
@@ -542,6 +546,8 @@ bool Player::startTeleportAnimation(Map& map, sf::Clock teleportClock, Animation
 			map.setPlateX(map.getPlateX() + 3);
 			if (animeOfTeleport.getFirstCycleInfo())
 			{
+				if (sound.teleport.getStatus() != sf::Sound::Playing)
+					sound.playTeleportMoving();
 				animeOfTeleport.setInterval(0.1);
 			}
 			animeOfTeleport.setFirstCycleInfo(true);
@@ -557,13 +563,14 @@ bool Player::startTeleportAnimation(Map& map, sf::Clock teleportClock, Animation
 		{
 			map.firstLevelMap[curRow][curCol] = 'T';
 			animeOfTeleport.setStay(false);
+			sound.teleport.stop(); 
 		}
 		return true;
 	}
 	return false;
 }
 
-bool Player::prepareForTeleportAnime(Animations& animeOfTeleport, Map& map, sf::Clock teleportClock, bool isNewCycle)
+bool Player::prepareForTeleportAnime(Animations& animeOfTeleport, Map& map, sf::Clock teleportClock, bool isNewCycle, SoundManager& sound)
 {
 	if (animeOfTeleport.getStay())
 	{
@@ -582,7 +589,7 @@ bool Player::prepareForTeleportAnime(Animations& animeOfTeleport, Map& map, sf::
 			map.setPlateY(map.startYCoordinate);
 			animeOfTeleport.setFirstSetInfo(false);
 		}
-		if (startTeleportAnimation(map, teleportClock, animeOfTeleport))
+		if (startTeleportAnimation(map, teleportClock, animeOfTeleport, sound))
 		{
 			isNewCycle = true;
 		}
@@ -591,7 +598,7 @@ bool Player::prepareForTeleportAnime(Animations& animeOfTeleport, Map& map, sf::
 	return isNewCycle;
 }
 
-bool Player::update(sf::Clock clock, Map& map, sf::Clock teleportClock, Animations& animeOfTeleport, sf::RenderWindow& window, sf::View& camera)
+bool Player::update(sf::Clock clock, Map& map, sf::Clock teleportClock, Animations& animeOfTeleport, sf::RenderWindow& window, sf::View& camera, SoundManager& sound)
 {
 	bool isNewCycle = false;
 	sf::Time curTime = clock.getElapsedTime();
@@ -623,11 +630,11 @@ bool Player::update(sf::Clock clock, Map& map, sf::Clock teleportClock, Animatio
 		}
 	}
 	drawLives(window, camera);
-	isNewCycle = prepareForTeleportAnime(animeOfTeleport, map, teleportClock, isNewCycle);
+	isNewCycle = prepareForTeleportAnime(animeOfTeleport, map, teleportClock, isNewCycle, sound);
 	return isNewCycle;
 }
 
-void Player::checkOnBottomDoor(int curRow, int curCol, Map& map, Animations& doorAnime)
+void Player::checkOnBottomDoor(int curRow, int curCol, Map& map, Animations& doorAnime, SoundManager& doorSound)
 {
 	if (map.firstLevelMap[curRow + 1][curCol] == 'D') 
 	{
@@ -635,11 +642,12 @@ void Player::checkOnBottomDoor(int curRow, int curCol, Map& map, Animations& doo
 		{
 			int numOfDoor = doorAnime.checkCurDoorNum(curRow + 1, curCol);
 			doorAnime.setDoorAnimationState(true, numOfDoor);
+			doorSound.playOpeningOfDoor();
 		}
 	}
 }
 
-void Player::checkOnTopDoor(int curRow, int curCol, Map& map, Animations& doorAnime)
+void Player::checkOnTopDoor(int curRow, int curCol, Map& map, Animations& doorAnime, SoundManager& doorSound)
 {
 	if (map.firstLevelMap[curRow - 1][curCol] == 'D')
 	{
@@ -647,11 +655,12 @@ void Player::checkOnTopDoor(int curRow, int curCol, Map& map, Animations& doorAn
 		{
 			int numOfDoor = doorAnime.checkCurDoorNum(curRow - 1, curCol);
 			doorAnime.setDoorAnimationState(true, numOfDoor);
+			doorSound.playOpeningOfDoor();
 		}
 	}
 }
 
-void Player::checkOnLeftDoor(int curRow, int curCol, Map& map, Animations& doorAnime)
+void Player::checkOnLeftDoor(int curRow, int curCol, Map& map, Animations& doorAnime, SoundManager& doorSound)
 {
 	if (map.firstLevelMap[curRow][curCol - 1] == 'D')
 	{
@@ -659,11 +668,12 @@ void Player::checkOnLeftDoor(int curRow, int curCol, Map& map, Animations& doorA
 		{
 			int numOfDoor = doorAnime.checkCurDoorNum(curRow, curCol - 1);
 			doorAnime.setDoorAnimationState(true, numOfDoor);
+			doorSound.playOpeningOfDoor();
 		}
 	}
 }
 
-void Player::checkOnRightDoor(int curRow, int curCol, Map& map, Animations& doorAnime)
+void Player::checkOnRightDoor(int curRow, int curCol, Map& map, Animations& doorAnime, SoundManager& doorSound)
 {
 	if (map.firstLevelMap[curRow][curCol + 1] == 'D')
 	{
@@ -671,11 +681,12 @@ void Player::checkOnRightDoor(int curRow, int curCol, Map& map, Animations& door
 		{
 			int numOfDoor = doorAnime.checkCurDoorNum(curRow, curCol + 1);
 			doorAnime.setDoorAnimationState(true, numOfDoor);
+			doorSound.playOpeningOfDoor();
 		}
 	}
 }
 
-void Player::checkOnDoor(char dir, Map& map, Animations& doorAnime)
+void Player::checkOnDoor(char dir, Map& map, Animations& doorAnime, SoundManager& doorSound)
 {
 	int curRow = calculateCurPlayerRow() + rowOffset;
 	int curCol = calculateCurPlayerCol() + colOffset;
@@ -684,22 +695,22 @@ void Player::checkOnDoor(char dir, Map& map, Animations& doorAnime)
 	{
 	case 'D':
 	{
-		checkOnBottomDoor(curRow, curCol, map, doorAnime);
+		checkOnBottomDoor(curRow, curCol, map, doorAnime, doorSound);
 		break;
 	}
 	case 'U':
 	{
-		checkOnTopDoor(curRow, curCol, map, doorAnime);
+		checkOnTopDoor(curRow, curCol, map, doorAnime, doorSound);
 		break;
 	}
 	case 'L':
 	{
-		checkOnLeftDoor(curRow, curCol, map, doorAnime);
+		checkOnLeftDoor(curRow, curCol, map, doorAnime, doorSound);
 		break;
 	}
 	case 'R':
 	{
-		checkOnRightDoor(curRow, curCol, map, doorAnime);
+		checkOnRightDoor(curRow, curCol, map, doorAnime, doorSound);
 		break;
 	}
 	}
@@ -720,7 +731,7 @@ void Player::checkOnExit(Map& map, int curRow, int curCol, char dir)
 		}
 }
 
-bool Player::move(sf::RenderWindow& window, Map& map, Animations& anime, Boxes& box, Animations& cage, sf::Clock& playerClock)
+bool Player::move(sf::RenderWindow& window, Map& map, Animations& anime, Boxes& box, Animations& cage, sf::Clock& playerClock, SoundManager& sound)
 {
 	sf::Time curTime = playerClock.getElapsedTime();
 	float timing = curTime.asMilliseconds();
@@ -736,22 +747,22 @@ bool Player::move(sf::RenderWindow& window, Map& map, Animations& anime, Boxes& 
 			{
 			case Direction::down:
 			{
-				updateDown(box, anime, map, window);
+				updateDown(box, anime, map, window, sound);
 				break;
 			}
 			case Direction::up:
 			{
-				updateUp(box, anime, map, window);
+				updateUp(box, anime, map, window, sound);
 				break;
 			}
 			case Direction::left:
 			{
-				updateLeft(box, anime, map, window);
+				updateLeft(box, anime, map, window, sound);
 				break;
 			}
 			case Direction::right:
 			{
-				updateRight(box, anime, map, window);
+				updateRight(box, anime, map, window, sound);
 				break;
 			}
 			}

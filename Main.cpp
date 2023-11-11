@@ -1,13 +1,13 @@
 ﻿#include <SFML/Graphics.hpp>
-#include <SFML/Audio.hpp>
 #include "Players.h"
 #include "Enemies.h"
 #include "Map.h"
 #include "Animations.h"
 #include "Boxes.h"
 #include "BackgroundObjects.h"
+#include "SoundManager.h"
 
-void pressOnKey(sf::RenderWindow& window, sf::Clock& clock, Player& player, Map& map, Animations& anime, Boxes& box, Animations& cage)
+void pressOnKey(sf::RenderWindow& window, sf::Clock& clock, Player& player, Map& map, Animations& anime, Boxes& box, Animations& cage, SoundManager& sound)
 {
     sf::Event event;
     bool isTime = false;
@@ -21,22 +21,22 @@ void pressOnKey(sf::RenderWindow& window, sf::Clock& clock, Player& player, Map&
             if (event.key.code == sf::Keyboard::D)
             {
                 player.setDir(Direction::right);
-                isTime = player.move(window, map, anime, box, cage, clock);
+                isTime = player.move(window, map, anime, box, cage, clock, sound);
             }
             if (event.key.code == sf::Keyboard::A)
             {
                 player.setDir(Direction::left);
-                isTime = player.move(window, map, anime, box, cage, clock);
+                isTime = player.move(window, map, anime, box, cage, clock, sound);
             }
             if (event.key.code == sf::Keyboard::W)
             {
                 player.setDir(Direction::up);
-                isTime = player.move(window, map, anime, box, cage, clock);
+                isTime = player.move(window, map, anime, box, cage, clock, sound);
             }
             if (event.key.code == sf::Keyboard::S)
             {
                 player.setDir(Direction::down);
-                isTime = player.move(window, map, anime, box, cage, clock);
+                isTime = player.move(window, map, anime, box, cage, clock, sound);
             }
         }
         if (isTime)
@@ -46,9 +46,9 @@ void pressOnKey(sf::RenderWindow& window, sf::Clock& clock, Player& player, Map&
     }
 }
 
-void updatePlayerState(sf::Clock& playerClock, Player& player, Map& map, Animations& animeOfTeleport, sf::Clock& teleportClock, sf::RenderWindow& window, sf::View& camera)
+void updatePlayerState(sf::Clock& playerClock, Player& player, Map& map, Animations& animeOfTeleport, sf::Clock& teleportClock, sf::RenderWindow& window, sf::View& camera, SoundManager& sound)
 {
-    if (player.update(playerClock, map, teleportClock, animeOfTeleport, window, camera))
+    if (player.update(playerClock, map, teleportClock, animeOfTeleport, window, camera, sound))
     {
         teleportClock.restart();
     }
@@ -59,9 +59,9 @@ void updateMapState(Map& map, sf::RenderWindow& window, Animations& anime, sf::C
     anime.checkOnOpenDoor(map, window, leftDoorClock, rightDoorClock);
 }
 
-void updateBoarState(Enemies& enemyBoar, sf::Clock& enemyClock, Player& player)
+void updateBoarState(Enemies& enemyBoar, sf::Clock& enemyClock, Player& player, SoundManager& sound)
 {
-    if (enemyBoar.enemyMove(enemyClock, player))
+    if (enemyBoar.enemyMove(enemyClock, player, sound))
     {
         enemyClock.restart();
     }
@@ -99,25 +99,27 @@ int main()
     sf::Clock rightDoorClock;
     sf::View camera(sf::FloatRect(0, 0, screenWidth, screenHeight));
     sf::Texture fogTexture;
+    SoundManager sound;
     fogTexture.loadFromFile("Images/fog.png");
     sf::Sprite fogSprite(fogTexture);
     fogSprite.setScale(2.2, 2.2);
     while (window.isOpen()) 
     {
-        pressOnKey(window, playerClock, player, map, anime, box, cage);
-        updateBoarState(enemyBoar1, enemyClock1, player);
-        updateBoarState(enemyBoar2, enemyClock2, player);
-        updateBoarState(enemyBoar3, enemyClock3, player);
-        updateBoarState(enemyBoar4, enemyClock4, player);
-        updateBoarState(enemyBoar5, enemyClock5, player);
-        updatePlayerState(playerClock, player, map, anime, teleportClock, window, camera);
+        sound.playBgMusic();
+        pressOnKey(window, playerClock, player, map, anime, box, cage, sound);
+        updateBoarState(enemyBoar1, enemyClock1, player, sound);
+        updateBoarState(enemyBoar2, enemyClock2, player, sound);
+        updateBoarState(enemyBoar3, enemyClock3, player, sound);
+        updateBoarState(enemyBoar4, enemyClock4, player, sound);
+        updateBoarState(enemyBoar5, enemyClock5, player, sound);
+        updatePlayerState(playerClock, player, map, anime, teleportClock, window, camera, sound);
         window.clear(sf::Color::Black);
         box.checkAllPoints(map);
         map.createMap(window);
         updateMapState(map, window, anime, leftDoorClock, rightDoorClock);
         box.drawBox(window);
         player.drawKey(window);
-        cage.setCagePos(window, box, map, cageClock);
+        cage.setCagePos(window, box, map, cageClock, sound);
         camera.setCenter(player.playerX, player.playerY);
         window.draw(map.getTeleportSprite());
         window.draw(backgroundObject.getDieScientistSprite());
@@ -128,7 +130,7 @@ int main()
         window.draw(enemyBoar3.getSprite());
         window.draw(enemyBoar4.getSprite());
         window.draw(enemyBoar5.getSprite());
-     //   window.draw(fogSprite);
+        window.draw(fogSprite);
         window.draw(player.getLifeBarSprite());
         window.draw(player.getSprite());
         window.display();

@@ -2,6 +2,7 @@
 #include <SFML/Graphics.hpp>
 #include "Boxes.h"
 #include "Map.h"
+#include "SoundManager.h"
 
 class Animations
 {
@@ -75,8 +76,8 @@ public:
 	bool getFirstSetInfo() { return isFirstSetTeleport; }
 	void setFirstSetInfo(bool isFirstSetTeleport) { this->isFirstSetTeleport = isFirstSetTeleport; }
 	Animations();
-	void setCagePos(sf::RenderWindow& window, Boxes& box, Map& map, sf::Clock& cageClock);
-	void startCageAnimation(Boxes& box, Map& map, sf::RenderWindow& window, sf::Clock& cageClock);
+	void setCagePos(sf::RenderWindow& window, Boxes& box, Map& map, sf::Clock& cageClock, SoundManager& sound);
+	void startCageAnimation(Boxes& box, Map& map, sf::RenderWindow& window, sf::Clock& cageClock, SoundManager& sound);
 	void checkOnOpenDoor(Map& map, sf::RenderWindow& window, sf::Clock& leftDoorClock, sf::Clock& rightDoorClock);
 	int checkCurDoorNum(int curRow, int curCol);
 	std::vector<sf::Vector2f> doors;

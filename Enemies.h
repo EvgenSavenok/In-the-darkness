@@ -36,21 +36,21 @@ public:
 	float enemyX, enemyY;
 	int returnEnemyX() { return enemyX; }
 	int returnEnemyY() { return enemyY; }
-	bool enemyMove(sf::Clock clock, Player& player);
-	bool checkOnMoveDown(Player& player, int curCol, int curRow);
-	bool checkOnMoveUp(Player& player, int curCol, int curRow);
-	bool checkOnMoveLeft(Player& player, int curCol, int curRow);
-	bool checkOnMoveRight(Player& player, int curCol, int curRow);
+	bool enemyMove(sf::Clock clock, Player& player, SoundManager& sound);
+	bool checkOnMoveDown(Player& player, int curCol, int curRow, SoundManager& sound);
+	bool checkOnMoveUp(Player& player, int curCol, int curRow, SoundManager& sound);
+	bool checkOnMoveLeft(Player& player, int curCol, int curRow, SoundManager& sound);
+	bool checkOnMoveRight(Player& player, int curCol, int curRow, SoundManager& sound);
 	bool checkBoarDown(int curCol, int curRow);
 	bool checkBoarUp(int curCol, int curRow);
 	bool checkBoarLeft(int curCol, int curRow);
 	bool checkBoarRight(int curCol, int curRow);
 	void checkOnNearPlayer(Player& player);
-	void startKillingAnimation(char dir, Player& player);
+	void startKillingAnimation(char dir, Player& player, SoundManager& sound);
 	void determineDir(int curCol, int curRow);
 	bool getInteractionWithPlayer() { return isFacedWithPlayer; }
 	void setInteractionWithPlayer(bool isFacedWithPlayer) { this->isFacedWithPlayer = isFacedWithPlayer; }
-	void checkOnPlayer(Player& player);
+	void checkOnPlayer(Player& player, SoundManager& sound);
 	enemyDirection defineNewDirection(int curNumOfDir, int curCol, int curRow);
 	sf::Clock enemyClock;
 	static const int brickSize = 90;

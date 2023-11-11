@@ -44,23 +44,25 @@ void Animations::initializeDoors()
 	}
 }
 
-void Animations::setCagePos(sf::RenderWindow& window, Boxes& box, Map& map, sf::Clock& cageClock)
+void Animations::setCagePos(sf::RenderWindow& window, Boxes& box, Map& map, sf::Clock& cageClock, SoundManager& sound)
 {
+	int cageX = 8;
+	int cageY = 31;
 	if (getCageAnimationState())
 	{
-		map.firstLevelMap[8][31] = ' ';
+		map.firstLevelMap[cageX][cageY] = ' ';
 	}
 	else
 	{
 		cageSprite.setPosition(brickSize * 31, brickSize * 8);
 		window.draw(cageSprite);
-		startCageAnimation(box, map, window, cageClock);
+		startCageAnimation(box, map, window, cageClock, sound);
 	}
 }
 
-void Animations::startCageAnimation(Boxes& box, Map& map, sf::RenderWindow& window, sf::Clock& cageClock)
+void Animations::startCageAnimation(Boxes& box, Map& map, sf::RenderWindow& window, sf::Clock& cageClock, SoundManager& sound)
 {
-	#define numOfActivePoints 2
+	#define numOfActivePoints 7
 	int countOfPoints = 0;
 	for (int i = 0; i < Map::mapHeight; i++)
 	{
@@ -72,6 +74,8 @@ void Animations::startCageAnimation(Boxes& box, Map& map, sf::RenderWindow& wind
 	}
 	if (countOfPoints == numOfActivePoints)
 	{
+		if (sound.openCage.getStatus() != sf::Sound::Playing)
+			sound.playOpeningOfCage();
 		sf::Time curTime = cageClock.getElapsedTime();
 		if (curTime.asSeconds() >= 0.01) 
 		{

@@ -86,9 +86,9 @@ public:
         "BB R RR R RRRR RRR R  RRR R R R BB",                                                               
         "BB R RR R    R   D R  R   R R   BB",     /* B - кирпич; E - дверь выхода */
         "BB RRRRRRRRRRRRRRR    R R R RRRRBB",     /* R - кирпич с прибором; D - обычная дверь */
-        "BB    R     R         R   R     BB",     /* H - вход */
-        "BB RRRR RRRRRRRR RRRRRRRRRR RR RBB",     /* T - телепорт */
-        "BB                     R    RR  BB",     /*C - клетка*/
+        "BB      R   R         R   R     BB",     /* H - вход */
+        "BB RRRR RR RRRRR RRRRRRRRRR RR RBB",     /* T - телепорт */
+        "BB R                   R    RR  BB",     /*C - клетка*/
         "BBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBB",     /*. - точка необходимой остановки ящика*/
         "BBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBB"      /*G - зеленая коробка (уже на нужной точке)*/
     };                                            /*L - лава*/

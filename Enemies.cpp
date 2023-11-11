@@ -119,12 +119,13 @@ void Enemies::checkOnNearPlayer(Player& player)
 		isFacedWithPlayer = true;
 }
 
-void Enemies::startKillingAnimation(char dir, Player& player)
+void Enemies::startKillingAnimation(char dir, Player& player, SoundManager& sound)
 {
 	if (isFacedWithPlayer)
 	{
 		if (curKillingImg > 2)
 		{
+			sound.playBeatingOfPlayer();
 			isFacedWithPlayer = false;
 			player.checkLives();
 			curKillingImg = 0;
@@ -201,7 +202,7 @@ void Enemies::checkOnLetWithPlayer(Player& player)
 	}
 }
 
-void Enemies::checkOnPlayer(Player& player)
+void Enemies::checkOnPlayer(Player& player, SoundManager& sound)
 {
 	const int eyeWidth = 50;
 	checkOnLetWithPlayer(player);
@@ -210,22 +211,38 @@ void Enemies::checkOnPlayer(Player& player)
 		if ((fabs((float)(enemyX - player.playerX)) <= brickSize * enemyEye) && (player.playerX > enemyX) && (fabs((float)(enemyY - player.playerY)) <= eyeWidth))
 		{
 			if (((fabs)((float)(enemyY - player.playerY)) <= brickSize) && (!isHasRightLet))
+			{
+				if ((sound.roar.getStatus() != sf::Sound::Playing) && (enemyDir != enemyDirection::right))
+					sound.playRoar();
 				enemyDir = enemyDirection::right;
+			}
 		}
 		if ((fabs((float)(enemyX - player.playerX)) <= brickSize * enemyEye) && (player.playerX < enemyX) && (fabs((float)(enemyY - player.playerY)) <= eyeWidth))
 		{
 			if ((fabs((float)(enemyY - player.playerY)) <= brickSize) && (!isHasLeftLet))
+			{
+				if ((sound.roar.getStatus() != sf::Sound::Playing) && (enemyDir != enemyDirection::left))
+					sound.playRoar();
 				enemyDir = enemyDirection::left;
+			}
 		}
 		if ((fabs((float)(enemyY - player.playerY)) <= brickSize * enemyEye) && (player.playerY > enemyY) && (fabs((float)(enemyX - player.playerX)) <= eyeWidth))
 		{
 			if ((fabs((float)(enemyX - player.playerX)) <= brickSize) && (!isHasBottomLet))
+			{
+				if ((sound.roar.getStatus() != sf::Sound::Playing) && (enemyDir != enemyDirection::down))
+					sound.playRoar();
 				enemyDir = enemyDirection::down;
+			}
 		}
 		if ((fabs((float)(enemyY - player.playerY)) <= brickSize * enemyEye) && (player.playerY < enemyY) && (fabs((float)(enemyX - player.playerX)) <= eyeWidth))
 		{
 			if ((fabs((float)(enemyX - player.playerX)) <= brickSize) && (!isHasTopLet))
+			{
+				if ((sound.roar.getStatus() != sf::Sound::Playing) && (enemyDir != enemyDirection::up))
+					sound.playRoar();
 				enemyDir = enemyDirection::up;
+			}
 		}
 		checkOnNearPlayer(player);
 	}
@@ -235,13 +252,12 @@ void Enemies::checkOnPlayer(Player& player)
 	isHasBottomLet = false;
 }
 
-
-bool Enemies::checkOnMoveDown(Player& player, int curCol, int curRow)
+bool Enemies::checkOnMoveDown(Player& player, int curCol, int curRow, SoundManager& sound)
 {
 	if (!player.getGameOverState())
 	{
-		checkOnPlayer(player);
-		startKillingAnimation('D', player);
+		checkOnPlayer(player, sound);
+		startKillingAnimation('D', player, sound);
 	}
 	if ((map.firstLevelMap[curRow + 1][curCol] != ' ') && (returnEnemyY() + 25 >= curRow * brickSize + 25))
 	{
@@ -253,12 +269,12 @@ bool Enemies::checkOnMoveDown(Player& player, int curCol, int curRow)
 	return true;
 }
 
-bool Enemies::checkOnMoveUp(Player& player, int curCol, int curRow)
+bool Enemies::checkOnMoveUp(Player& player, int curCol, int curRow, SoundManager& sound)
 {
 	if (!player.getGameOverState())
 	{
-		checkOnPlayer(player);
-		startKillingAnimation('U', player);
+		checkOnPlayer(player, sound);
+		startKillingAnimation('U', player, sound);
 	}
 	if ((map.firstLevelMap[curRow - 1][curCol] != ' ') && (returnEnemyY() - 8 <= curRow * brickSize))
 	{
@@ -270,12 +286,12 @@ bool Enemies::checkOnMoveUp(Player& player, int curCol, int curRow)
 	return true;
 }
 
-bool Enemies::checkOnMoveLeft(Player& player, int curCol, int curRow)
+bool Enemies::checkOnMoveLeft(Player& player, int curCol, int curRow, SoundManager& sound)
 {
 	if (!player.getGameOverState())
 	{
-		checkOnPlayer(player);
-		startKillingAnimation('L', player);
+		checkOnPlayer(player, sound);
+		startKillingAnimation('L', player, sound);
 	}
 	if (((map.firstLevelMap[curRow][curCol - 1] != ' ')) && (returnEnemyX() - 8 <= curCol * brickSize))
 	{
@@ -290,12 +306,12 @@ bool Enemies::checkOnMoveLeft(Player& player, int curCol, int curRow)
 	return true;
 }
 
-bool Enemies::checkOnMoveRight(Player& player, int curCol, int curRow)
+bool Enemies::checkOnMoveRight(Player& player, int curCol, int curRow, SoundManager& sound)
 {
 	if (!player.getGameOverState())
 	{
-		checkOnPlayer(player);
-		startKillingAnimation('R', player);
+		checkOnPlayer(player, sound);
+		startKillingAnimation('R', player, sound);
 	}
 	//выход за границы массива
 	if ((map.firstLevelMap[curRow][curCol + 1] != ' ') && (returnEnemyX() + 8 >= curCol * brickSize + 30))
@@ -311,7 +327,7 @@ bool Enemies::checkOnMoveRight(Player& player, int curCol, int curRow)
 	return true;
 }
 
-bool Enemies::enemyMove(sf::Clock clock, Player& player)
+bool Enemies::enemyMove(sf::Clock clock, Player& player, SoundManager& sound)
 {
 	sf::Time curTime = clock.getElapsedTime();
 	float timing = curTime.asMilliseconds();
@@ -332,7 +348,7 @@ bool Enemies::enemyMove(sf::Clock clock, Player& player)
 		{
 		case enemyDirection::down:
 		{
-			if (checkOnMoveDown(player, curCol, curRow) && !isFacedWithPlayer)
+			if (checkOnMoveDown(player, curCol, curRow, sound) && !isFacedWithPlayer)
 			{
 				enemyY += enemyStep;
 				enemySprite.setTexture(enemyTexture);
@@ -343,7 +359,7 @@ bool Enemies::enemyMove(sf::Clock clock, Player& player)
 		}
 		case enemyDirection::up:
 		{
-			if (checkOnMoveUp(player, curCol, curRow) && !isFacedWithPlayer)
+			if (checkOnMoveUp(player, curCol, curRow, sound) && !isFacedWithPlayer)
 			{
 				enemyY -= enemyStep;
 				enemySprite.setTexture(enemyTexture);
@@ -354,7 +370,7 @@ bool Enemies::enemyMove(sf::Clock clock, Player& player)
 		}
 		case enemyDirection::left:
 		{
-			if (checkOnMoveLeft(player, curCol, curRow) && !isFacedWithPlayer)
+			if (checkOnMoveLeft(player, curCol, curRow, sound) && !isFacedWithPlayer)
 			{
 				enemyX -= enemyStep;
 				enemySprite.setTexture(enemyTexture);
@@ -365,7 +381,7 @@ bool Enemies::enemyMove(sf::Clock clock, Player& player)
 		}
 		case enemyDirection::right:
 		{
-			if (checkOnMoveRight(player, curCol, curRow) && !isFacedWithPlayer)
+			if (checkOnMoveRight(player, curCol, curRow, sound) && !isFacedWithPlayer)
 			{
 				enemyX += enemyStep;
 				enemySprite.setTexture(enemyTexture);
