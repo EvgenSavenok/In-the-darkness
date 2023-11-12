@@ -1,7 +1,7 @@
 #pragma once
 #include <SFML/Graphics.hpp>
 #include "Map.h"
-#include "Players.h"
+#include "Player.h"
 
 enum class enemyDirection { down, up, left, right, none };
 
@@ -46,7 +46,7 @@ public:
 	bool checkBoarLeft(int curCol, int curRow);
 	bool checkBoarRight(int curCol, int curRow);
 	void checkOnNearPlayer(Player& player);
-	void startKillingAnimation(char dir, Player& player, SoundManager& sound);
+	void startKillingAnimation(char dir, Player& player, SoundManager& soundz);
 	void determineDir(int curCol, int curRow);
 	bool getInteractionWithPlayer() { return isFacedWithPlayer; }
 	void setInteractionWithPlayer(bool isFacedWithPlayer) { this->isFacedWithPlayer = isFacedWithPlayer; }

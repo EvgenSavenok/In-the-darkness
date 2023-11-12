@@ -1,5 +1,4 @@
 ﻿#include "Animations.h"
-#include "Map.h"
 
 Animations::Animations()
 {
@@ -44,6 +43,21 @@ void Animations::initializeDoors()
 	}
 }
 
+void Animations::resetMap(Map& map, Animations& anime)
+{
+	isCanStartDoorAnimation.clear();
+	door.clear();
+	int x, y;
+	for (int i = 0; i < numOfDoors; i++)
+	{
+		x = doors[i].x;
+		y = doors[i].y;
+		map.firstLevelMap[y][x] = 'D';
+		isCanStartDoorAnimation.push_back(false);
+		door.push_back(DoorsProperties(205.0, 46.5, 40.5, 0.0, 47.5));
+	}
+}
+
 void Animations::setCagePos(sf::RenderWindow& window, Boxes& box, Map& map, sf::Clock& cageClock, SoundManager& sound)
 {
 	int cageX = 8;
@@ -62,7 +76,7 @@ void Animations::setCagePos(sf::RenderWindow& window, Boxes& box, Map& map, sf::
 
 void Animations::startCageAnimation(Boxes& box, Map& map, sf::RenderWindow& window, sf::Clock& cageClock, SoundManager& sound)
 {
-	#define numOfActivePoints 7
+	#define numOfActivePoints 1
 	int countOfPoints = 0;
 	for (int i = 0; i < Map::mapHeight; i++)
 	{

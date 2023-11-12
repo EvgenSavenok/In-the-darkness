@@ -1,5 +1,4 @@
 ﻿#include "Boxes.h"
-#include "Map.h"
 
 Boxes::Boxes()
 {

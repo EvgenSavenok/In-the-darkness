@@ -4,6 +4,7 @@
 #include "Animations.h"
 #include "Boxes.h"
 #include "SoundManager.h"
+#include "Menu.h"
 
 enum class Direction { down, up, left, right };
 
@@ -33,6 +34,10 @@ private:
 	sf::Texture lifeBarTexture;
 	sf::Sprite lifeBarSprite;
 
+	sf::Image deathTextImg;
+	sf::Texture deathTextTexture;
+	sf::Sprite deathTextSprite;
+
 	bool checkOnDownBoxCollisions(int curRow, int curCol, Boxes& box, Map& map);
 	bool checkOnUpBoxCollisions(int curRow, int curCol, Boxes& box, Map& map);
 	bool checkOnLeftBoxCollisions(int curRow, int curCol, Boxes& box, Map& map);
@@ -45,15 +50,19 @@ private:
 	const int rowOffset = 2;
 	const int colOffset = 2;
 
-	bool isGameOver = false;
-	bool isGameWin = false;
 	int startNumOfLives = 5;
 	int numOfLives = 5;
 	float widthOfLifeBar = 280;
 
+	bool isGameOver = false;
+
+	void resetPlayer();
+	void resetTeleport(Animations& anime, Map& map);
+
 public:
 	sf::Sprite getSprite() { return sprite; };
 	Player();
+	bool isGameWin = false;
 	bool move(sf::RenderWindow& window, Map& map, Animations& animeOfTeleport, Boxes& box, Animations& cage, sf::Clock& playerClock, SoundManager& doorSound);
 	void setDir(Direction dir) { this->playerDir = dir; };
 	bool update(sf::Clock clock, Map& map, sf::Clock teleportClock, Animations& animeOfTeleport, sf::RenderWindow& window, sf::View& camera, SoundManager& sound);
@@ -91,11 +100,13 @@ public:
 	void checkOnRightDoor(int curRow, int curCol, Map& map, Animations& doorAnime, SoundManager& doorSound);
 	bool getGameOverState() { return isGameOver; };
 	void setGameOverState(bool isGameOver) { this->isGameOver = isGameOver; };
+	void checkOnGameOver(sf::View& camera, sf::RenderWindow& window);
 	int getLives() { return numOfLives; };
 	void setLives(int numOfLives) { this->numOfLives = numOfLives; };
-	void checkLives();
+	void checkLives(SoundManager& sound);
 	void drawLives(sf::RenderWindow& window, sf::View& camera);
-	void checkOnExit(Map& map, int curRow, int curCol, char dir);
+	void checkOnExit(Map& map, int curRow, int curCol, char dir, SoundManager& sound);
 	sf::Sprite getLifeBarSprite() { return lifeBarSprite; };
 	static const int brickSize = 90;
+	void resetGame(Map& map, Animations& anime);
 };

@@ -44,7 +44,7 @@ private:
     sf::Texture laveTexture;
     sf::Sprite laveSprite;
 
-    int plateX, plateY;
+    int plateX = -1, plateY = -1;
 
 public:
     sf::Sprite getWallSprite() { return wallSprite; };

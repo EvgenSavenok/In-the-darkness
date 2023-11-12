@@ -18,6 +18,10 @@ SoundManager::SoundManager()
 	openCage.setVolume(30);
 	teleport.openFromFile("Sounds/teleport.ogg");
 	teleport.setVolume(30);
+	winMelody.openFromFile("Sounds/holyMelody.ogg");
+	winMelody.setVolume(50);
+	death.openFromFile("Sounds/death.ogg");
+	death.setVolume(50);
 }
 
 void SoundManager::playBgMusic()
@@ -62,4 +66,14 @@ void SoundManager::playOpeningOfCage()
 void SoundManager::playTeleportMoving()
 {
 	teleport.play();
+}
+
+void SoundManager::playWinMelody()
+{
+	winMelody.play();
+}
+
+void SoundManager::playDeathSound()
+{
+	death.play();
 }

@@ -1,13 +1,11 @@
-#include "Players.h"
-#include "Map.h"
-#include "Animations.h"
+#include "Player.h"
 
 Player::Player()
 {
-	key = false;
+	key = true;
 	std::fill(canPushBox, canPushBox + 7, false);
 	playerX = brickSize * 12 + 25;
-	playerY = brickSize * 7 + 15;
+	playerY = brickSize * 9 + 15;
 	curImg = 0;
 	playerDir = Direction::down;
 	playerImg.loadFromFile("Images/player.png");
@@ -33,14 +31,63 @@ Player::Player()
 	lifeBarTexture.loadFromImage(lifeBarImg);
 	lifeBarSprite.setTexture(lifeBarTexture);
 	lifeBarSprite.setTextureRect(sf::IntRect(0, 0, widthOfLifeBar, 77));
+
+	deathTextImg.loadFromFile("Images/deathText.png");
+	deathTextTexture.loadFromImage(deathTextImg);
+	deathTextSprite.setTexture(deathTextTexture);
 }
 
-void Player::checkLives()
+void Player::resetPlayer()
+{
+	key = true;
+	std::fill(canPushBox, canPushBox + 7, false);
+	playerX = brickSize * 12 + 25;
+	playerY = brickSize * 7 + 15;
+	sprite.setPosition(playerX, playerY);
+	sprite.setTexture(texture);
+	sprite.setTextureRect(sf::IntRect(0, 0, 24, 32));
+	curImg = 0;
+
+	playerDir = Direction::down;
+
+	keyX = brickSize * 31 + 30;
+	keyY = brickSize * 8 + 30;
+	keySprite.setPosition(keyX, keyY);
+
+	widthOfLifeBar = 280;
+	lifeBarSprite.setTextureRect(sf::IntRect(0, 0, widthOfLifeBar, 77));
+
+	numOfLives = startNumOfLives;
+	setGameOverState(false);
+	bool isGameWin = false;
+}
+
+void Player::resetTeleport(Animations& anime, Map& map)
+{
+	anime.setStay(false);
+	anime.setInterval(1.5);
+	anime.setFirstCycleInfo(false);
+	anime.setFirstSetInfo(true);
+	map.firstLevelMap[7][13] = 'T';
+	map.firstLevelMap[7][13 + 3] = 'B';
+	map.setPlateX(-1);
+	map.setPlateY(-1);
+}
+
+void Player::resetGame(Map& map, Animations& anime)
+{
+	resetPlayer();
+	anime.resetMap(map, anime);
+	resetTeleport(anime, map);
+}
+
+void Player::checkLives(SoundManager& sound)
 {
 	numOfLives--;
 	lifeBarSprite.setTextureRect(sf::IntRect(0, 0, widthOfLifeBar -= (widthOfLifeBar / (startNumOfLives - 1)), 77));
 	if (numOfLives == 0)
 	{
+		sound.playDeathSound();
 		sprite.setTexture(deadPlayerTexture);
 		sprite.setTextureRect(sf::IntRect(0, 0, 33, 20));
 		setGameOverState(true);
@@ -174,7 +221,6 @@ bool Player::checkOnMoveDown(Boxes& box, Animations& anime, Map& map, sf::Render
 	int curCol = calculateCurPlayerCol() + colOffset;
 	bool canMoveDown = true;
 	const int numOfPointsBoxes = 7;
-	checkOnExit(map, curRow, curCol, 'D');
 	checkOnKey(curRow, curCol, 'D', sound);
 	checkOnDoor('D', map, anime, sound);
 	canMoveDown = checkOnDownBoxCollisions(curRow, curCol, box, map);
@@ -219,7 +265,7 @@ bool Player::checkOnMoveUp(Boxes& box, Animations& anime, Map& map, sf::RenderWi
 	int curCol = calculateCurPlayerCol() + colOffset;
 	bool canMoveUp = true;
 	const int numOfPointsBoxes = 7;
-	checkOnExit(map, curRow, curCol, 'U');
+	checkOnExit(map, curRow, curCol, 'U', sound);
 	checkOnKey(curRow, curCol, 'U', sound);
 	checkOnDoor('U', map, anime, sound);
 	canMoveUp = checkOnUpBoxCollisions(curRow, curCol, box, map);
@@ -266,7 +312,6 @@ bool Player::checkOnMoveLeft(Boxes& box, Animations& anime, Map& map, sf::Render
 	int curCol = calculateCurPlayerCol() + colOffset;
 	bool canMoveLeft = true;
 	const int numOfPointsBoxes = 7;
-	checkOnExit(map, curRow, curCol, 'L');
 	checkOnKey(curRow, curCol, 'L', sound);
 	checkOnDoor('L', map, anime, sound);
 	canMoveLeft = checkOnLeftBoxCollisions(curRow, curCol, box, map);
@@ -331,7 +376,6 @@ bool Player::checkOnMoveRight(Boxes& box, Animations& anime, Map& map, sf::Rende
 	int curCol = calculateCurPlayerCol() + colOffset;
 	bool canMoveRight = true;
 	const int numOfPointsBoxes = 7;
-	checkOnExit(map, curRow, curCol, 'R');
 	checkOnKey(curRow, curCol, 'R', sound);
 	checkOnDoor('R', map, anime, sound);
 	canMoveRight = checkOnRightBoxCollisions(curRow, curCol, box, map);
@@ -564,6 +608,7 @@ bool Player::startTeleportAnimation(Map& map, sf::Clock teleportClock, Animation
 			map.firstLevelMap[curRow][curCol] = 'T';
 			animeOfTeleport.setStay(false);
 			sound.teleport.stop(); 
+
 		}
 		return true;
 	}
@@ -581,10 +626,6 @@ bool Player::prepareForTeleportAnime(Animations& animeOfTeleport, Map& map, sf::
 		{
 			map.startXCoordinate = brickSize * (curCol + 1);
 			map.startYCoordinate = brickSize * curRow;
-		}
-
-		if (animeOfTeleport.getFirstSetInfo())
-		{
 			map.setPlateX(map.startXCoordinate);
 			map.setPlateY(map.startYCoordinate);
 			animeOfTeleport.setFirstSetInfo(false);
@@ -596,6 +637,17 @@ bool Player::prepareForTeleportAnime(Animations& animeOfTeleport, Map& map, sf::
 		sprite.setPosition(playerX, playerY);
 	}
 	return isNewCycle;
+}
+
+void Player::checkOnGameOver(sf::View& camera, sf::RenderWindow& window)
+{
+	if (isGameOver)
+	{
+		const float screenWidth = sf::VideoMode::getDesktopMode().width;
+		const float screenHeight = sf::VideoMode::getDesktopMode().height;
+		deathTextSprite.setPosition(camera.getCenter().x - 170, camera.getCenter().y + 300);
+		window.draw(deathTextSprite);
+	}
 }
 
 bool Player::update(sf::Clock clock, Map& map, sf::Clock teleportClock, Animations& animeOfTeleport, sf::RenderWindow& window, sf::View& camera, SoundManager& sound)
@@ -716,26 +768,26 @@ void Player::checkOnDoor(char dir, Map& map, Animations& doorAnime, SoundManager
 	}
 }
 
-void Player::checkOnExit(Map& map, int curRow, int curCol, char dir)
+void Player::checkOnExit(Map& map, int curRow, int curCol, char dir, SoundManager& sound)
 {
-		switch (dir)
+	switch (dir)
+	{
+	case 'U':
+	{
+		if ((map.firstLevelMap[curRow - 1][curCol] == 'E') && ((playerY - curRow * brickSize) <= -60))
 		{
-		case 'U':
-		{
-			if ((map.firstLevelMap[curRow - 1][curCol] == 'E') && ((playerY - curRow * brickSize) <= -60))
-			{
-				isGameWin = true;
-			}
-			break;
+			isGameWin = true;
 		}
-		}
+		break;
+	}
+	}
 }
 
 bool Player::move(sf::RenderWindow& window, Map& map, Animations& anime, Boxes& box, Animations& cage, sf::Clock& playerClock, SoundManager& sound)
 {
 	sf::Time curTime = playerClock.getElapsedTime();
 	float timing = curTime.asMilliseconds();
-	if (timing >= playerDelay)//connect to time
+	if (timing >= playerDelay)
 	{
 		if (!anime.getStay() && (!getGameOverState()))
 		{

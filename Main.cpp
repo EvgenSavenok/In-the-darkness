@@ -1,19 +1,21 @@
 ﻿#include <SFML/Graphics.hpp>
-#include "Players.h"
+#include "Player.h"
 #include "Enemies.h"
 #include "Map.h"
 #include "Animations.h"
 #include "Boxes.h"
 #include "BackgroundObjects.h"
 #include "SoundManager.h"
+#include "Menu.h"
 
-void pressOnKey(sf::RenderWindow& window, sf::Clock& clock, Player& player, Map& map, Animations& anime, Boxes& box, Animations& cage, SoundManager& sound)
+void pressOnKey(sf::RenderWindow& window, sf::Clock& clock, Player& player, Map& map, Animations& anime, Boxes& box, Animations& cage, SoundManager& sound, Menu& menu)
 {
     sf::Event event;
     bool isTime = false;
     while (window.pollEvent(event))
     {
-        if (event.type == sf::Event::KeyPressed) {
+        if (event.type == sf::Event::KeyPressed) 
+        {
             if (event.key.code == sf::Keyboard::Escape)
             {
                 window.close();
@@ -37,6 +39,10 @@ void pressOnKey(sf::RenderWindow& window, sf::Clock& clock, Player& player, Map&
             {
                 player.setDir(Direction::down);
                 isTime = player.move(window, map, anime, box, cage, clock, sound);
+            }
+            if ((event.key.code == sf::Keyboard::Enter) && player.getGameOverState())
+            {
+                player.resetGame(map, anime);
             }
         }
         if (isTime)
@@ -73,11 +79,10 @@ int main()
 {
     sf::RenderWindow window;
     window.create(sf::VideoMode::getDesktopMode(), L"In the darkness");
-    window.setMouseCursorVisible(false);
     const float screenWidth = sf::VideoMode::getDesktopMode().width;
     const float screenHeight = sf::VideoMode::getDesktopMode().height;
     Player player;
-    Enemies enemyBoar1(2, 13);
+    Enemies enemyBoar1(20, 8);
     Enemies enemyBoar2(4, 14);
     Enemies enemyBoar3(25, 15);
     Enemies enemyBoar4(21, 14);
@@ -86,6 +91,7 @@ int main()
     Animations anime;
     Animations cage;
     Boxes box;
+    Menu menu;
     BackgroundObjects backgroundObject;
     sf::Clock playerClock;
     sf::Clock enemyClock1;
@@ -103,36 +109,49 @@ int main()
     fogTexture.loadFromFile("Images/fog.png");
     sf::Sprite fogSprite(fogTexture);
     fogSprite.setScale(2.2, 2.2);
+    camera.setCenter(950, 550);
     while (window.isOpen()) 
     {
-        sound.playBgMusic();
-        pressOnKey(window, playerClock, player, map, anime, box, cage, sound);
-        updateBoarState(enemyBoar1, enemyClock1, player, sound);
-        updateBoarState(enemyBoar2, enemyClock2, player, sound);
-        updateBoarState(enemyBoar3, enemyClock3, player, sound);
-        updateBoarState(enemyBoar4, enemyClock4, player, sound);
-        updateBoarState(enemyBoar5, enemyClock5, player, sound);
-        updatePlayerState(playerClock, player, map, anime, teleportClock, window, camera, sound);
-        window.clear(sf::Color::Black);
-        box.checkAllPoints(map);
-        map.createMap(window);
-        updateMapState(map, window, anime, leftDoorClock, rightDoorClock);
-        box.drawBox(window);
-        player.drawKey(window);
-        cage.setCagePos(window, box, map, cageClock, sound);
-        camera.setCenter(player.playerX, player.playerY);
-        window.draw(map.getTeleportSprite());
-        window.draw(backgroundObject.getDieScientistSprite());
-        window.setView(camera); 
-        fogSprite.setPosition(player.playerX - 1240, player.playerY - 1200);
-        window.draw(enemyBoar1.getSprite());
-        window.draw(enemyBoar2.getSprite());
-        window.draw(enemyBoar3.getSprite());
-        window.draw(enemyBoar4.getSprite());
-        window.draw(enemyBoar5.getSprite());
-        window.draw(fogSprite);
-        window.draw(player.getLifeBarSprite());
-        window.draw(player.getSprite());
+        if (menu.isMenu)
+        {
+            menu.showMenu(sound, window, camera);
+        }
+        if (!player.isGameWin && !menu.isMenu)
+        {
+            sound.playBgMusic();
+            pressOnKey(window, playerClock, player, map, anime, box, cage, sound, menu);
+            updateBoarState(enemyBoar1, enemyClock1, player, sound);
+            updateBoarState(enemyBoar2, enemyClock2, player, sound);
+            updateBoarState(enemyBoar3, enemyClock3, player, sound);
+            updateBoarState(enemyBoar4, enemyClock4, player, sound);
+            updateBoarState(enemyBoar5, enemyClock5, player, sound);
+            updatePlayerState(playerClock, player, map, anime, teleportClock, window, camera, sound);
+            window.clear(sf::Color::Black);
+            box.checkAllPoints(map);
+            map.createMap(window);
+            updateMapState(map, window, anime, leftDoorClock, rightDoorClock);
+            box.drawBox(window);
+            player.drawKey(window);
+            cage.setCagePos(window, box, map, cageClock, sound);
+            camera.setCenter(player.playerX, player.playerY);
+            window.draw(map.getTeleportSprite());
+            window.draw(backgroundObject.getDieScientistSprite());
+            window.setView(camera);
+            fogSprite.setPosition(player.playerX - 1240, player.playerY - 1200);
+            window.draw(enemyBoar1.getSprite());
+            window.draw(enemyBoar2.getSprite());
+            window.draw(enemyBoar3.getSprite());
+            window.draw(enemyBoar4.getSprite());
+            window.draw(enemyBoar5.getSprite());
+            //window.draw(fogSprite);
+            window.draw(player.getLifeBarSprite());
+            window.draw(player.getSprite());
+            player.checkOnGameOver(camera, window);
+        }
+        else if (!menu.isMenu)
+        {
+            menu.startWin(sound, window);
+        }
         window.display();
     }
     return 0;

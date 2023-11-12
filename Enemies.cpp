@@ -127,7 +127,7 @@ void Enemies::startKillingAnimation(char dir, Player& player, SoundManager& soun
 		{
 			sound.playBeatingOfPlayer();
 			isFacedWithPlayer = false;
-			player.checkLives();
+			player.checkLives(sound);
 			curKillingImg = 0;
 			if (!player.getGameOverState())
 				checkOnNearPlayer(player);

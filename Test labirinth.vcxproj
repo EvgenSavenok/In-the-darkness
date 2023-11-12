@@ -137,7 +137,8 @@
     <ClCompile Include="Enemies.cpp" />
     <ClCompile Include="Main.cpp" />
     <ClCompile Include="Map.cpp" />
-    <ClCompile Include="Players.cpp" />
+    <ClCompile Include="Menu.cpp" />
+    <ClCompile Include="Player.cpp" />
     <ClCompile Include="SoundManager.cpp" />
   </ItemGroup>
   <ItemGroup>
@@ -159,7 +160,8 @@
     <ClInclude Include="Boxes.h" />
     <ClInclude Include="Enemies.h" />
     <ClInclude Include="Map.h" />
-    <ClInclude Include="Players.h" />
+    <ClInclude Include="Menu.h" />
+    <ClInclude Include="Player.h" />
     <ClInclude Include="SoundManager.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

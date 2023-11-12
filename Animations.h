@@ -36,27 +36,8 @@ private:
 	float brickSize = 90;
 
 	void startDoorAnimation(int numOfDoor, Map& map, sf::RenderWindow& window, sf::Clock& leftDoorClock, sf::Clock& rightDoorClock);
-	sf::Vector2f position;
 	void initializeDoors();
 
-	struct DoorsProperties {
-		float leftDoorStartX = 205;
-		float leftDoorWidth = 46.5;
-		float rightDoorWidth = 40.5;
-		float leftDoorOffset = 0;
-		float rightDoorOffset = 47.5;
-		DoorsProperties(float leftDoorStartX, float leftDoorWidth, float rightDoorWidth, float leftDoorOffset, float rightDoorOffset) 
-		{
-			this->leftDoorStartX = leftDoorStartX;
-			this->leftDoorWidth = leftDoorWidth;
-			this->rightDoorWidth = rightDoorWidth;
-			this->leftDoorOffset = leftDoorOffset;
-			this->rightDoorOffset = rightDoorOffset;
-		}
-	};
-	std::vector<DoorsProperties> door;
-	int numOfDoors = 0;
-	std::vector<bool> isCanStartDoorAnimation;
 	Map map;
 	
 public:
@@ -80,5 +61,25 @@ public:
 	void startCageAnimation(Boxes& box, Map& map, sf::RenderWindow& window, sf::Clock& cageClock, SoundManager& sound);
 	void checkOnOpenDoor(Map& map, sf::RenderWindow& window, sf::Clock& leftDoorClock, sf::Clock& rightDoorClock);
 	int checkCurDoorNum(int curRow, int curCol);
+	int numOfDoors = 0;
 	std::vector<sf::Vector2f> doors;
+	struct DoorsProperties {
+		float leftDoorStartX = 205;
+		float leftDoorWidth = 46.5;
+		float rightDoorWidth = 40.5;
+		float leftDoorOffset = 0;
+		float rightDoorOffset = 47.5;
+		DoorsProperties(float leftDoorStartX, float leftDoorWidth, float rightDoorWidth, float leftDoorOffset, float rightDoorOffset)
+		{
+			this->leftDoorStartX = leftDoorStartX;
+			this->leftDoorWidth = leftDoorWidth;
+			this->rightDoorWidth = rightDoorWidth;
+			this->leftDoorOffset = leftDoorOffset;
+			this->rightDoorOffset = rightDoorOffset;
+		}
+	};
+	std::vector<DoorsProperties> door;
+	std::vector<bool> isCanStartDoorAnimation;
+	sf::Vector2f position;
+	void resetMap(Map& map, Animations& anime);
 };
