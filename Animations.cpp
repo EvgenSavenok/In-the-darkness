@@ -58,11 +58,11 @@ void Animations::resetMap(Map& map, Animations& anime)
 	}
 }
 
-void Animations::setCagePos(sf::RenderWindow& window, Boxes& box, Map& map, sf::Clock& cageClock, SoundManager& sound)
+void Animations::setCagePos(sf::RenderWindow& window, Boxes& box, Map& map, sf::Clock& cageClock, SoundManager& sound, Animations& anime)
 {
 	int cageX = 8;
 	int cageY = 31;
-	if (getCageAnimationState())
+	if (anime.isCageAnimationStarted)
 	{
 		map.firstLevelMap[cageX][cageY] = ' ';
 	}
@@ -70,13 +70,13 @@ void Animations::setCagePos(sf::RenderWindow& window, Boxes& box, Map& map, sf::
 	{
 		cageSprite.setPosition(brickSize * 31, brickSize * 8);
 		window.draw(cageSprite);
-		startCageAnimation(box, map, window, cageClock, sound);
+		startCageAnimation(box, map, window, cageClock, sound, anime);
 	}
 }
 
-void Animations::startCageAnimation(Boxes& box, Map& map, sf::RenderWindow& window, sf::Clock& cageClock, SoundManager& sound)
+void Animations::startCageAnimation(Boxes& box, Map& map, sf::RenderWindow& window, sf::Clock& cageClock, SoundManager& sound, Animations& anime)
 {
-	#define numOfActivePoints 1
+	#define numOfActivePoints 2
 	int countOfPoints = 0;
 	for (int i = 0; i < Map::mapHeight; i++)
 	{
@@ -97,7 +97,7 @@ void Animations::startCageAnimation(Boxes& box, Map& map, sf::RenderWindow& wind
 			cageSprite.setTextureRect(sf::IntRect(0, 0, 90, getCageHeight()));
 			window.draw(cageSprite);
 			if (getCageHeight() == 0)
-				setCageAnimationState(true);
+				anime.isCageAnimationStarted = true;
 			cageClock.restart();
 		}
 	}

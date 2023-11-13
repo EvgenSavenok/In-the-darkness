@@ -58,6 +58,8 @@ private:
 
 	void resetPlayer();
 	void resetTeleport(Animations& anime, Map& map);
+	void resetCageAnimation(Animations& anime, Map& map);
+	void resetBoxes(Boxes& box, Map& map);
 
 public:
 	sf::Sprite getSprite() { return sprite; };
@@ -108,5 +110,5 @@ public:
 	void checkOnExit(Map& map, int curRow, int curCol, char dir, SoundManager& sound);
 	sf::Sprite getLifeBarSprite() { return lifeBarSprite; };
 	static const int brickSize = 90;
-	void resetGame(Map& map, Animations& anime);
+	void resetGame(Map& map, Animations& anime, Boxes& box);
 };

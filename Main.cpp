@@ -42,7 +42,7 @@ void pressOnKey(sf::RenderWindow& window, sf::Clock& clock, Player& player, Map&
             }
             if ((event.key.code == sf::Keyboard::Enter) && player.getGameOverState())
             {
-                player.resetGame(map, anime);
+                player.resetGame(map, anime, box);
             }
         }
         if (isTime)
@@ -132,7 +132,8 @@ int main()
             updateMapState(map, window, anime, leftDoorClock, rightDoorClock);
             box.drawBox(window);
             player.drawKey(window);
-            cage.setCagePos(window, box, map, cageClock, sound);
+            bool a = anime.getCageAnimationState();
+            cage.setCagePos(window, box, map, cageClock, sound, anime);
             camera.setCenter(player.playerX, player.playerY);
             window.draw(map.getTeleportSprite());
             window.draw(backgroundObject.getDieScientistSprite());

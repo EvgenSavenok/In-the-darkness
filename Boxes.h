@@ -29,4 +29,5 @@ public:
 	void checkAllPoints(Map& map);
 	void initializeBoxes();
 	std::vector<sf::Vector2f> boxes;
+	std::vector<sf::Vector2f> greenPointsCoordinates;
 };

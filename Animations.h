@@ -41,6 +41,7 @@ private:
 	Map map;
 	
 public:
+	sf::Sprite getCageSprite() { return cageSprite; };
 	bool getStay() { return isStayOnTeleport; }
 	void setStay(bool isStayOnTeleport) { this->isStayOnTeleport = isStayOnTeleport; }
 	float getCageHeight() { return cageHeight; }
@@ -49,7 +50,6 @@ public:
 	bool getCageAnimationState() { return isCageAnimationStarted; }
 	void setDoorAnimationState(bool isCanStartDoorAnimation, int numOfDoor) { this->isCanStartDoorAnimation[numOfDoor] = isCanStartDoorAnimation; }
 	bool getDoorAnimationState(int numOfDoor) { return isCanStartDoorAnimation[numOfDoor]; }
-
 	float getInterval() { return interval; }
 	void setInterval(float interval) { this->interval = interval; }
 	bool getFirstCycleInfo() { return isFirstCycle; }
@@ -57,8 +57,8 @@ public:
 	bool getFirstSetInfo() { return isFirstSetTeleport; }
 	void setFirstSetInfo(bool isFirstSetTeleport) { this->isFirstSetTeleport = isFirstSetTeleport; }
 	Animations();
-	void setCagePos(sf::RenderWindow& window, Boxes& box, Map& map, sf::Clock& cageClock, SoundManager& sound);
-	void startCageAnimation(Boxes& box, Map& map, sf::RenderWindow& window, sf::Clock& cageClock, SoundManager& sound);
+	void setCagePos(sf::RenderWindow& window, Boxes& box, Map& map, sf::Clock& cageClock, SoundManager& sound, Animations& anime);
+	void startCageAnimation(Boxes& box, Map& map, sf::RenderWindow& window, sf::Clock& cageClock, SoundManager& sound, Animations& anime);
 	void checkOnOpenDoor(Map& map, sf::RenderWindow& window, sf::Clock& leftDoorClock, sf::Clock& rightDoorClock);
 	int checkCurDoorNum(int curRow, int curCol);
 	int numOfDoors = 0;

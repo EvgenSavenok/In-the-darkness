@@ -2,10 +2,10 @@
 
 Player::Player()
 {
-	key = true;
+	key = false;
 	std::fill(canPushBox, canPushBox + 7, false);
-	playerX = brickSize * 12 + 25;
-	playerY = brickSize * 9 + 15;
+	playerX = brickSize * 27 + 25;
+	playerY = brickSize * 8 + 15;
 	curImg = 0;
 	playerDir = Direction::down;
 	playerImg.loadFromFile("Images/player.png");
@@ -39,10 +39,10 @@ Player::Player()
 
 void Player::resetPlayer()
 {
-	key = true;
+	key = false;
 	std::fill(canPushBox, canPushBox + 7, false);
-	playerX = brickSize * 12 + 25;
-	playerY = brickSize * 7 + 15;
+	playerX = brickSize * 27 + 25;
+	playerY = brickSize * 8 + 15;
 	sprite.setPosition(playerX, playerY);
 	sprite.setTexture(texture);
 	sprite.setTextureRect(sf::IntRect(0, 0, 24, 32));
@@ -74,11 +74,35 @@ void Player::resetTeleport(Animations& anime, Map& map)
 	map.setPlateY(-1);
 }
 
-void Player::resetGame(Map& map, Animations& anime)
+void Player::resetCageAnimation(Animations& anime, Map& map)
+{
+	anime.setCageAnimationState(false);
+	anime.setCageHeight(brickSize);
+	int cageX = 8;
+	int cageY = 31;
+	map.firstLevelMap[cageX][cageY] = 'C';
+	anime.getCageSprite().setTextureRect(sf::IntRect(0, 0, 90, anime.getCageHeight()));
+}
+
+void Player::resetBoxes(Boxes& box, Map& map)
+{
+	box.boxes.clear();
+	box.initializeBoxes();
+	for (int i = 0; i < box.greenPointsCoordinates.size(); i++)
+	{
+		int x = box.greenPointsCoordinates[i].x;
+		int y = box.greenPointsCoordinates[i].y;
+		map.firstLevelMap[x][y] = '.';
+	}
+}
+
+void Player::resetGame(Map& map, Animations& anime, Boxes& box)
 {
 	resetPlayer();
 	anime.resetMap(map, anime);
 	resetTeleport(anime, map);
+	resetCageAnimation(anime, map);
+	resetBoxes(box, map);
 }
 
 void Player::checkLives(SoundManager& sound)

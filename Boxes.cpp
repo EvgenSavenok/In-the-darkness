@@ -72,13 +72,10 @@ void Boxes::checkAllPoints(Map& map)
 	for (int i = 0; i < 7; i++)
 	{
 		int curXDistance = getBoxX(i) - 11 * brickSize;
-		int curBoxCol = curXDistance / brickSize;
+		int curBoxCol = curXDistance / brickSize + 11;
 
 		int curYDistance = getBoxY(i) + 50 - 2 * brickSize;
-		int curBoxRow = curYDistance / brickSize;
-
-		curBoxCol += 11;
-		curBoxRow += 2;
+		int curBoxRow = curYDistance / brickSize + 2;
 
 		if (map.firstLevelMap[curBoxRow][curBoxCol] == '.')
 		{
@@ -87,6 +84,10 @@ void Boxes::checkAllPoints(Map& map)
 				if ((getBoxY(i) < brickSize * curBoxRow + 30) && (getBoxY(i) > brickSize * curBoxRow))
 				{
 					map.firstLevelMap[curBoxRow][curBoxCol] = 'G';
+					sf::Vector2f bufferPos;
+					bufferPos.x = curBoxRow;
+					bufferPos.y = curBoxCol;
+					greenPointsCoordinates.push_back(bufferPos);
 				}
 			}
 		}
