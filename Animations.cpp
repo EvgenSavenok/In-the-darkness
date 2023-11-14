@@ -76,7 +76,7 @@ void Animations::setCagePos(sf::RenderWindow& window, Boxes& box, Map& map, sf::
 
 void Animations::startCageAnimation(Boxes& box, Map& map, sf::RenderWindow& window, sf::Clock& cageClock, SoundManager& sound, Animations& anime)
 {
-	#define numOfActivePoints 7
+	#define numOfActivePoints 6
 	int countOfPoints = 0;
 	for (int i = 0; i < Map::mapHeight; i++)
 	{

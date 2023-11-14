@@ -4,7 +4,7 @@ Player::Player()
 {
 	key = false;
 	std::fill(canPushBox, canPushBox + 7, false);
-	playerX = brickSize * startPlayerX + 25; //12, 7
+	playerX = brickSize * startPlayerX + 25; 
 	playerY = brickSize * startPlayerY + 15;
 	curImg = 0;
 	playerDir = Direction::down;
@@ -41,6 +41,16 @@ void Player::resetPlayer()
 {
 	if (!isHasSavePoint)
 		key = false;
+	if (isGameWin)
+	{
+		savePointX = 12;
+		savePointY = 6;
+	}
+	else
+	{
+		savePointX = 29;
+		savePointY = 10;
+	}
 	std::fill(canPushBox, canPushBox + 7, false);
 	playerX = brickSize * startPlayerX + 25;
 	playerY = brickSize * startPlayerY + 15;
@@ -232,7 +242,7 @@ bool Player::checkOnDownCageCollision(bool canMoveDown, Animations& cage, Map ma
 
 bool Player::checkOnDownBoxCollisions(int curRow, int curCol, Boxes& box, Map& map)
 {
-	const int numOfPointsBoxes = 7;
+	const int numOfPointsBoxes = 6;
 	for (int i = 0; i < numOfPointsBoxes; i++)
 	{
 		checkOnBox(curRow, curCol, 'D', box, map, i);
@@ -257,7 +267,7 @@ bool Player::checkOnMoveDown(Boxes& box, Animations& anime, Map& map, sf::Render
 	int curRow = calculateCurPlayerRow() + rowOffset;
 	int curCol = calculateCurPlayerCol() + colOffset;
 	bool canMoveDown = true;
-	const int numOfPointsBoxes = 7;
+	const int numOfPointsBoxes = 6;
 	checkOnKey(curRow, curCol, 'D', sound);
 	checkOnDoor('D', map, anime, sound);
 	checkOnSavePoint(curRow, curCol, sound);
@@ -281,7 +291,7 @@ bool Player::checkOnMoveDown(Boxes& box, Animations& anime, Map& map, sf::Render
 
 bool Player::checkOnUpBoxCollisions(int curRow, int curCol, Boxes& box, Map& map)
 {
-	const int numOfPointsBoxes = 7;
+	const int numOfPointsBoxes = 6;
 	for (int i = 0; i < numOfPointsBoxes; i++)
 	{
 		checkOnBox(curRow, curCol, 'U', box, map, i);
@@ -302,7 +312,7 @@ bool Player::checkOnMoveUp(Boxes& box, Animations& anime, Map& map, sf::RenderWi
 	int curRow = calculateCurPlayerRow() + rowOffset;
 	int curCol = calculateCurPlayerCol() + colOffset;
 	bool canMoveUp = true;
-	const int numOfPointsBoxes = 7;
+	const int numOfPointsBoxes = 6;
 	checkOnExit(map, curRow, curCol, 'U', sound);
 	checkOnKey(curRow, curCol, 'U', sound);
 	checkOnDoor('U', map, anime, sound);
@@ -319,7 +329,7 @@ bool Player::checkOnMoveUp(Boxes& box, Animations& anime, Map& map, sf::RenderWi
 
 bool Player::checkOnLeftBoxCollisions(int curRow, int curCol, Boxes& box, Map& map)
 {
-	const int numOfPointsBoxes = 7;
+	const int numOfPointsBoxes = 6;
 	for (int i = 0; i < numOfPointsBoxes; i++)
 	{
 		checkOnBox(curRow, curCol, 'L', box, map, i);
@@ -350,7 +360,7 @@ bool Player::checkOnMoveLeft(Boxes& box, Animations& anime, Map& map, sf::Render
 	int curRow = calculateCurPlayerRow() + rowOffset;
 	int curCol = calculateCurPlayerCol() + colOffset;
 	bool canMoveLeft = true;
-	const int numOfPointsBoxes = 7;
+	const int numOfPointsBoxes = 6;
 	checkOnKey(curRow, curCol, 'L', sound);
 	checkOnDoor('L', map, anime, sound);
 	checkOnSavePoint(curRow, curCol, sound);
@@ -394,7 +404,7 @@ bool Player::checkOnRightCageCollision(int curRow, int curCol, bool canMoveRight
 
 bool Player::checkOnRightBoxCollisions(int curRow, int curCol, Boxes& box, Map& map)
 {
-	const int numOfPointsBoxes = 7;
+	const int numOfPointsBoxes = 6;
 	for (int i = 0; i < numOfPointsBoxes; i++)
 	{
 		checkOnBox(curRow, curCol, 'R', box, map, i);
@@ -415,7 +425,7 @@ bool Player::checkOnMoveRight(Boxes& box, Animations& anime, Map& map, sf::Rende
 	int curRow = calculateCurPlayerRow() + rowOffset;
 	int curCol = calculateCurPlayerCol() + colOffset;
 	bool canMoveRight = true;
-	const int numOfPointsBoxes = 7;
+	const int numOfPointsBoxes = 6;
 	checkOnKey(curRow, curCol, 'R', sound);
 	checkOnDoor('R', map, anime, sound);
 	checkOnSavePoint(curRow, curCol, sound);
@@ -442,7 +452,7 @@ void Player::checkOnNearBox(int curRow, int curCol, char dir, Boxes& box, Map& m
 {
 	if (canPushBox[indexOfBox])
 	{
-		for (int i = 0; i < 7; i++)
+		for (int i = 0; i < 6; i++)
 		{
 			if (i != indexOfBox)
 			{

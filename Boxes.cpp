@@ -24,9 +24,6 @@ void Boxes::initializeBoxes()
 	boxPosition = sf::Vector2f(brickSize * 29 + 15, brickSize * 7 + 15);
 	boxes.push_back(boxPosition);
 
-	boxPosition = sf::Vector2f(brickSize * 28 + 15, brickSize * 7 + 15);
-	boxes.push_back(boxPosition);
-
 	boxPosition = sf::Vector2f(brickSize * 27 + 15, brickSize * 7 + 15);
 	boxes.push_back(boxPosition);
 
@@ -36,7 +33,7 @@ void Boxes::initializeBoxes()
 
 void Boxes::drawBox(sf::RenderWindow& window)
 {
-	for (int i = 0; i < 7; i++)
+	for (int i = 0; i < 6; i++)
 	{
 		boxSprite.setPosition(getBoxX(i), getBoxY(i));
 		window.draw(boxSprite);
@@ -69,7 +66,7 @@ void Boxes::pushBox(int curRow, int curCol, char dir, Boxes& box, int indexOfBox
 
 void Boxes::checkAllPoints(Map& map)
 {
-	for (int i = 0; i < 7; i++)
+	for (int i = 0; i < 6; i++)
 	{
 		int curXDistance = getBoxX(i) - 11 * brickSize;
 		int curBoxCol = curXDistance / brickSize + 11;

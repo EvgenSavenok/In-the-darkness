@@ -146,7 +146,7 @@ int main()
             window.draw(enemyBoar3.getSprite());
             window.draw(enemyBoar4.getSprite());
             window.draw(enemyBoar5.getSprite());
-            window.draw(fogSprite);
+           // window.draw(fogSprite);
             window.draw(player.getLifeBarSprite());
             window.draw(player.getSprite());
             player.checkOnGameOver(camera, window);

@@ -22,7 +22,7 @@ private:
 	Direction playerDir;
 	int curImg;
 	float delayInSeconds = 0.5f;
-	#define numOfBoxes 7
+	#define numOfBoxes 6
 	bool key;
 	bool canPushBox[numOfBoxes];
 
@@ -55,8 +55,8 @@ private:
 	float widthOfLifeBar = 190;
 
 	bool isGameOver = false;
-	int startPlayerX = 12;
-	int startPlayerY = 6;
+	int startPlayerX = 25;
+	int startPlayerY = 3;
 	int savePointX = 29;
 	int savePointY = 10;
 	bool isHasSavePoint = false;
