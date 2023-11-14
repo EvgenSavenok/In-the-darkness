@@ -7,6 +7,8 @@ private:
     sf::Music openDoor;
     sf::Music beatPlayer;
     sf::Music takeKey;
+    sf::Music powerdown;
+    bool isPlayPowerdown = true;
 
 public:
     SoundManager();
@@ -19,6 +21,7 @@ public:
     void playWinMelody();
     void playTeleportMoving();
     void playDeathSound();
+    void playPowerdownSound();
 
     sf::Music roar;
     sf::Music openCage;
@@ -27,4 +30,7 @@ public:
     sf::Music bgMusic1;
     sf::Music bgMusic2;
     sf::Music death;
+
+    bool getPowerdownSound() { return isPlayPowerdown; };
+    void setPowerDownSound(bool isPlayPowerDown) { this->isPlayPowerdown = isPlayPowerDown; };
 };

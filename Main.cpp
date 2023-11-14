@@ -40,9 +40,13 @@ void pressOnKey(sf::RenderWindow& window, sf::Clock& clock, Player& player, Map&
                 player.setDir(Direction::down);
                 isTime = player.move(window, map, anime, box, cage, clock, sound);
             }
+            if (event.key.code == sf::Keyboard::Enter)
+            {
+                player.resetGame(map, anime, box, sound);
+            }
             if ((event.key.code == sf::Keyboard::Enter) && player.getGameOverState())
             {
-                player.resetGame(map, anime, box);
+                player.resetGame(map, anime, box, sound);
             }
         }
         if (isTime)
@@ -78,15 +82,15 @@ void updateBoarState(Enemies& enemyBoar, sf::Clock& enemyClock, Player& player, 
 int main() 
 {
     sf::RenderWindow window;
-    window.create(sf::VideoMode::getDesktopMode(), L"In the darkness");
+    window.create(sf::VideoMode::getDesktopMode(), L"In the darkness", sf::Style::Fullscreen);
     const float screenWidth = sf::VideoMode::getDesktopMode().width;
     const float screenHeight = sf::VideoMode::getDesktopMode().height;
     Player player;
-    Enemies enemyBoar1(20, 8);
+    Enemies enemyBoar1(18, 12);
     Enemies enemyBoar2(4, 14);
     Enemies enemyBoar3(25, 15);
-    Enemies enemyBoar4(21, 14);
-    Enemies enemyBoar5(21, 14);
+    Enemies enemyBoar4(21, 16);
+    Enemies enemyBoar5(2, 20);
     Map map;
     Animations anime;
     Animations cage;
@@ -109,14 +113,13 @@ int main()
     fogTexture.loadFromFile("Images/fog.png");
     sf::Sprite fogSprite(fogTexture);
     fogSprite.setScale(2.2, 2.2);
-    camera.setCenter(950, 550);
     while (window.isOpen()) 
     {
         if (menu.isMenu)
         {
-            menu.showMenu(sound, window, camera);
+            menu.showMenu(sound, window, camera, map);
         }
-        if (!player.isGameWin && !menu.isMenu)
+        if (!player.isGameWin && !menu.isMenu && !menu.isWinScreen)
         {
             sound.playBgMusic();
             pressOnKey(window, playerClock, player, map, anime, box, cage, sound, menu);
@@ -132,7 +135,6 @@ int main()
             updateMapState(map, window, anime, leftDoorClock, rightDoorClock);
             box.drawBox(window);
             player.drawKey(window);
-            bool a = anime.getCageAnimationState();
             cage.setCagePos(window, box, map, cageClock, sound, anime);
             camera.setCenter(player.playerX, player.playerY);
             window.draw(map.getTeleportSprite());
@@ -144,14 +146,15 @@ int main()
             window.draw(enemyBoar3.getSprite());
             window.draw(enemyBoar4.getSprite());
             window.draw(enemyBoar5.getSprite());
-            //window.draw(fogSprite);
+            window.draw(fogSprite);
             window.draw(player.getLifeBarSprite());
             window.draw(player.getSprite());
             player.checkOnGameOver(camera, window);
         }
         else if (!menu.isMenu)
         {
-            menu.startWin(sound, window);
+            player.resetGame(map, anime, box, sound);
+            menu.startWin(sound, window, camera);
         }
         window.display();
     }

@@ -64,6 +64,8 @@ public:
     static const int mapHeight = 24;
     static const int mapWidth = 34;
 
+    bool isOnceWin = false;
+
     int startXCoordinate, startYCoordinate;
 
     sf::String firstLevelMap[mapHeight] = {

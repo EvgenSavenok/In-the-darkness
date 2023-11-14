@@ -4,8 +4,8 @@ Player::Player()
 {
 	key = false;
 	std::fill(canPushBox, canPushBox + 7, false);
-	playerX = brickSize * 27 + 25;
-	playerY = brickSize * 8 + 15;
+	playerX = brickSize * startPlayerX + 25; //12, 7
+	playerY = brickSize * startPlayerY + 15;
 	curImg = 0;
 	playerDir = Direction::down;
 	playerImg.loadFromFile("Images/player.png");
@@ -39,10 +39,11 @@ Player::Player()
 
 void Player::resetPlayer()
 {
-	key = false;
+	if (!isHasSavePoint)
+		key = false;
 	std::fill(canPushBox, canPushBox + 7, false);
-	playerX = brickSize * 27 + 25;
-	playerY = brickSize * 8 + 15;
+	playerX = brickSize * startPlayerX + 25;
+	playerY = brickSize * startPlayerY + 15;
 	sprite.setPosition(playerX, playerY);
 	sprite.setTexture(texture);
 	sprite.setTextureRect(sf::IntRect(0, 0, 24, 32));
@@ -54,12 +55,12 @@ void Player::resetPlayer()
 	keyY = brickSize * 8 + 30;
 	keySprite.setPosition(keyX, keyY);
 
-	widthOfLifeBar = 280;
+	widthOfLifeBar = 190;
 	lifeBarSprite.setTextureRect(sf::IntRect(0, 0, widthOfLifeBar, 77));
 
 	numOfLives = startNumOfLives;
 	setGameOverState(false);
-	bool isGameWin = false;
+    isGameWin = false;
 }
 
 void Player::resetTeleport(Animations& anime, Map& map)
@@ -76,39 +77,51 @@ void Player::resetTeleport(Animations& anime, Map& map)
 
 void Player::resetCageAnimation(Animations& anime, Map& map)
 {
-	anime.setCageAnimationState(false);
-	anime.setCageHeight(brickSize);
-	int cageX = 8;
-	int cageY = 31;
-	map.firstLevelMap[cageX][cageY] = 'C';
-	anime.getCageSprite().setTextureRect(sf::IntRect(0, 0, 90, anime.getCageHeight()));
+	if (!isHasSavePoint)
+	{
+		anime.setCageAnimationState(false);
+		anime.setCageHeight(brickSize);
+		int cageX = 8;
+		int cageY = 31;
+		map.firstLevelMap[cageX][cageY] = 'C';
+		anime.getCageSprite().setTextureRect(sf::IntRect(0, 0, 90, anime.getCageHeight()));
+	}
 }
 
 void Player::resetBoxes(Boxes& box, Map& map)
 {
-	box.boxes.clear();
-	box.initializeBoxes();
-	for (int i = 0; i < box.greenPointsCoordinates.size(); i++)
+	if (!isHasSavePoint)
 	{
-		int x = box.greenPointsCoordinates[i].x;
-		int y = box.greenPointsCoordinates[i].y;
-		map.firstLevelMap[x][y] = '.';
+		box.boxes.clear();
+		box.initializeBoxes();
+		for (int i = 0; i < box.greenPointsCoordinates.size(); i++)
+		{
+			int x = box.greenPointsCoordinates[i].x;
+			int y = box.greenPointsCoordinates[i].y;
+			map.firstLevelMap[x][y] = '.';
+		}
 	}
 }
 
-void Player::resetGame(Map& map, Animations& anime, Boxes& box)
+void Player::resetSounds(SoundManager& sound)
+{
+	sound.setPowerDownSound(true);
+}
+
+void Player::resetGame(Map& map, Animations& anime, Boxes& box, SoundManager& sound)
 {
 	resetPlayer();
 	anime.resetMap(map, anime);
 	resetTeleport(anime, map);
 	resetCageAnimation(anime, map);
 	resetBoxes(box, map);
+	resetSounds(sound);
 }
 
 void Player::checkLives(SoundManager& sound)
 {
 	numOfLives--;
-	lifeBarSprite.setTextureRect(sf::IntRect(0, 0, widthOfLifeBar -= (widthOfLifeBar / (startNumOfLives - 1)), 77));
+	lifeBarSprite.setTextureRect(sf::IntRect(0, 0, widthOfLifeBar -= (widthOfLifeBar / (startNumOfLives)), 77));
 	if (numOfLives == 0)
 	{
 		sound.playDeathSound();
@@ -247,6 +260,7 @@ bool Player::checkOnMoveDown(Boxes& box, Animations& anime, Map& map, sf::Render
 	const int numOfPointsBoxes = 7;
 	checkOnKey(curRow, curCol, 'D', sound);
 	checkOnDoor('D', map, anime, sound);
+	checkOnSavePoint(curRow, curCol, sound);
 	canMoveDown = checkOnDownBoxCollisions(curRow, curCol, box, map);
 	if (anime.getCageAnimationState())
 	{
@@ -292,6 +306,7 @@ bool Player::checkOnMoveUp(Boxes& box, Animations& anime, Map& map, sf::RenderWi
 	checkOnExit(map, curRow, curCol, 'U', sound);
 	checkOnKey(curRow, curCol, 'U', sound);
 	checkOnDoor('U', map, anime, sound);
+	checkOnSavePoint(curRow, curCol, sound);
 	canMoveUp = checkOnUpBoxCollisions(curRow, curCol, box, map);
 	if (((map.firstLevelMap[curRow - 1][curCol] != ' ') && (map.firstLevelMap[curRow - 1][curCol] != 'T') && (map.firstLevelMap[curRow - 1][curCol] != '.') && (map.firstLevelMap[curRow - 1][curCol] != 'G')) && (returnPlayerY() - 4 <= curRow * brickSize))
 	{
@@ -338,6 +353,7 @@ bool Player::checkOnMoveLeft(Boxes& box, Animations& anime, Map& map, sf::Render
 	const int numOfPointsBoxes = 7;
 	checkOnKey(curRow, curCol, 'L', sound);
 	checkOnDoor('L', map, anime, sound);
+	checkOnSavePoint(curRow, curCol, sound);
 	canMoveLeft = checkOnLeftBoxCollisions(curRow, curCol, box, map);
 	if (((map.firstLevelMap[curRow][curCol - 1] != ' ')))
 	{
@@ -402,6 +418,7 @@ bool Player::checkOnMoveRight(Boxes& box, Animations& anime, Map& map, sf::Rende
 	const int numOfPointsBoxes = 7;
 	checkOnKey(curRow, curCol, 'R', sound);
 	checkOnDoor('R', map, anime, sound);
+	checkOnSavePoint(curRow, curCol, sound);
 	canMoveRight = checkOnRightBoxCollisions(curRow, curCol, box, map);
 	if (anime.getCageAnimationState())
 	{
@@ -632,7 +649,6 @@ bool Player::startTeleportAnimation(Map& map, sf::Clock teleportClock, Animation
 			map.firstLevelMap[curRow][curCol] = 'T';
 			animeOfTeleport.setStay(false);
 			sound.teleport.stop(); 
-
 		}
 		return true;
 	}
@@ -641,11 +657,10 @@ bool Player::startTeleportAnimation(Map& map, sf::Clock teleportClock, Animation
 
 bool Player::prepareForTeleportAnime(Animations& animeOfTeleport, Map& map, sf::Clock teleportClock, bool isNewCycle, SoundManager& sound)
 {
+	int curRow = calculateCurPlayerRow() + rowOffset;
+	int curCol = calculateCurPlayerCol() + colOffset;
 	if (animeOfTeleport.getStay())
 	{
-		int curRow = calculateCurPlayerRow() + rowOffset;
-		int curCol = calculateCurPlayerCol() + colOffset;
-
 		if (animeOfTeleport.getFirstSetInfo())
 		{
 			map.startXCoordinate = brickSize * (curCol + 1);
@@ -659,6 +674,13 @@ bool Player::prepareForTeleportAnime(Animations& animeOfTeleport, Map& map, sf::
 			isNewCycle = true;
 		}
 		sprite.setPosition(playerX, playerY);
+	}
+	int teleportX = 13;
+	int teleportY = 7;
+	if (!animeOfTeleport.getStay() && (fabs(curRow - teleportY) > 3) && (fabs(curCol - teleportX) > 3))
+	{
+		resetTeleport(animeOfTeleport, map);
+
 	}
 	return isNewCycle;
 }
@@ -676,6 +698,11 @@ void Player::checkOnGameOver(sf::View& camera, sf::RenderWindow& window)
 
 bool Player::update(sf::Clock clock, Map& map, sf::Clock teleportClock, Animations& animeOfTeleport, sf::RenderWindow& window, sf::View& camera, SoundManager& sound)
 {
+	if (sound.getPowerdownSound())
+	{
+		sound.playPowerdownSound();
+		sound.setPowerDownSound(false);
+	}
 	bool isNewCycle = false;
 	sf::Time curTime = clock.getElapsedTime();
 	if ((curTime.asSeconds() >= delayInSeconds) && (!getGameOverState()))
@@ -792,6 +819,16 @@ void Player::checkOnDoor(char dir, Map& map, Animations& doorAnime, SoundManager
 	}
 }
 
+void Player::checkOnSavePoint(int curRow, int curCol, SoundManager& sound)
+{
+	if ((curCol == savePointX) && (curRow == savePointY))
+	{
+		startPlayerX = savePointX;
+		startPlayerY = savePointY;
+		isHasSavePoint = true;
+	}
+}
+
 void Player::checkOnExit(Map& map, int curRow, int curCol, char dir, SoundManager& sound)
 {
 	switch (dir)
@@ -801,6 +838,7 @@ void Player::checkOnExit(Map& map, int curRow, int curCol, char dir, SoundManage
 		if ((map.firstLevelMap[curRow - 1][curCol] == 'E') && ((playerY - curRow * brickSize) <= -60))
 		{
 			isGameWin = true;
+			map.isOnceWin = true;
 		}
 		break;
 	}

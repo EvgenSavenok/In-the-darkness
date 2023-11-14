@@ -50,16 +50,22 @@ private:
 	const int rowOffset = 2;
 	const int colOffset = 2;
 
-	int startNumOfLives = 5;
-	int numOfLives = 5;
-	float widthOfLifeBar = 280;
+	int startNumOfLives = 8;
+	int numOfLives = 8;
+	float widthOfLifeBar = 190;
 
 	bool isGameOver = false;
+	int startPlayerX = 12;
+	int startPlayerY = 6;
+	int savePointX = 29;
+	int savePointY = 10;
+	bool isHasSavePoint = false;
 
 	void resetPlayer();
 	void resetTeleport(Animations& anime, Map& map);
 	void resetCageAnimation(Animations& anime, Map& map);
 	void resetBoxes(Boxes& box, Map& map);
+	void resetSounds(SoundManager& sound);
 
 public:
 	sf::Sprite getSprite() { return sprite; };
@@ -110,5 +116,6 @@ public:
 	void checkOnExit(Map& map, int curRow, int curCol, char dir, SoundManager& sound);
 	sf::Sprite getLifeBarSprite() { return lifeBarSprite; };
 	static const int brickSize = 90;
-	void resetGame(Map& map, Animations& anime, Boxes& box);
+	void resetGame(Map& map, Animations& anime, Boxes& box, SoundManager& sound);
+	void checkOnSavePoint(int curRow, int curCol, SoundManager& sound);
 };

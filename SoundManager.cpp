@@ -22,6 +22,8 @@ SoundManager::SoundManager()
 	winMelody.setVolume(50);
 	death.openFromFile("Sounds/death.ogg");
 	death.setVolume(50);
+	powerdown.openFromFile("Sounds/powerdown.ogg");
+	death.setVolume(50);
 }
 
 void SoundManager::playBgMusic()
@@ -76,4 +78,9 @@ void SoundManager::playWinMelody()
 void SoundManager::playDeathSound()
 {
 	death.play();
+}
+
+void SoundManager::playPowerdownSound()
+{
+	powerdown.play();
 }

@@ -2,6 +2,7 @@
 #include <SFML/Graphics.hpp>
 #include "SoundManager.h"
 #include "Process.h"
+#include "Map.h"
 
 class Menu
 {
@@ -20,7 +21,8 @@ private:
 
 public:
 	Menu();
-	void startWin(SoundManager& sound, sf::RenderWindow& window);
-	void showMenu(SoundManager& sound, sf::RenderWindow& window, sf::View& camera);
+	void startWin(SoundManager& sound, sf::RenderWindow& window, sf::View& camera);
+	void showMenu(SoundManager& sound, sf::RenderWindow& window, sf::View& camera, Map& map);
 	bool isMenu;
+	bool isWinScreen;
 };
